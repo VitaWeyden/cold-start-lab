@@ -31,6 +31,7 @@ The application is a mid-sized **webshop analytics API** (FastAPI, pandas, NumPy
 | `analyze.py` | median, p95, cold start count -> `summary.csv`, `latency.png` |
 | `cost.py` | monthly cost estimate based on the price list |
 | `cleanup.sh` | deletes the resources (mandatory when the measurements are done!) |
+| `OBSERVATIONS.md` | dated log of things found while setting up and testing, feeds the Results/Limitations sections |
 
 ## Procedure
 
@@ -95,7 +96,9 @@ Duration: 10 x (5 + 20) minutes = about **4 hours 10 minutes**, plus the back-to
 python3 analyze.py results.csv
 python3 cost.py --requests-per-month 100000 --avg-ms 70
 ```
-Then check the **Billing report** (Billing -> Reports, filter: Cloud Run) and compare the estimate with the amount that was actually billed. The report can lag by up to 24 hours.
+Then check the **Billing report** (Billing -> Reports) and compare the estimate with the actual usage. The report can lag by up to 24 hours, so check it the day after the measurement, not right away.
+
+In the Reports table, filter by **Project** (your project) and set the **Time range** to cover the measurement period. Read the **"Usage cost"** column, not the "Subtotal" column: if you are still inside the free-trial credit, "Other savings" will cancel the usage cost down to a €0.00 subtotal, same as in the screenshot we looked at for the other project. The subtotal is what you actually pay (nothing, while on the trial); the usage cost is the real, gross cost the resources generated, and that is the number to compare against `cost.py`'s estimate in the paper. Break it down further by **Service** (Cloud Run, Artifact Registry, Cloud Build) if the project has other charges mixed in, so the comparison isolates this experiment.
 
 ### 5. Cleanup
 ```bash
