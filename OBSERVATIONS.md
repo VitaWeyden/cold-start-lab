@@ -58,3 +58,25 @@ Results and Limitations sections - update it as the real measurement runs.
 - How do the `sequential` (back-to-back) numbers compare once both instances
   have had real, sustained traffic, rather than the paired single requests
   used in the quick test?
+
+## 2026-10-02/03 - Full overnight measurement (results.csv, 265 rows)
+
+Idle tiers used: 5min x10, 15min x10, 30min x8, 60min x3, then 100 sequential
+requests. Total runtime ~9 hours (18:12 UTC to ~04:33 UTC), e2-micro VM in
+europe-central2, same region as the Cloud Run services.
+
+Cold start rate per idle tier (scale-zero only; always-warm never showed a
+cold start after the initial deploy):
+- 5 min idle:  1/10 cold (only the very first request after deploy)
+- 15 min idle: 0/10 cold (instance stayed warm throughout)
+- 30 min idle: 8/8  cold (torn down and restarted EVERY time)
+- 60 min idle: 3/3  cold (same, every time)
+
+Conclusion: for this configuration (1 vCPU, 1 GiB, this FastAPI app,
+europe-central2), Cloud Run's scale-to-zero teardown threshold sits
+somewhere between 15 and 30 minutes of idleness. Below it, an instance
+reliably stays warm; at or above it, teardown is consistent (100% in both
+the 30 and 60 minute tiers).
+
+Cold start latency: 3.2-5.9s (vs ~200-350ms when warm) - roughly a
+15-20x slowdown on the first request after teardown.

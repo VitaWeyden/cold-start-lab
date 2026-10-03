@@ -9,6 +9,13 @@ and state the date in the paper. Finally, compare the estimate with the Billing 
 Usage:
   python3 cost.py --requests-per-month 100000 --avg-ms 40
   python3 cost.py --requests-per-month 100000 --avg-ms 40 --no-free-tier
+  python3 cost.py --requests-per-month 100000 --avg-ms 40 --eur-rate 0.92
+
+The price list itself is published in USD; --eur-rate converts the USD total
+using a flat exchange rate you supply (GCP's actual EUR invoice uses its own
+rate at billing time, so treat this as an approximation for comparing against
+the Billing report, not an exact prediction). Check the current rate, e.g.
+https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates
 """
 import argparse
 
@@ -54,8 +61,10 @@ def main():
     ap.add_argument("--requests-per-month", type=int, required=True)
     ap.add_argument("--avg-ms", type=float, required=True, help="average request processing time in ms")
     ap.add_argument("--vcpu", type=float, default=1.0)
-    ap.add_argument("--memory-gib", type=float, default=1.0)
+    ap.add_argument("--memory-gib", type=float, default=0.5)
     ap.add_argument("--no-free-tier", action="store_true")
+    ap.add_argument("--eur-rate", type=float, default=None,
+                     help="also print totals converted to EUR at this flat USD->EUR rate (e.g. 0.92)")
     a = ap.parse_args()
 
     print(f"Scenario: {a.requests_per_month:,} requests/month, {a.avg_ms} ms/request, "
@@ -66,10 +75,19 @@ def main():
         totals[name] = sum(parts.values())
         print(name)
         for k, v in parts.items():
-            print(f"  {k:<32} ${v:>9.4f}")
-        print(f"  {'TOTAL':<32} ${totals[name]:>9.4f} / month\n")
+            line = f"  {k:<32} ${v:>9.4f}"
+            if a.eur_rate:
+                line += f"   (~EUR {v * a.eur_rate:>7.4f})"
+            print(line)
+        total_line = f"  {'TOTAL':<32} ${totals[name]:>9.4f} / month"
+        if a.eur_rate:
+            total_line += f"   (~EUR {totals[name] * a.eur_rate:>7.4f} / month)"
+        print(total_line + "\n")
     diff = totals["always-warm (min=1)"] - totals["scale-zero (min=0)"]
-    print(f"Extra cost of the warm instance: ${diff:.2f} / month")
+    diff_line = f"Extra cost of the warm instance: ${diff:.2f} / month"
+    if a.eur_rate:
+        diff_line += f"  (~EUR {diff * a.eur_rate:.2f} / month, at rate {a.eur_rate})"
+    print(diff_line)
 
 
 if __name__ == "__main__":
