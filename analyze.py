@@ -5,6 +5,7 @@ Usage:
   python3 analyze.py results.csv     # table + summary.csv (+ latency.png if matplotlib is installed)
 """
 import csv
+import math
 import statistics
 import sys
 from collections import defaultdict
@@ -18,6 +19,20 @@ def percentile(values, p):
     k = (len(s) - 1) * p / 100
     lo, hi = int(k), min(int(k) + 1, len(s) - 1)
     return s[lo] + (s[hi] - s[lo]) * (k - lo)
+
+
+def wilson_ci(successes, trials, z=1.96):
+    """95% Wilson score interval for a cold-start rate - more honest than a
+    raw percentage at small n (e.g. a "mixed" idle tier near the threshold),
+    since it doesn't collapse to 0 width at 0% or 100% the way a naive
+    +/- sqrt(p(1-p)/n) interval does."""
+    if trials == 0:
+        return (float("nan"), float("nan"))
+    p = successes / trials
+    denom = 1 + z**2 / trials
+    centre = p + z**2 / (2 * trials)
+    half = z * math.sqrt(p * (1 - p) / trials + z**2 / (4 * trials**2))
+    return (max(0.0, (centre - half) / denom) * 100, min(1.0, (centre + half) / denom) * 100)
 
 
 def main(path):
@@ -37,19 +52,29 @@ def main(path):
 
     rows = []
     for (scenario, variant), vals in sorted(groups.items()):
+        n = len(vals)
+        colds = cold[(scenario, variant)]
+        errs = errors[(scenario, variant)]
+        trials = n + errs  # every attempted repetition, including failed requests
+        ci_lo, ci_hi = wilson_ci(colds, trials)
         rows.append({
-            "scenario": scenario, "variant": variant, "n": len(vals),
-            "cold_starts": cold[(scenario, variant)], "errors": errors[(scenario, variant)],
+            "scenario": scenario, "variant": variant, "n": n,
+            "cold_starts": colds, "errors": errs,
+            "cold_rate_pct": round(100 * colds / trials, 1) if trials else float("nan"),
+            "cold_rate_ci95_lo": round(ci_lo, 1), "cold_rate_ci95_hi": round(ci_hi, 1),
             "median_ms": round(statistics.median(vals), 1),
             "p95_ms": round(percentile(vals, 95), 1),
             "mean_ms": round(statistics.mean(vals), 1),
             "min_ms": round(min(vals), 1), "max_ms": round(max(vals), 1),
         })
 
-    hdr = ["scenario", "variant", "n", "cold_starts", "errors", "median_ms", "p95_ms", "mean_ms", "min_ms", "max_ms"]
-    print("  ".join(f"{h:>12}" for h in hdr))
+    hdr = ["scenario", "variant", "n", "cold_starts", "errors",
+           "cold_rate_pct", "cold_rate_ci95_lo", "cold_rate_ci95_hi",
+           "median_ms", "p95_ms", "mean_ms", "min_ms", "max_ms"]
+    widths = {h: max(12, len(h) + 1) for h in hdr}
+    print("  ".join(f"{h:>{widths[h]}}" for h in hdr))
     for r in rows:
-        print("  ".join(f"{r[h]!s:>12}" for h in hdr))
+        print("  ".join(f"{r[h]!s:>{widths[h]}}" for h in hdr))
 
     with open("summary.csv", "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=hdr)

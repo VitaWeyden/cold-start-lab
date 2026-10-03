@@ -3,16 +3,29 @@
 
 Two scenarios:
   idle_<X>min   : one request to BOTH services (in parallel) after X minutes
-                  of idleness, repeated --repeats times
+                  of idleness, repeated as many times as configured for that tier
   sequential    : back-to-back requests (the "normal", warm latency)
+
+Each idle tier is its own "ping interval, repeat count" pair, given with
+--tier "IDLE_MINUTES:REPEATS" (repeatable). This is what controls both how
+often a ping happens and how long the whole run takes - there is no fixed
+scenario list baked into the script. The planned wall-clock time (sum of
+idle*repeats per tier, plus the sequential series) is printed before anything
+runs, so you know what you are committing to.
 
 Results are appended to a CSV, flushed row by row (nothing is lost if the run is interrupted).
 
 Examples:
-  python3 measure.py --urls-file urls.env                       # full measurement (/api/report)
-  python3 measure.py --urls-file urls.env --path / --out results_light.csv   # light endpoint
+  # one command, three tiers with independent repeat counts - replaces chaining
+  # several invocations with "&&" the way Test 1 needed:
+  python3 measure.py --urls-file urls.env \\
+      --tier 15:10 --tier 22:18 --tier 30:10 --sequential 100 --out results.csv
+
+  # quick trial (still works the simple way, one tier)
+  python3 measure.py --urls-file urls.env --tier 0.05:2 --sequential 10
+
+  # old-style equivalent: same --repeats applied to every --idle value
   python3 measure.py --urls-file urls.env --idle 5 20 --repeats 10
-  python3 measure.py --urls-file urls.env --idle 0.05 --repeats 2 --sequential 10   # quick trial
 """
 import argparse
 import csv
@@ -95,6 +108,34 @@ def paired_request(writer, scenario, iteration, targets):
         t.join()
 
 
+def parse_tiers(tier_args, idle_args, repeats_arg):
+    """Builds the list of (idle_minutes, repeats) pairs to run, in this order:
+    1) --tier "IDLE:REPEATS" entries (repeatable), if given - full control per tier
+    2) otherwise --idle values (one or more) combined with one shared --repeats
+    """
+    tiers = []
+    if tier_args:
+        for spec in tier_args:
+            try:
+                idle_s, repeats_s = spec.split(":", 1)
+                idle_min, repeats = float(idle_s), int(repeats_s)
+            except ValueError:
+                raise SystemExit(f"--tier expects IDLE_MINUTES:REPEATS, got {spec!r}")
+            if idle_min < 0 or repeats < 1:
+                raise SystemExit(f"--tier {spec!r}: idle must be >= 0 and repeats >= 1")
+            tiers.append((idle_min, repeats))
+    else:
+        for idle_min in idle_args:
+            tiers.append((idle_min, repeats_arg))
+    return tiers
+
+
+def format_hms(total_seconds):
+    h, rem = divmod(int(total_seconds), 3600)
+    m, s = divmod(rem, 60)
+    return f"{h}h {m:02d}m" if h else f"{m}m {s:02d}s"
+
+
 def sleep_with_countdown(minutes):
     end = time.time() + minutes * 60
     while True:
@@ -111,14 +152,28 @@ def main():
     ap.add_argument("--urls-file", default="urls.env")
     ap.add_argument("--scale-zero-url")
     ap.add_argument("--warm-url")
-    ap.add_argument("--path", default="/api/report", help="request path, e.g. / (light), /api/products, /api/report (heavy)")
-    ap.add_argument("--idle", type=float, nargs="*", default=[5, 20],
-                    help="idle times in minutes (decimals allowed), default: 5 20")
-    ap.add_argument("--repeats", type=int, default=10, help="repetitions per idle time (>=10)")
+    ap.add_argument("--path", default="/api/report",
+                    help="request path, e.g. / (light), /api/products, /api/report (heavy, default - "
+                         "this is what Test 1 measured)")
+    ap.add_argument("--tier", action="append", metavar="IDLE_MIN:REPEATS",
+                    help='one idle tier, e.g. --tier 22:18 (repeatable; full control over '
+                         'ping interval and repeat count per tier - takes priority over --idle/--repeats)')
+    ap.add_argument("--idle", type=float, nargs="*", default=None,
+                    help="(legacy) idle times in minutes, all using the same --repeats; "
+                         "ignored if --tier is given")
+    ap.add_argument("--repeats", type=int, default=10,
+                    help="(legacy) repetitions per --idle value; ignored if --tier is given")
     ap.add_argument("--sequential", type=int, default=100, help="number of back-to-back requests (0 = skip)")
     ap.add_argument("--gap-ms", type=int, default=200, help="pause between back-to-back requests")
     ap.add_argument("--out", default="results.csv")
     args = ap.parse_args()
+
+    if not args.tier and args.idle is None:
+        args.idle = [5, 20]  # default when neither --tier nor --idle is given
+
+    tiers = parse_tiers(args.tier, args.idle or [], args.repeats)
+    if not tiers and args.sequential <= 0:
+        raise SystemExit("nothing to do: no --tier/--idle and --sequential 0")
 
     if args.scale_zero_url and args.warm_url:
         sz, warm = args.scale_zero_url, args.warm_url
@@ -127,12 +182,22 @@ def main():
     targets = [("scale-zero", sz.rstrip("/") + args.path), ("always-warm", warm.rstrip("/") + args.path)]
     writer = Writer(args.out)
 
-    # 1) first request after an idle period
-    for idle in args.idle:
+    idle_wait_s = sum(idle * 60 * repeats for idle, repeats in tiers)
+    sequential_s = (args.gap_ms / 1000 * args.sequential) if args.sequential > 0 else 0
+    print("Plan:")
+    for idle, repeats in tiers:
+        print(f"  idle_{idle:g}min  x{repeats:<3} repetitions  (~{format_hms(idle * 60 * repeats)} of idle wait)")
+    if args.sequential > 0:
+        print(f"  sequential      x{args.sequential:<3} requests     (~{format_hms(sequential_s)}, {args.gap_ms} ms gap)")
+    print(f"Estimated total run time: ~{format_hms(idle_wait_s + sequential_s)} "
+          f"(idle wait only - request/processing time not included)\n")
+
+    # 1) first request after an idle period, per configured tier
+    for idle, repeats in tiers:
         label = f"idle_{idle:g}min"
-        print(f"\n== {label}: {args.repeats} repetitions ==")
-        for i in range(1, args.repeats + 1):
-            print(f"[{label}] {i}/{args.repeats}")
+        print(f"\n== {label}: {repeats} repetitions ==")
+        for i in range(1, repeats + 1):
+            print(f"[{label}] {i}/{repeats}")
             sleep_with_countdown(idle)
             paired_request(writer, label, i, targets)
 

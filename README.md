@@ -32,6 +32,7 @@ The application is a mid-sized **webshop analytics API** (FastAPI, pandas, NumPy
 | `cost.py` | monthly cost estimate based on the price list |
 | `cleanup.sh` | deletes the resources (mandatory when the measurements are done!) |
 | `OBSERVATIONS.md` | dated log of things found while setting up and testing, feeds the Results/Limitations sections |
+| `TEST1_REPORT.md` | full methodology, results and billing validation for the completed first measurement run |
 
 ## Procedure
 
@@ -85,17 +86,29 @@ If `--allow-unauthenticated` fails because of an organization policy, ask for an
 
 ### 3. Measurement
 Run it from **Cloud Shell or from a VM in the same region as the services**, so that network latency is small and stable. (Running from a home network also works, but it must be stated in the paper.)
+
+Each idle tier is its own `IDLE_MINUTES:REPEATS` pair, given with `--tier` (repeatable) — this is what controls both how often a ping happens and how long the whole run takes, so one command fully defines a run instead of needing several chained invocations:
+
 ```bash
-nohup python3 measure.py --urls-file urls.env --idle 5 20 --repeats 10 --sequential 100 --out results.csv > measure.log 2>&1 &
+nohup python3 measure.py --urls-file urls.env \
+    --tier 15:8 --tier 20:12 --tier 25:12 --tier 30:8 \
+    --sequential 100 --out results.csv > measure.log 2>&1 &
+disown
 ```
-By default the heavy endpoint `/api/report` is requested (a pandas aggregation over 200,000 rows). To compare with the light endpoint, run the measurement a second time with `--path / --out results_light.csv` (this needs another 4 hours, or use fewer repetitions), and analyze it with `python3 analyze.py results_light.csv`. Available paths: `/` (light), `/api/products?category=books&limit=20` (SQLite query), `/api/orders/12345` (primary-key lookup), `/api/report` (heavy).
-Duration: 10 x (5 + 20) minutes = about **4 hours 10 minutes**, plus the back-to-back requests. A Cloud Shell session may be cut off by inactivity, so prefer a small Compute Engine VM (`e2-micro`) with `nohup` or `tmux`. The CSV is written row by row, so the finished part survives an interruption.
+
+The script prints the planned wall-clock time before it starts anything, e.g. `Estimated total run time: ~15h 00m`, so you know what you're committing to before walking away. By default the heavy endpoint `/api/report` is requested (a pandas aggregation over 200,000 rows); pass `--path /` to compare against the light endpoint instead (available paths: `/` light, `/api/products?category=books&limit=20` SQLite query, `/api/orders/12345` primary-key lookup, `/api/report` heavy). A Cloud Shell session may be cut off by inactivity, so prefer a small Compute Engine VM (`e2-micro`) with `nohup ... & disown` or `tmux`. The CSV is written row by row, so the finished part survives an interruption, and `measure.py` appends rather than overwrites, so re-running with more tiers just adds more rows.
+
+The old `--idle 5 20 --repeats 10` style (one shared repeat count for every idle value) still works and is handy for a quick local trial; `--tier` takes priority whenever both are given.
+
+**Test 1** (completed, see `TEST1_REPORT.md`) used `--tier 5:10 --tier 15:10 --tier 30:8 --tier 60:3 --sequential 100` (chained manually before `--tier` existed) and found the scale-to-zero teardown threshold between 15 and 30 minutes. **Test 2** is designed around that finding — drop the 5-minute tier (nothing happens there), keep one tier well below the threshold (15 min, expected ~0% cold), one well above it (30 min, expected 100% cold), and add **two** tiers *inside* the 15–30 min window (20 and 25 min) with more repetitions each, to trace how the cold-start rate actually rises across the boundary rather than treating it as a single step.
 
 ### 4. Analysis and cost
 ```bash
 python3 analyze.py results.csv
-python3 cost.py --requests-per-month 100000 --avg-ms 70
+python3 cost.py --requests-per-month 100000 --avg-ms 70 --memory-gib 1.0 --eur-rate 0.92
 ```
+`analyze.py` now also reports `cold_rate_pct` with a 95% (Wilson score) confidence interval per scenario — the number to quote for a tier that sometimes restarts and sometimes doesn't, instead of just the raw count. `cost.py`'s optional `--eur-rate` converts its USD estimate to EUR at a flat rate you supply, for an easier side-by-side with the EUR Billing report (see `TEST1_REPORT.md` §6.1 for the caveats on this conversion).
+
 Then check the **Billing report** (Billing -> Reports) and compare the estimate with the actual usage. The report can lag by up to 24 hours, so check it the day after the measurement, not right away.
 
 In the Reports table, filter by **Project** (your project) and set the **Time range** to cover the measurement period. Read the **"Usage cost"** column, not the "Subtotal" column: if you are still inside the free-trial credit, "Other savings" will cancel the usage cost down to a €0.00 subtotal, same as in the screenshot we looked at for the other project. The subtotal is what you actually pay (nothing, while on the trial); the usage cost is the real, gross cost the resources generated, and that is the number to compare against `cost.py`'s estimate in the paper. Break it down further by **Service** (Cloud Run, Artifact Registry, Cloud Build) if the project has other charges mixed in, so the comparison isolates this experiment.
