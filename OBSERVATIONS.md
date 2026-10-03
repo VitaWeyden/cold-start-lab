@@ -80,3 +80,62 @@ the 30 and 60 minute tiers).
 
 Cold start latency: 3.2-5.9s (vs ~200-350ms when warm) - roughly a
 15-20x slowdown on the first request after teardown.
+
+Billing validation (Group by SKU, see TEST1_REPORT.md section 6): over the
+~11.35h the always-warm service existed during this window, it billed
+€0.26 total (€0.13 CPU + €0.13 memory, SKU "Min Instance ... Tier 2");
+scale-zero billed effectively €0.00 (SKU "... Tier 2 (Request-based
+billing)", 79s/79 GiB*s of actual processing). Real rate derived from this:
+€0.26 / 40,854.6 s ≈ €0.00000636/s (~€0.023/h) for the always-warm service
+existing (1 vCPU + 1 GiB combined, continuous, Tier 2 region pricing).
+
+## 2026-10-03 - Test 2 plan and the idle-gap billing correction
+
+Test 2 design (see README.md section 3 and TEST2 run below): drop the 5-min
+tier (nothing happens there), keep 15min (expect ~0% cold) and 30min
+(expect 100% cold) as the two "obvious" ends, and add 20min + 25min *inside*
+the 15-30min window specifically to capture a mixed cold-start rate with a
+usable 95% CI (Wilson score, now computed by analyze.py) - i.e. to trace how
+the rate actually rises across the boundary instead of treating it as one
+step. All four tiers run with 10 repetitions each (`--tier 15:10 --tier
+20:10 --tier 25:10 --tier 30:10 --sequential 100`), ~15h estimated total.
+
+Unlike Test 1 (which started right after redeploy), the always-warm service
+kept running continuously between Test 1's end and Test 2's start - it does
+not stop just because no measurement is active. This means the raw billing
+*delta* between "end of Test 1" and "end of Test 2" will include three
+components, not just Test 2:
+
+  idle gap (Test 1 end -> Test 2 start) + Test 2's own ~15h window + whatever
+  gap follows until the next billing check
+
+Because Cloud Run's min-instance billing is a flat rate per elapsed wall-
+clock second (not request-based - it doesn't matter whether the instance is
+idle or actually serving a request), this is NOT a problem: the idle-gap
+portion can be subtracted out arithmetically using the real per-second rate
+already derived from Test 1 above, rather than needing hour-level filtering
+in the Billing Reports UI (which only supports day-level granularity anyway).
+
+Known timestamps so far:
+- Test 1 end: ~2026-10-03 04:33 UTC
+- Test 2 start: ~2026-10-03 18:54 UTC (PID 1434 on coldstart-measurer)
+- Idle gap: ~14h 21m =~ 51,660 s
+- Test 2 end: TBD - read the actual start/`Done ->` timestamps from
+  measure2.log once it finishes, rather than relying on the estimate.
+
+Formula to apply once Test 2's billing delta is visible (usually ~24h after
+the window closes):
+
+  predicted_idle_gap_cost  = idle_gap_seconds  x 0.00000636 EUR/s
+  predicted_test2_cost     = test2_duration_s  x 0.00000636 EUR/s
+  predicted_total_delta    = predicted_idle_gap_cost + predicted_test2_cost
+
+Compare predicted_total_delta against the actual Min-Instance-seconds delta
+shown in Billing -> Reports -> Group by SKU (current baseline snapshot,
+right at Test 1's end state: 40,854.6 s / 79 s / 81 count - confirmed via
+screenshot on 2026-10-03). If they match (within rounding), subtracting
+predicted_idle_gap_cost from the real total delta gives a clean, isolated
+Test-2-only cost figure, safe to report alongside Test 1's €0.26 number.
+scale-zero needs no such correction - it is request-based, so it only bills
+during the two measurement windows themselves, never during the gap between
+them.

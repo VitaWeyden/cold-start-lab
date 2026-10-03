@@ -1,0 +1,5 @@
+scenario,variant,n,cold_starts,errors,median_ms,p95_ms,mean_ms,min_ms,max_ms
+idle_0.1min,always-warm,2,0,0,2762.3,4966.4,2762.3,313.2,5211.3
+idle_0.1min,scale-zero,2,0,0,286.2,337.3,286.2,229.5,342.9
+sequential,always-warm,5,0,0,5221.8,5252.5,4232.3,216.8,5253.5
+sequential,scale-zero,5,0,0,200.4,210.8,201.8,191.3,212.0

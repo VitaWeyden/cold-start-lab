@@ -5,11 +5,11 @@ urls.env
 # Keep this ignored while you are testing. Once you have the final run for the
 # paper, either force-add the specific file (git add -f results.csv) or move
 # the final files into a results/ folder and exclude that from the rules below.
-*.csv
+#*.csv
 local_test*.csv
-results*.csv
-summary.csv
-latency.png
+#results*.csv
+#summary.csv
+#latency.png
 measure.log
 
 # --- Python ---
