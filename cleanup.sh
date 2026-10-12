@@ -8,5 +8,9 @@ REGION="${REGION:-europe-west1}"
 
 gcloud run services delete coldstart-scale-zero  --region "$REGION" --project "$PROJECT_ID" --quiet || true
 gcloud run services delete coldstart-always-warm --region "$REGION" --project "$PROJECT_ID" --quiet || true
+# Test 3 boundary services (created by deploy3.sh)
+for t in 15 16 17 18 19 20; do
+  gcloud run services delete "coldstart-idle-$t" --region "$REGION" --project "$PROJECT_ID" --quiet || true
+done
 gcloud artifacts repositories delete coldstart-lab --location "$REGION" --project "$PROJECT_ID" --quiet || true
 echo "Deleted."

@@ -10,7 +10,9 @@ local_test*.csv
 #results*.csv
 #summary.csv
 #latency.png
-measure.log
+measure*.log
+# Test 3: contains the live service URLs, like urls.env
+services3.csv
 
 # --- Python ---
 __pycache__/

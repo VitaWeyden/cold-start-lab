@@ -139,3 +139,26 @@ Test-2-only cost figure, safe to report alongside Test 1's €0.26 number.
 scale-zero needs no such correction - it is request-based, so it only bills
 during the two measurement windows themselves, never during the gap between
 them.
+
+## 2026-10-12 - Test 2 result and what it changes for Test 3
+
+Test 2 (results_2.csv): scale-zero cold starts 15 min 1/10, 20 min 10/10,
+25 min 10/10, 30 min 10/10. The boundary is between 15 and 20 minutes, not
+between 25 and 30.
+
+The one cold sample at 15 min is `idle_15min` iteration 1 = the first request
+after the ~14 h idle gap between Test 1 and Test 2, i.e. the instance was gone
+for a reason unrelated to the 15-minute idle time (`instance_uptime_s` 2.55).
+Iterations 2-10 are all warm with `instance_uptime_s` growing in 900 s steps.
+Excluding it: 15 min = 0/9 in Test 2, 0/19 over Test 1 + Test 2. Same artifact
+in Test 1: the single cold `idle_5min` sample is iteration 1 (corrected 0/9).
+The Wilson CIs printed by the old analyze.py for these tiers include the
+artifact; use `analyze3.py --legacy-drop-first` for the corrected numbers.
+Fix in Test 3: every service gets a warm-up request first, so no measured
+sample can be "first after a long gap".
+
+Test 3 design decisions: one service per tier run in parallel (same night for
+all tiers, total time = longest tier), tiers 15-20 min in 1 min steps, 20
+samples each, real idle time logged, IPv4-only timing split, BigQuery billing
+export with per-service labels, teardown time from Cloud Logging (needs a
+pilot to confirm the "Shutting down" line is written on SIGTERM).
