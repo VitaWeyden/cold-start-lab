@@ -41,15 +41,18 @@ def load(path, drop_first):
         first = min((r for r in rows if r["scenario"].startswith("idle_")),
                     key=lambda r: datetime.fromisoformat(r["timestamp_utc"]))
         rows.remove(first)
-    out = []
+    out, errs = [], defaultdict(int)
     for r in rows:
-        if not r["scenario"].startswith("idle_") or r["error"] or r["http_status"] != "200":
+        if not r["scenario"].startswith("idle_"):
             continue
         nominal = float(r["scenario"][5:-3])
+        if r["error"] or r["http_status"] != "200":
+            errs[nominal] += 1  # attempted but unusable: shown in the table, not counted as cold or warm
+            continue
         a = r.get("actual_idle_s", "")
         out.append({"tier": nominal, "idle": float(a) / 60 if a else nominal,
                     "cold": r["cold"] == "True", "row": r})
-    return out
+    return out, errs
 
 
 def logistic(points):
@@ -91,12 +94,12 @@ def main():
     ap.add_argument("--legacy-drop-first", action="store_true")
     ap.add_argument("--out", default="summary3.csv")
     a = ap.parse_args()
-    data = load(a.csv, a.legacy_drop_first)
+    data, errs = load(a.csv, a.legacy_drop_first)
     by = defaultdict(list)
     for d in data:
         by[d["tier"]].append(d)
 
-    hdr = ["tier_min", "n", "cold", "cold_rate_pct", "ci95_lo", "ci95_hi",
+    hdr = ["tier_min", "n", "errors", "cold", "cold_rate_pct", "ci95_lo", "ci95_hi",
            "mean_actual_idle_min", "median_ms", "p95_ms"]
     rows = []
     for tier in sorted(by):
@@ -105,8 +108,11 @@ def main():
         lo, hi = wilson(k, n)
         lat = sorted(float(x["row"]["latency_ms"]) for x in v)
         p95 = lat[min(len(lat) - 1, math.ceil(0.95 * len(lat)) - 1)]
-        rows.append([f"{tier:g}", n, k, round(100 * k / n, 1), round(lo, 1), round(hi, 1),
+        rows.append([f"{tier:g}", n, errs.get(tier, 0), k, round(100 * k / n, 1), round(lo, 1), round(hi, 1),
                      round(statistics.mean(x["idle"] for x in v), 2), round(statistics.median(lat), 1), round(p95, 1)])
+    for tier in sorted(set(errs) - set(by)):  # tiers where every attempt failed
+        rows.append([f"{tier:g}", 0, errs[tier], 0, "", "", "", "", "", ""])
+    rows.sort(key=lambda r: float(r[0]))
     print("  ".join(f"{h:>20}" for h in hdr))
     for r in rows:
         print("  ".join(f"{c!s:>20}" for c in r))
@@ -118,24 +124,37 @@ def main():
     print("\nBoundary")
     if not warm or not cold:
         print("  only one outcome observed - the boundary is outside the measured range")
-    elif min(cold) > max(warm):
-        print(f"  clean step: longest idle still warm = {max(warm):.2f} min, "
-              f"shortest idle that was cold = {min(cold):.2f} min -> the boundary lies in that gap")
-        print("  (no overlap = logistic MLE undefined; report the bracket and the per-tier CIs above)")
     else:
-        pts = [(d["idle"], 1.0 if d["cold"] else 0.0) for d in data]
-        centre = statistics.mean(x for x, _ in pts)
-        est = x50(pts, centre)
-        if est is None:
-            print("  mixed outcomes but the fit did not converge")
+        tiers = sorted(by)
+        rate = {t: sum(x["cold"] for x in by[t]) / len(by[t]) for t in tiers}
+        first = next((t for t in tiers if rate[t] >= 0.5), None)
+        if first is None:
+            print("  cold rate never reaches 50% in the measured range")
+        elif first == tiers[0]:
+            print(f"  cold rate is already >= 50% at the shortest tier ({first:g} min)")
         else:
-            random.seed(1)
-            bs = [e for e in (x50([random.choice(pts) for _ in pts], centre) for _ in range(2000)) if e is not None]
-            bs.sort()
-            ci = (bs[int(0.025 * len(bs))], bs[int(0.975 * len(bs)) - 1]) if len(bs) > 50 else None
-            print(f"  50% cold at {est:.2f} min idle" +
-                  (f"  (95% bootstrap CI {ci[0]:.2f}-{ci[1]:.2f}, {len(bs)}/2000 valid resamples)" if ci else ""))
-        print(f"  overlap zone: warm up to {max(warm):.2f} min, cold from {min(cold):.2f} min")
+            prev = tiers[tiers.index(first) - 1]
+            kp, kf = sum(x["cold"] for x in by[prev]), sum(x["cold"] for x in by[first])
+            print(f"  cold rate crosses 50% between {prev:g} min ({kp}/{len(by[prev])} cold) "
+                  f"and {first:g} min ({kf}/{len(by[first])} cold)")
+        print(f"  warm samples up to {max(warm):.2f} min idle, cold samples from {min(cold):.2f} min idle")
+        mixed = [t for t in tiers if 0 < sum(x["cold"] for x in by[t]) < len(by[t])]
+        if len(mixed) >= 2:  # a logistic fit needs mixed outcomes at two or more idle times
+            pts = [(d["idle"], 1.0 if d["cold"] else 0.0) for d in data]
+            centre = statistics.mean(x for x, _ in pts)
+            est = x50(pts, centre)
+            if est is None:
+                print("  logistic fit did not converge")
+            else:
+                random.seed(1)
+                bs = [e for e in (x50([random.choice(pts) for _ in pts], centre) for _ in range(2000)) if e is not None]
+                bs.sort()
+                ci = (bs[int(0.025 * len(bs))], bs[int(0.975 * len(bs)) - 1]) if len(bs) > 50 else None
+                print(f"  logistic fit: 50% cold at {est:.2f} min idle" +
+                      (f"  (95% bootstrap CI {ci[0]:.2f}-{ci[1]:.2f}, {len(bs)}/2000 valid resamples)" if ci else ""))
+        else:
+            print("  at most one tier has mixed outcomes: the transition is a sharp step and a logistic fit has no")
+            print("  finite solution; use the crossing above, the per-tier CIs and teardown_times.py instead")
 
     print("\nLatency split, median ms (cold vs warm requests)")
     parts = ["latency_ms", "dns_ms", "tcp_ms", "tls_ms", "ttfb_ms", "body_ms", "startup_ms", "init_ms", "work_ms"]

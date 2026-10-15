@@ -162,3 +162,40 @@ all tiers, total time = longest tier), tiers 15-20 min in 1 min steps, 20
 samples each, real idle time logged, IPv4-only timing split, BigQuery billing
 export with per-service labels, teardown time from Cloud Logging (needs a
 pilot to confirm the "Shutting down" line is written on SIGTERM).
+
+## 2026-10-16 - Test 3 result, what did not work
+
+Run 2026-10-12, 12:22-19:05 UTC. 15 min: 1/20 cold; 16/17/18/19/20 min:
+14/14, 17/17, 10/10, 10/10, 13/13 cold. Boundary = crossing between 15 and 16
+minutes. SIGTERM ("Shutting down") 888.6-910.1 s after the last response in 64
+of 65 cold samples (median 903.3 s). Cold median 3375 ms vs warm 251 ms.
+
+Findings that are NOT explained by the idle timeout (no cause claimed):
+- 36 of 120 attempts got HTTP 429 "The request was aborted because there was
+  no available instance" (httpRequest.latency 0 s in the log, 10-23 s waited
+  by the client), only at the tiers 16-20, never at 15, never in Tests 1/2.
+  The services had max-instances=1; not tested whether that matters.
+- coldstart-idle-15 iteration 10 (the only cold sample of that tier): the
+  previous instance was shut down 166.3 s after iteration 9 (log 14:40:37 UTC,
+  another instance of the service logged Shutting down at 14:42:28.9), and the
+  instance that answered started its process ~14:42:29.6, ~620 s before our
+  request (instance_uptime_s 622). Not caused by our request; reason unknown.
+- 15 of 64 shutdown lines were logged 888.6-899.9 s after the previous
+  response, yet all 19 valid requests of the 15 min tier (sent at exactly
+  900 s) found a live instance.
+
+Process mistakes to avoid next time:
+- BigQuery billing export was never enabled in the Console (all exports
+  "Disabled"); the dataset stayed empty, no per-service hourly cost exists, and
+  the export is not backfilled. The Reports label filter listed no label keys.
+  Cost of the day (whole project, no label filter, 2026-10-12): Cloud Run CPU
+  528.1 s EUR 0.02, memory 528.1 GiB-s EUR 0.00, 140 requests EUR 0.00; the
+  measurement VM (18.7 h) about EUR 0.17-0.18 plus small Network Intelligence
+  Center items. Check that the export table exists BEFORE measuring.
+- teardown3.csv was first generated in the wrong directory (empty file);
+  gcloud logging --freshness must cover the run date (2d was too short after
+  3 days, 7d used).
+- Measurement VM deleted 2026-10-16 (instances, disks, addresses lists empty).
+  No always-warm service exists in the project any more; the 7 remaining
+  services all have min-instances unset (0).
+

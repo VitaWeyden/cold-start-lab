@@ -144,6 +144,8 @@ python3 analyze3.py results3.csv
 
 Nothing else may send requests to these services during the run (browser tabs, uptime checks), otherwise the idle time is not what the CSV says.
 
+**Result (`Test 3/results3.csv`, `teardown3.csv`, `summary3.csv`; full write-up in `Test 3/Test3_report.md`):** run on 2026-10-12, 12:22 - 19:05 UTC. 15 min idle: 1/20 cold (and that one was not an idle-timer teardown, see the report); 16, 17, 18, 19, 20 min: 14/14, 17/17, 10/10, 10/10, 13/13 cold. The boundary is the crossing between 15 and 16 minutes. Cloud Run sent SIGTERM 888.6 - 910.1 s after the last request (median 903.3 s, 64 of 65 cold samples; one outlier at 166.3 s). Cold requests took a median of 3375 ms against 251 ms warm. 36 of the 120 attempts returned HTTP 429 ("no available instance") on cold starts at the 16 - 20 min tiers, which was not seen in Tests 1 and 2; the cause is open. Cost: see "BigQuery billing export" below, the per-service numbers do not exist.
+
 ### 4. Analysis and cost
 ```bash
 python3 analyze.py results.csv
@@ -166,6 +168,8 @@ predicted_total_delta    = predicted_idle_gap_cost + predicted_test2_cost
 Once Test 2's billing delta is visible (usually ~24h after the window closes), compare `predicted_total_delta` against the actual Min-Instance-seconds delta in Billing → Reports → Group by SKU, using Test 1's end-state snapshot as the baseline (40,854.6 s / 79 s / 81 count, confirmed by screenshot on 2026-10-03). If they match within rounding, subtracting `predicted_idle_gap_cost` from the real total delta gives a clean, isolated Test-2-only cost figure, safe to report alongside Test 1's €0.26 number. `scale-zero` needs no such correction — its billing is request-based, so it only accrues during the two measurement windows themselves, never during the gap between them.
 
 #### BigQuery billing export (Test 3, one-time setup)
+
+**What happened in the Test 3 run:** the dataset was created but the export itself was never switched on in the Console (every export under Billing -> Billing export read "Disabled" afterwards), so the `billing_export` dataset stayed empty and `billing_query.sql` failed with "does not match any table". Because the export is not backfilled, the hourly per-service costs of Test 3 cannot be recovered; the Test 3 report uses the day-level Reports view for the whole project (upper bound) instead. For a future run, check in the Console that *Standard usage cost* is enabled and that a `gcp_billing_export_v1_...` table has appeared **before** starting the measurement.
 
 The Billing Reports UI only has day-level granularity. The standard usage cost export to BigQuery gives hourly rows per SKU and per label, so the cost of each Test 3 service can be read separately. It is **not backfilled**: enable it *before* the measurement starts, and expect the first rows a few hours later.
 
