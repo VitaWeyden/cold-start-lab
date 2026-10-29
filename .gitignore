@@ -39,4 +39,4 @@ service-account*.json
 Thumbs.db
 .vscode/
 .idea/
-*.swp
+*.swp"*.zip" 
