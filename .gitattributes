@@ -1,0 +1,5 @@
+# Shell scripts must keep LF line endings, or bash fails on Cloud Shell / the VM
+# ("$'\r': command not found"). Editing on Windows can otherwise turn them into CRLF.
+*.sh  text eol=lf
+*.py  text eol=lf
+*.sql text eol=lf

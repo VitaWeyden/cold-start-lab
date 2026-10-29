@@ -13,6 +13,9 @@ local_test*.csv
 measure*.log
 # Test 3: contains the live service URLs, like urls.env
 services3.csv
+# Test 4 (pilot and main run): same, written into Test 4/ by deploy4p.sh / deploy4.sh
+services4p.csv
+services4.csv
 
 # --- Python ---
 __pycache__/
@@ -22,6 +25,9 @@ venv/
 .pytest_cache/
 
 # --- Google Cloud / credentials (should never exist in this folder, but just in case) ---
+# This also keeps the Cloud Logging downloads out (Test 3/shutdown_logs.json,
+# Test 4/logs4p_*.json): they contain the service URLs and, in the request log, the
+# measurement VM's IP address. To publish one, force-add it (git add -f <file>) after checking it.
 *.json
 !package*.json
 .env

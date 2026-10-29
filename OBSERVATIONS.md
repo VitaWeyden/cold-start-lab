@@ -199,3 +199,25 @@ Process mistakes to avoid next time:
   No always-warm service exists in the project any more; the 7 remaining
   services all have min-instances unset (0).
 
+
+## 2026-10-29 - Test 3 logs re-read, Test 4 pilot planned
+
+- `Test 3/shutdown_logs.json` has 108 "Shutting down" lines: 3 for coldstart-idle-15 and 21 for
+  each of the 16-20 min services, i.e. one per request that arrived after a teardown, the 36
+  429s included. After a 429 the next shutdown came 909-917 s after the 429 request STARTED
+  (median 912 s); after a normal cold request 900-910 s after the response ended (median 905 s).
+  So a 429 request did start an instance; it went idle ~7 s after the request arrived, while the
+  client waited a median 17 s for the 429. The instance existed but did not get the request.
+  This points to routing/queueing with max-instances=1, not to missing capacity. Not proven.
+- Confounders between Tests 1/2 and Test 3 that Test 3 cannot separate: time of day (Test 3
+  12:22-19:05 UTC, Tests 1/2 from ~18 UTC into the night), 6 services cold-starting with
+  warm-ups in the same second, and the 429 clustering 14-17 UTC.
+- coldstart-idle-15 around 14:40: two different instances shut down (14:40:37, 14:42:28) and a
+  third started ~14:42:29, so briefly more than one instance existed despite max=1. Looks like a
+  platform-side replacement; it coincides with the hour the 429s increased.
+- Decision: a 2 h pilot before Test 4 (`Test 4/Test4_report.md`): max-instances 1 vs 3,
+  3 replicas each, 16 min idle, 2 GiB (Test 4 memory), 14:00-16:12 UTC, staggered starts,
+  request ids + retries, exact instance logging, billing export gate. Decision rule fixed before
+  the run.
+- Test 4 memory: all sizes at 2 GiB (size L needs it), so size is the only difference between
+  the Test 4 services. Size M: Cloud SQL only if Redis (needs VPC) gets complicated.
