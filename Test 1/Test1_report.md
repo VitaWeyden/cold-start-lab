@@ -23,7 +23,7 @@ chapters) and as the baseline that Test 2 will be compared against.
 | Idle tiers tested | 5, 15, 30, 60 minutes |
 | Total requests recorded | 264 data rows (`results.csv`) |
 | Headline finding | Scale-to-zero teardown threshold lies **between 15 and 30 minutes** for this configuration. Cold starts cost **3.2–5.9 s**, warm requests **~200–350 ms**. |
-| Headline cost finding | Over the measurement window, the always-warm service billed **€0.26**; the scale-zero service billed **≈€0.00** (negligible). |
+| Headline cost finding | Over the 10.37 h measurement window, the always-warm service cost **€0.230** (€0.252 over its 11.35 h existence incl. setup); the scale-zero service **€0.0028** for 86.3 vCPU-s of request processing. Exact figures from the BigQuery billing export, see §6.2 (the €0.26 / ≈€0.00 first read from the rounded Reports view are kept in §6 for reference). |
 
 ---
 
@@ -217,6 +217,12 @@ mention in Limitations, but it is not a confound in the reported numbers.
 
 ## 6. Billing Validation
 
+> **Update 2026-10-29:** the BigQuery billing export, switched on later, turned out to contain
+> hourly data back to 2026-09-01, so Test 1 can now be costed exactly. §6.2 has those numbers;
+> they replace the rounded figures below, which are kept as the first reading. In particular
+> the 79 s / 81 requests in the table below were a partial-day view: the export shows 86.3
+> vCPU-s and 264 requests in the measurement hours, i.e. exactly the 264 rows of `results.csv`.
+
 The GCP Billing report was checked the following day (reports can lag up to 24h)
 using **Reports → Group by SKU**, filtered to the project and the measurement
 window. Because both services have `max-instances=1`, each Cloud Run billing SKU
@@ -244,6 +250,42 @@ that belongs in the paper.
 scale-zero: negligible at this traffic volume, by construction
 ```
 
+### 6.2 Exact figures from the BigQuery billing export (added 2026-10-29)
+
+Source: `billing/billing_hourly_2026-10.csv` (hourly rows, EUR, gross), computed by
+`billing/billing_windows.py` (output in `billing/billing_summary.txt`).
+
+Exact Tier 2 unit prices (identical in every row):
+
+| SKU | EUR per unit |
+|---|---|
+| Services CPU Tier 2 (Request-based) | 2.9499e-05 per vCPU-s |
+| Services Memory Tier 2 (Request-based) | 3.0187e-06 per GiB-s |
+| Services Min Instance CPU Tier 2 | 3.0798e-06 per vCPU-s |
+| Services Min Instance Memory Tier 2 | 3.0798e-06 per GiB-s |
+
+So one 1 vCPU + 1 GiB min instance costs **6.1596e-06 EUR/s = €0.0222/h = €0.532/day =
+€15.97 per 30-day month**. (The earlier €0.00000636/s came from dividing the rounded €0.26.)
+
+The min-instance rows are reported in uneven chunks (hours with ~2,400 s next to hours with
+~4,800 s), so the always-warm cost of a window is computed as wall-clock seconds x price.
+Request-based rows land in the hour they happen.
+
+| | Test 1 |
+|---|---|
+| measurement window | 2026-10-02 18:12:00 -> 10-03 04:34:11 UTC = 37,331 s (10.37 h) |
+| always-warm, measurement window | **€0.2299** |
+| always-warm, whole existence (40,854.6 s, incl. deploy and set-up) | €0.2516 (the Reports view showed €0.26) |
+| scale-zero, request-based CPU + memory (hours 18-04) | 86.3 vCPU-s, **€0.0028** |
+| requests billed in hours 18-04 | 264 (= 264 rows in `results.csv`) |
+
+Corrected extrapolation (always-warm, continuous):
+
+```
+6.1596e-06 EUR/s -> €0.0222/h -> €0.53/day -> €15.97 per 30-day month
+scale-zero: €0.0028 for 264 requests (132 to scale-zero, 12 of them cold) in this run
+```
+
 ### 6.1 Comparison with the `cost.py` model
 
 `cost.py`'s price constants are the published **USD** list prices for a
@@ -269,6 +311,21 @@ scale-zero (min=0)
 
 Extra cost of the warm instance: $12.86 / month  (~EUR 11.83 / month, at rate 0.92)
 ```
+
+**Update 2026-10-29:** `cost.py` now uses Tier 2 prices by default (`--tier 2`, Tier 1 x 1.4)
+and can use the exact EUR prices from the bill (`--prices bill`):
+
+```
+$ python3 cost.py --requests-per-month 100000 --avg-ms 210 --memory-gib 1.0 --eur-rate 0.92   # Tier 2 list
+  Extra cost of the warm instance: $18.00 / month  (~EUR 16.56 / month, at rate 0.92)
+$ python3 cost.py --requests-per-month 100000 --avg-ms 210 --memory-gib 1.0 --prices bill    # exact EUR
+  Extra cost of the warm instance: EUR 15.84 / month
+```
+
+The bill's EUR prices are 1.229-1.232 x the Tier 1 USD list prices, i.e. the 1.4 Tier 2
+multiplier at about 0.878 EUR per USD; at 0.92 the Tier 2 list estimate is ~4% too high.
+(15.84 < 15.97 because the model counts the min instance only for the time it is idle.)
+The paragraph below is the original reading:
 
 Model estimate (**≈€11.83/month**, Tier-1 prices converted at an indicative
 rate) vs. real extrapolated cost (**≈€16.70/month**, actual Tier-2 billing) are

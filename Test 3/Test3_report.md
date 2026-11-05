@@ -2,7 +2,8 @@
 
 Run date: 2026-10-12, 12:22:48 - 19:05:39 UTC (14:22 - 21:05 CEST), about 6 h 43 min.
 Region: `europe-central2`. Files: `Test 3/results3.csv`, `teardown3.csv`, `summary3.csv`,
-`shutdown_logs.json`, `services3.csv`.
+`shutdown_logs.json`, `services3.csv`; cost: `billing/billing_hourly_2026-10.csv`,
+`billing/billing_windows.py` (section 4 updated on 2026-10-29).
 
 ## 1. Question
 
@@ -93,6 +94,15 @@ start it. The idle timer was therefore not what removed the instance; the data d
 what did (a platform-side replacement is a possibility, not something we can verify).
 Excluding this sample, the 15-minute tier is 19/19 warm.
 
+*Added 2026-10-29:* the hourly billing export shows **2 billed requests on `coldstart-idle-15`
+in the 14:00 UTC hour that our client did not send** (6 billed, 4 sent) together with 12.8
+vCPU-s of request-based time, against 0.3 - 1.3 vCPU-s in the other warm hours of that service.
+That is about two extra instance starts, in the same hour as the two shutdowns at 14:40:37 and
+14:42:28.9. So the most likely trigger of the early replacement is traffic from outside the
+measurement (the services were public, `--allow-unauthenticated`), not the platform. Who sent
+it can be read from the Cloud Run request log of that hour while the logs are still kept
+(30 days, i.e. until about 2026-11-11).
+
 **Teardown before 900 s.** 15 of the 64 shutdown log lines were written before 900 s after the
 previous response (earliest 888.6 s, in `coldstart-idle-19`), yet all 19 requests of the 15-min
 tier, sent at exactly 900 s, were answered by a live instance. So a `Shutting down` line a few
@@ -102,14 +112,40 @@ same, and we did not measure the difference.
 
 ## 4. Cost
 
-The BigQuery billing export could **not** be used. All exports under Billing -> Billing export
-were still "Disabled" at the time of the run; the `billing_export` dataset exists but is empty,
-and the standard export is not backfilled, so the planned hourly per-service costs do not
-exist. The label filter in Billing -> Reports offered no label keys, so the cost of the
-`experiment=boundary` services could not be isolated either.
+*Rewritten 2026-10-29.* At the time of the run the BigQuery billing export was still
+"Disabled". It was switched on later and, contrary to what we expected, it contains hourly data
+back to 2026-09-01, with the service labels. So the per-service cost of Test 3 exists after
+all (`billing/billing_windows.py`, hours 12 - 19 UTC on 2026-10-12, gross EUR):
 
-What is available is the day-level Reports view for 2026-10-12 for the whole project
-(no label filter), so these numbers are upper bounds for Test 3:
+| service | billed requests | client attempts | of them 429 | request-based vCPU-s | cost |
+|---|---|---|---|---|---|
+| `coldstart-idle-15` | 24 | 21 | 0 | 21.1 | €0.00069 |
+| `coldstart-idle-16` | 22 | 21 | 6 | 97.5 | €0.00318 |
+| `coldstart-idle-17` | 22 | 21 | 3 | 85.2 | €0.00278 |
+| `coldstart-idle-18` | 22 | 21 | 10 | 103.1 | €0.00336 |
+| `coldstart-idle-19` | 24 | 21 | 10 | 113.3 | €0.00369 |
+| `coldstart-idle-20` | 22 | 21 | 7 | 98.6 | €0.00321 |
+| **Test 3 total** | **136** | **126** | **36** | **518.8** | **€0.0169** |
+| no label (12:00 hour) | 4 | - | - | 9.3 + 227.4 s min instance | €0.0017 |
+
+Prices: 2.9499e-05 EUR per vCPU-s and 3.0187e-06 EUR per GiB-s (request-based, Tier 2).
+
+What the bill adds to the findings:
+
+- **The 429 requests cost money too.** Every service paid far more vCPU time than its successful
+  responses took (e.g. idle-16: 97.5 vCPU-s billed vs 53 s of successful responses), because
+  request-based billing includes the start-up time of every instance, including the ones the
+  429 requests started (see 3.4 and `OBSERVATIONS.md` 2026-10-29: one instance per request
+  after a teardown, 429s included).
+- **140 vs 126 requests.** 4 of the 140 belong to an unlabelled service in the 12:00 hour,
+  together with 227.4 s of min-instance time (a min-instances >= 1 service that existed for a
+  few minutes; the always-warm service itself had stopped billing on 2026-10-04). Of the
+  remaining 10 extra requests on the labelled services, 8 fall in the 12:00 hour (before or
+  around the 12:22 start, i.e. checks of the new services) and 2 in the 14:00 hour on
+  `coldstart-idle-15` (see 3.4).
+- The min-instance lines of the day (227.4 s) are therefore not Test 3, as stated before.
+
+The day-level Reports view that this section used before, for reference (whole project):
 
 | SKU | usage | cost |
 |---|---|---|
@@ -118,14 +154,9 @@ What is available is the day-level Reports view for 2026-10-12 for the whole pro
 | Cloud Run requests | 140 | EUR 0.00 |
 | Cloud Run min-instance CPU / memory | 227.41 s / GiB-s | EUR 0.00 |
 
-The Report rounds to cents, so the Cloud Run cost of the whole day is under 3 cents. The
-min-instance lines cannot come from Test 3 (all its services had `min-instances` 0). The 140
-requests do not match the 126 requests the measurement sent (36 of them 429); the
-difference is not explained, other traffic on the same day is possible.
-
-The measurement VM is separate infrastructure, not experiment cost: it ran 18.7 h on that day
-(E2 core 4.68 h EUR 0.11, E2 RAM 18.7 GiB-h EUR 0.06, disk EUR 0.01, plus three Network
-Intelligence Center items of EUR 0.02 / 0.01 / 0.02). It was deleted after the run.
+The measurement VM is separate infrastructure, not experiment cost: €0.094 during the run
+(12 - 19 UTC, Compute Engine + Network Intelligence Center), but it kept running until it was
+deleted, and those idle days cost €0.90, ten times the run itself.
 
 ## 5. Conclusions for the paper
 
@@ -146,9 +177,10 @@ Intelligence Center items of EUR 0.02 / 0.01 / 0.02). It was deleted after the r
 - The valid sample sizes at 18 and 19 min are 10 (CI lower bound 72%); the 429s reduced them.
 - Teardown time is measured from the client-side end of the previous response, which differs
   from the server's view by network time and body transfer (well under a second here).
-- Cost is a project-wide upper bound, not per service (see section 4).
+- Cost per service is exact per hour, not per request: the export has no finer resolution.
 - The causes of the 429s, of the 166 s teardown at tier 15 and of the early shutdown lines were
-  not investigated further.
+  not investigated further at the time (see the 2026-10-29 additions in 3.4 and 4, and the
+  Test 4 pilot).
 
 ## 7. Reproduce
 

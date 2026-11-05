@@ -1,0 +1,62 @@
+1. Exact unit prices in the export (EUR, gross, every row has the same price)
+
+  Services CPU Tier 2  (Request-based billing)                   2.9499e-05 per second
+  Services Memory Tier 2 (Request-based billing)                 3.0187e-06 per gibibyte second
+  Services Min Instance CPU Tier 2 (Request-based billing)       3.0798e-06 per second
+  Services Min Instance Memory Tier 2 (Request-based billing)    3.0798e-06 per gibibyte second
+  Requests                                                       0.0000e+00 per count
+
+  always-warm (1 vCPU + 1 GiB min instance): 6.1596e-06 EUR/s = EUR 0.0222/h = EUR 0.5322/day = EUR 15.97/30-day month
+  ratio to the Tier 1 USD list price: req_cpu 1.229, req_mem 1.207, min_cpu 1.232, min_mem 1.232  (= 1.4 Tier 2 multiplier x ~0.878 EUR per USD)
+
+2. Min-instance rows come in uneven chunks (seconds reported per hour, always-warm)
+
+  50 hours with min-instance usage; per hour min 227 s, max 6020 s; 23 hours report more than 3,600 s
+  always-warm life 2026-10-02 17h - 10-04 15h: 167,812.7 s billed = 46.61 h (slides: 167,813 s)
+
+3. Per test
+
+  Test 1: 2026-10-02T18:12:00 -> 2026-10-03T04:34:11 UTC = 37,331 s (10.37 h)
+    always-warm (min instance, wall clock x price): EUR 0.2299
+    scale-zero (request-based CPU + memory, hours 18h-04h): 86.3 vCPU-s, EUR 0.0028
+    requests billed 264 vs client rows 264
+    always-warm over its 40,854.6 s existence in the Test 1 report: EUR 0.2516 (report: EUR 0.26 from the rounded Reports view)
+  Test 2: 2026-10-03T18:54:00 -> 2026-10-04T09:57:47 UTC = 54,227 s (15.06 h)
+    always-warm (min instance, wall clock x price): EUR 0.3340
+    scale-zero (request-based CPU + memory, hours 19h-09h): 168.5 vCPU-s, EUR 0.0055
+    requests billed 282 vs client rows 282
+  Before Test 2 (18h, before the 18:54 start): 4 requests, 10.3 vCPU-s - checks before the run, not part of Test 2
+  Gap Test 1 end -> Test 2 start: 51,589 s -> always-warm EUR 0.3178 (README correction rate 0.00000636 EUR/s would give EUR 0.3281)
+  Test 1 start -> Test 2 end incl. the gap: 143,147 s -> EUR 0.8817
+
+  Test 3 (hours 12h-19h on 2026-10-12), per service label idle_min:
+    service      billed req  client  429   vCPU-s   cost EUR
+    (no label)            4       0    0      9.3    0.00170
+    15                   24      21    0     21.1    0.00069
+    16                   22      21    6     97.5    0.00318
+    17                   22      21    3     85.2    0.00278
+    18                   22      21   10    103.1    0.00336
+    19                   24      21   10    113.3    0.00369
+    20                   22      21    7     98.6    0.00321
+    labelled services total: 136 requests, 518.8 vCPU-s, EUR 0.0169
+    unlabelled in the 12h hour: 4 requests, 227.4 s of min instance
+
+  Test 3, hours where billed requests != client attempts (per service):
+    12h  -   billed 4  client 0  (9.3 vCPU-s billed)
+    12h  15  billed 4  client 3  (5.5 vCPU-s billed)
+    12h  16  billed 4  client 3  (17.5 vCPU-s billed)
+    12h  17  billed 4  client 3  (12.1 vCPU-s billed)
+    12h  18  billed 4  client 3  (18.7 vCPU-s billed)
+    12h  19  billed 5  client 2  (11.7 vCPU-s billed)
+    12h  20  billed 3  client 2  (9.3 vCPU-s billed)
+    14h  15  billed 6  client 4  (12.8 vCPU-s billed)
+    17h  20  billed 4  client 3  (17.7 vCPU-s billed)
+    18h  20  billed 2  client 3  (11.0 vCPU-s billed)
+
+4. Measurement VM (Compute Engine + Network Intelligence Center), not experiment cost
+
+  Tests 1-2 period (10-02 17h - 10-04 15h)     EUR 0.4655
+  Test 3 run (10-12 12h - 19h)                 EUR 0.0942
+  idle after Test 3 (10-12 20h - deletion)     EUR 0.9018
+
+5. Whole project 2026-10-01 - 10-16 by service (gross): Compute Engine EUR 1.14, Cloud Run EUR 1.07, Networking EUR 0.32; total EUR 2.54

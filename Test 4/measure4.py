@@ -6,7 +6,8 @@ exactly IDLE minutes after the END of the previous response), with the fixes tha
 
   * Billing export gate. Before anything is sent, `bq ls` must show a
     gcp_billing_export_v1_* table in the billing dataset; otherwise the script stops.
-    (Test 3: the export was never switched on and is not backfilled, so its cost was lost.)
+    (Test 3: the export was not switched on during the run; it was recovered later only because
+    the export happened to backfill, which is not something to rely on.)
   * Request id on every attempt. A 32-hex id is sent as X-Request-Id (echoed by the app) and as
     the trace id in X-Cloud-Trace-Context / traceparent, so every client row can be joined with
     the Cloud Run request log -- including 429s, which never reach the application.

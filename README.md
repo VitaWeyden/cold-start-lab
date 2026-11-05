@@ -35,6 +35,7 @@ The application is a mid-sized **webshop analytics API** (FastAPI, pandas, NumPy
 | `Test 1/Test1_report.md` | full methodology, results and billing validation for the completed first measurement run |
 | `deploy3.sh`, `measure3.py`, `analyze3.py` | Test 3 (boundary): one service per idle tier, parallel measurement with real idle times, analysis incl. boundary bracket / logistic fit |
 | `teardown_times.py`, `billing_query.sql` | Test 3: teardown moment from Cloud Logging, hourly per-service cost from the BigQuery billing export |
+| `billing/billing_hourly_2026-10.csv`, `billing/billing_windows.py`, `billing/billing_summary.txt` | the whole project's hourly bill 2026-10-01..16 from the BigQuery export, and the exact cost of Tests 1-3 computed from it |
 | `Test 4/Test4_report.md` | Test 4 pilot: why, design, decision rule (written before the run), run book |
 | `Test 4/setup_billing_export.sh` | creates the billing dataset, prints the Console step, `check` tells whether the export table exists |
 | `Test 4/deploy4p.sh`, `measure4.py`, `collect_logs4.sh`, `analyze4.py`, `billing_query4.sql` | Test 4 pilot: max-instances 1 vs 3; measurement with billing gate, request ids, retries, staggered starts; log download; joined analysis; per-service cost |
@@ -148,7 +149,7 @@ python3 analyze3.py results3.csv
 
 Nothing else may send requests to these services during the run (browser tabs, uptime checks), otherwise the idle time is not what the CSV says.
 
-**Result (`Test 3/results3.csv`, `teardown3.csv`, `summary3.csv`; full write-up in `Test 3/Test3_report.md`):** run on 2026-10-12, 12:22 - 19:05 UTC. 15 min idle: 1/20 cold (and that one was not an idle-timer teardown, see the report); 16, 17, 18, 19, 20 min: 14/14, 17/17, 10/10, 10/10, 13/13 cold. The boundary is the crossing between 15 and 16 minutes. Cloud Run sent SIGTERM 888.6 - 910.1 s after the last request (median 903.3 s, 64 of 65 cold samples; one outlier at 166.3 s). Cold requests took a median of 3375 ms against 251 ms warm. 36 of the 120 attempts returned HTTP 429 ("no available instance") on cold starts at the 16 - 20 min tiers, which was not seen in Tests 1 and 2; the cause is open. Cost: see "BigQuery billing export" below, the per-service numbers do not exist.
+**Result (`Test 3/results3.csv`, `teardown3.csv`, `summary3.csv`; full write-up in `Test 3/Test3_report.md`):** run on 2026-10-12, 12:22 - 19:05 UTC. 15 min idle: 1/20 cold (and that one was not an idle-timer teardown, see the report); 16, 17, 18, 19, 20 min: 14/14, 17/17, 10/10, 10/10, 13/13 cold. The boundary is the crossing between 15 and 16 minutes. Cloud Run sent SIGTERM 888.6 - 910.1 s after the last request (median 903.3 s, 64 of 65 cold samples; one outlier at 166.3 s). Cold requests took a median of 3375 ms against 251 ms warm. 36 of the 120 attempts returned HTTP 429 ("no available instance") on cold starts at the 16 - 20 min tiers, which was not seen in Tests 1 and 2; the cause is open. Cost (from the backfilled BigQuery export, 2026-10-29): Test 3's six services together €0.0169 (€0.0007 - €0.0037 each), the 429 requests included, since each of them started an instance whose start-up time was billed.
 
 #### Test 4 pilot (max-instances 1 vs 3, before Test 4)
 
@@ -186,6 +187,14 @@ python3 cost.py --requests-per-month 100000 --avg-ms 70 --memory-gib 1.0 --eur-r
 
 #### Test 2 billing correction
 
+> **Resolved 2026-10-29.** The BigQuery export turned out to hold hourly data back to 2026-09-01,
+> so Test 2 is costed directly (`billing/billing_summary.txt`): always-warm **€0.3340** for the
+> 54,227 s window, scale-zero **€0.0055** (168.5 vCPU-s, 282 requests = the 282 CSV rows). The
+> method below was right, but its rate was 3% high: the exact min-instance price is
+> **6.1596e-06 EUR/s** (1 vCPU + 1 GiB), not 0.00000636 (which came from the rounded €0.26).
+> Test 1 exact: €0.2299 for the window, €0.2516 over the service's 40,854.6 s existence.
+> Continuous always-warm: **€15.97 per 30-day month** (not €16.70). The original text follows.
+
 Test 1's cost could be read straight off the Billing Reports delta, because its measurement window started right after redeploy — the delta *was* the measurement. Test 2 can't use that shortcut: the always-warm service kept billing through the ~14h21m idle gap between the two tests (see the Test 2 timestamps table above), so the raw Min-Instance-seconds delta between "end of Test 1" and "end of Test 2" covers three periods, not just Test 2 — the idle gap, Test 2's own run, and whatever further gap passes until the Billing report is actually checked (it lags up to 24h).
 
 This is not a problem in practice, because Cloud Run's min-instance billing is a flat rate per elapsed wall-clock second — it doesn't matter whether the instance is idle or actually serving a request. That means the idle-gap portion can be subtracted out arithmetically, using the real per-second rate already derived from Test 1's billing validation (`Test 1/Test1_report.md` §6: €0.26 / 40,854.6 s ≈ **€0.00000636/s**, for 1 vCPU + 1 GiB, continuous, Tier 2 region pricing), instead of needing hour-level filtering in the Billing Reports UI (which only supports day-level granularity anyway):
@@ -200,9 +209,9 @@ Once Test 2's billing delta is visible (usually ~24h after the window closes), c
 
 #### BigQuery billing export (Test 3, one-time setup)
 
-**What happened in the Test 3 run:** the dataset was created but the export itself was never switched on in the Console (every export under Billing -> Billing export read "Disabled" afterwards), so the `billing_export` dataset stayed empty and `billing_query.sql` failed with "does not match any table". Because the export is not backfilled, the hourly per-service costs of Test 3 cannot be recovered; the Test 3 report uses the day-level Reports view for the whole project (upper bound) instead. For a future run, check in the Console that *Standard usage cost* is enabled and that a `gcp_billing_export_v1_...` table has appeared **before** starting the measurement.
+**What happened in the Test 3 run:** the dataset was created but the export itself was never switched on in the Console (every export under Billing -> Billing export read "Disabled" afterwards), so the `billing_export` dataset stayed empty and `billing_query.sql` failed with "does not match any table". **Update 2026-10-29:** once switched on (before the Test 4 pilot), the export filled itself back to 2026-09-01, with the service labels, so the hourly per-service cost of Test 3 (and of Tests 1-2) was recovered after all: `billing/billing_summary.txt`, `Test 3/Test3_report.md` section 4. For a future run, check in the Console that *Standard usage cost* is enabled and that a `gcp_billing_export_v1_...` table has appeared **before** starting the measurement.
 
-The Billing Reports UI only has day-level granularity. The standard usage cost export to BigQuery gives hourly rows per SKU and per label, so the cost of each Test 3 service can be read separately. It is **not backfilled**: enable it *before* the measurement starts, and expect the first rows a few hours later.
+The Billing Reports UI only has day-level granularity. The standard usage cost export to BigQuery gives hourly rows per SKU and per label, so the cost of each Test 3 service can be read separately. In our project it was backfilled to the start of the previous month when it was switched on; do not rely on that (Google does not promise it for every case): enable it *before* the measurement starts and check that the table exists (`Test 4/setup_billing_export.sh check`).
 
 ```bash
 gcloud services enable bigquery.googleapis.com

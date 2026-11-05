@@ -1,5 +1,23 @@
 # Cloud Run: scale-to-zero vs. warm instance
 
+> **Test 2 billing result (added 2026-10-29, from the BigQuery billing export).** This file is
+> the README as it was during Test 2; the billing correction described further down could not
+> be checked at the time. With the hourly export (`billing/billing_hourly_2026-10.csv`,
+> `billing/billing_windows.py`) it is no longer needed:
+>
+> | | Test 2 |
+> |---|---|
+> | measurement window | 2026-10-03 18:54:00 -> 10-04 09:57:47 UTC = 54,227 s (15.06 h) |
+> | always-warm (wall clock x 6.1596e-06 EUR/s) | **€0.3340** |
+> | scale-zero, request-based CPU + memory (hours 19-09) | 168.5 vCPU-s, **€0.0055** |
+> | requests billed in hours 19-09 | 282 (= 282 rows in `results_2.csv`) |
+> | gap Test 1 end -> Test 2 start (51,589 s), always-warm | €0.3178 |
+> | always-warm whole existence 10-02 17h - 10-04 15h | 167,812.7 s, €1.0337 |
+>
+> The correction formula itself was right; its rate (0.00000636 EUR/s, from the rounded
+> €0.26) was 3% too high: it gives €0.3281 for the gap instead of €0.3178. In the 18h hour,
+> before the 18:54 start, 4 other requests (10.3 vCPU-s) were billed - checks before the run.
+
 Small-scale university lab experiment (Cloud Native Architecture) comparing Google
 Cloud Run's `min-instances=0` (scale-to-zero) and `min-instances=1` (always-warm)
 configurations: cold start latency, steady-state latency, and monthly cost.

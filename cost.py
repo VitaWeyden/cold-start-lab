@@ -22,9 +22,15 @@ requests. The exact per-SKU prices in EUR are in the Cloud Billing Catalog, e.g.
 or the BigQuery billing export, over the multiplier when quoting prices in the paper.
 The free tier is the same in both tiers (it is based on us-central1 prices).
 
+--prices bill uses the exact Tier 2 EUR prices read from our own BigQuery billing export
+(billing/billing_summary.txt, 2026-10): 1.229-1.232 x the Tier 1 USD prices, i.e. 1.4 at about
+0.878 EUR/USD. The export bills requests at 0 inside the free tier, so the per-request price in
+this mode is the Tier 1 list price x 1.229 (not observed). Output is in EUR; --eur-rate is ignored.
+
 Usage:
   python3 cost.py --requests-per-month 100000 --avg-ms 40                 # Tier 2 (default)
   python3 cost.py --requests-per-month 100000 --avg-ms 40 --tier 1        # the old Tier 1 estimate
+  python3 cost.py --requests-per-month 100000 --avg-ms 40 --prices bill   # exact EUR prices from our bill
   python3 cost.py --requests-per-month 100000 --avg-ms 40 --no-free-tier
   python3 cost.py --requests-per-month 100000 --avg-ms 40 --eur-rate 0.92
 
@@ -42,13 +48,19 @@ PRICE_MEM_ACTIVE_PER_GIB_S = 0.0000025
 PRICE_CPU_IDLE_PER_VCPU_S = 0.0000025       # idle time of a min-instance
 PRICE_MEM_IDLE_PER_GIB_S = 0.0000025
 PRICE_PER_MILLION_REQUESTS = 0.40
+# --- PRICES (EUR, Tier 2, europe-central2) measured in our billing export, 2026-10 ---
+BILL_EUR = {
+    "cpu_active": 2.9499e-05, "mem_active": 3.0187e-06,
+    "cpu_idle": 3.0798e-06, "mem_idle": 3.0798e-06,
+    "per_million_requests": 0.40 * 1.229,   # not observed (free tier), list price x 1.229
+}
 # Monthly free tier (applied to the account, not per instance)
 FREE_CPU_S, FREE_MEM_GIB_S, FREE_REQUESTS = 180_000, 360_000, 2_000_000
 
 SECONDS_PER_MONTH = 30 * 24 * 3600
 
 
-def cost(requests, avg_ms, vcpu, mem_gib, min_instances, free_tier, mult=1.0):
+def cost(requests, avg_ms, vcpu, mem_gib, min_instances, free_tier, mult=1.0, prices=None):
     active_s = requests * avg_ms / 1000            # assumption: requests do not overlap
     cpu_s = active_s * vcpu
     mem_s = active_s * mem_gib
@@ -63,12 +75,17 @@ def cost(requests, avg_ms, vcpu, mem_gib, min_instances, free_tier, mult=1.0):
         mem_s = max(0, mem_s - FREE_MEM_GIB_S)
         req = max(0, req - FREE_REQUESTS)
 
+    p = prices or {
+        "cpu_active": PRICE_CPU_ACTIVE_PER_VCPU_S * mult, "mem_active": PRICE_MEM_ACTIVE_PER_GIB_S * mult,
+        "cpu_idle": PRICE_CPU_IDLE_PER_VCPU_S * mult, "mem_idle": PRICE_MEM_IDLE_PER_GIB_S * mult,
+        "per_million_requests": PRICE_PER_MILLION_REQUESTS * mult,
+    }
     parts = {
-        "active CPU": cpu_s * PRICE_CPU_ACTIVE_PER_VCPU_S * mult,
-        "active memory": mem_s * PRICE_MEM_ACTIVE_PER_GIB_S * mult,
-        "requests": req / 1e6 * PRICE_PER_MILLION_REQUESTS * mult,
-        "idle CPU (min-instance)": idle_cpu_s * PRICE_CPU_IDLE_PER_VCPU_S * mult,
-        "idle memory (min-instance)": idle_mem_s * PRICE_MEM_IDLE_PER_GIB_S * mult,
+        "active CPU": cpu_s * p["cpu_active"],
+        "active memory": mem_s * p["mem_active"],
+        "requests": req / 1e6 * p["per_million_requests"],
+        "idle CPU (min-instance)": idle_cpu_s * p["cpu_idle"],
+        "idle memory (min-instance)": idle_mem_s * p["mem_idle"],
     }
     return parts
 
@@ -86,28 +103,36 @@ def main():
                     help="region price tier; europe-central2 (this experiment) is Tier 2 (default)")
     ap.add_argument("--tier2-multiplier", type=float, default=1.4,
                     help="Tier 2 price = Tier 1 price x this (default 1.4, see the docstring)")
+    ap.add_argument("--prices", choices=("list", "bill"), default="list",
+                    help="list: USD list price (x Tier 2 multiplier); bill: exact EUR prices from our bill")
     a = ap.parse_args()
     mult = a.tier2_multiplier if a.tier == 2 else 1.0
+    bill = a.prices == "bill"
+    if bill:
+        a.eur_rate = None
+    cur = "EUR " if bill else "$"
 
     print(f"Scenario: {a.requests_per_month:,} requests/month, {a.avg_ms} ms/request, "
           f"{a.vcpu} vCPU, {a.memory_gib} GiB, free tier: {'no' if a.no_free_tier else 'yes'}, "
-          f"Tier {a.tier} prices" + (f" (Tier 1 x {mult})" if a.tier == 2 else "") + "\n")
+          + ("exact Tier 2 EUR prices from the bill" if bill else
+             f"Tier {a.tier} prices" + (f" (Tier 1 x {mult})" if a.tier == 2 else "")) + "\n")
     totals = {}
     for name, m in (("scale-zero (min=0)", 0), ("always-warm (min=1)", 1)):
-        parts = cost(a.requests_per_month, a.avg_ms, a.vcpu, a.memory_gib, m, not a.no_free_tier, mult)
+        parts = cost(a.requests_per_month, a.avg_ms, a.vcpu, a.memory_gib, m, not a.no_free_tier, mult,
+                     BILL_EUR if bill else None)
         totals[name] = sum(parts.values())
         print(name)
         for k, v in parts.items():
-            line = f"  {k:<32} ${v:>9.4f}"
+            line = f"  {k:<32} {cur}{v:>9.4f}"
             if a.eur_rate:
                 line += f"   (~EUR {v * a.eur_rate:>7.4f})"
             print(line)
-        total_line = f"  {'TOTAL':<32} ${totals[name]:>9.4f} / month"
+        total_line = f"  {'TOTAL':<32} {cur}{totals[name]:>9.4f} / month"
         if a.eur_rate:
             total_line += f"   (~EUR {totals[name] * a.eur_rate:>7.4f} / month)"
         print(total_line + "\n")
     diff = totals["always-warm (min=1)"] - totals["scale-zero (min=0)"]
-    diff_line = f"Extra cost of the warm instance: ${diff:.2f} / month"
+    diff_line = f"Extra cost of the warm instance: {cur}{diff:.2f} / month"
     if a.eur_rate:
         diff_line += f"  (~EUR {diff * a.eur_rate:.2f} / month, at rate {a.eur_rate})"
     print(diff_line)

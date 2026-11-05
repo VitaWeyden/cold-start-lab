@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # One-time setup of the Cloud Billing export to BigQuery (needed for per-service cost in Test 4).
 # Test 3 lesson: creating the dataset is NOT enough. The export itself must be switched on in
-# the Console, and it is not backfilled, so do this at least a day before the measurement.
+# the Console. (When we switched it on it filled itself back to the start of the previous month, but
+# that is not something to rely on: switch it on, and check it, before the measurement.)
 #
 #   export PROJECT_ID=cold-start-lab
 #   ./setup_billing_export.sh          # creates the dataset, prints the Console steps

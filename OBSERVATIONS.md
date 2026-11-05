@@ -188,6 +188,7 @@ Process mistakes to avoid next time:
 - BigQuery billing export was never enabled in the Console (all exports
   "Disabled"); the dataset stayed empty, no per-service hourly cost exists, and
   the export is not backfilled. The Reports label filter listed no label keys.
+  [2026-10-29: wrong - once switched on it backfilled to 2026-09-01, see the 2026-10-29 entry.]
   Cost of the day (whole project, no label filter, 2026-10-12): Cloud Run CPU
   528.1 s EUR 0.02, memory 528.1 GiB-s EUR 0.00, 140 requests EUR 0.00; the
   measurement VM (18.7 h) about EUR 0.17-0.18 plus small Network Intelligence
@@ -221,3 +222,35 @@ Process mistakes to avoid next time:
   the run.
 - Test 4 memory: all sizes at 2 GiB (size L needs it), so size is the only difference between
   the Test 4 services. Size M: Cloud SQL only if Redis (needs VPC) gets complicated.
+## 2026-10-29 - BigQuery billing export switched on: it is backfilled, Tests 1-3 costed exactly
+
+- Switched on (Standard usage cost) before the Test 4 pilot. The table appeared within the hour
+  and holds hourly rows from 2026-09-01, with the service labels. The "not backfilled"
+  assumption of the Test 3 write-up was wrong for this case. Saved: `billing/billing_hourly_2026-10.csv`,
+  computed by `billing/billing_windows.py` -> `billing/billing_summary.txt`.
+- Exact Tier 2 EUR prices: request-based CPU 2.9499e-05 /vCPU-s, memory 3.0187e-06 /GiB-s;
+  min instance CPU and memory 3.0798e-06 each -> always-warm 1 vCPU + 1 GiB = 6.1596e-06 EUR/s
+  = EUR 0.0222/h = EUR 0.53/day = EUR 15.97 / 30-day month (was EUR 16.70 from the rounded EUR 0.26).
+  The EUR prices are 1.229-1.232 x the Tier 1 USD list price = 1.4 x ~0.878 EUR/USD.
+- Min-instance rows come in uneven chunks per hour (227 - 6,020 s; 23 hours report > 3,600 s),
+  so a window's always-warm cost = wall-clock seconds x price. Request-based rows are hour-exact:
+  billed requests = client rows hour by hour in Test 1 (264) and Test 2 (282).
+- Test 1: always-warm EUR 0.2299 (window) / EUR 0.2516 (existence, 40,854.6 s); scale-zero
+  EUR 0.0028 (86.3 vCPU-s; the Reports view had shown 79 s and 81 requests, a partial day).
+- Test 2: always-warm EUR 0.3340; scale-zero EUR 0.0055 (168.5 vCPU-s). Gap Test 1 -> 2:
+  EUR 0.3178 (the README correction rate would have given 0.3281). 4 requests in the 18h hour
+  before the 18:54 start = checks.
+- Test 3: six services EUR 0.0169 total, EUR 0.0007-0.0037 each; billed vCPU time far above the
+  successful response time because every instance start is billed, the 429-started ones too.
+  140 requests = 136 labelled + 4 unlabelled (12h hour, with 227.4 s of min-instance time of an
+  unlabelled min>=1 service; the always-warm had stopped billing on 2026-10-04). Of the 10 extra
+  labelled requests, 8 are in the 12h hour (checks around the 12:22 start) and 2 on
+  coldstart-idle-15 in the 14h hour with 12.8 vCPU-s (~2 extra instance starts) - the same hour
+  as the unexplained 166 s replacement. Likely outside traffic to the public URL; the request
+  log of that hour can show who (logs kept 30 days, until ~2026-11-11).
+- Correction to the 2026-10-29 chat analysis: the 227.4 s of min-instance time on 2026-10-12 is
+  NOT the always-warm service running into Test 3 (it stopped billing on 2026-10-04 15h); which
+  service it was is not in the export (no labels).
+- The measurement VM cost more than the experiment: Tests 1-2 period EUR 0.47, Test 3 run EUR 0.09,
+  then EUR 0.90 idle until it was deleted (Compute Engine + Network Intelligence Center).
+  Whole project 2026-10-01..16: EUR 2.54 gross (Compute Engine 1.14, Cloud Run 1.07, Networking 0.32).
