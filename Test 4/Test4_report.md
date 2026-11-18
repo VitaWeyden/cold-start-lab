@@ -1,6 +1,6 @@
 # Test 4 - how does the size of the application change cold starts, teardown and cost?
 
-Status: **planned, not run yet.** Written before the run, so the analysis rules in section 5
+Status: **planned, not run yet. Scheduled for 2026-11-19 (Thursday), 08:00 - 18:00 UTC; deployed the day before.** Written before the run, so the analysis rules in section 5
 cannot be fitted to the result afterwards. All Test 4 files live in this folder (`Test 4/`).
 The preparation run is in `Test 4 pilot/` (its report: `Test 4 pilot/Test4_report.md`).
 
