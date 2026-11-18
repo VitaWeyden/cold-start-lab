@@ -5,7 +5,7 @@
 # Usage:
 #   export PROJECT_ID=your-project-id
 #   export REGION=europe-west1      # optional
-#   ./deploy.sh
+#   bash "Test 1/deploy.sh"     (from anywhere; app/ is found next to this folder)
 set -euo pipefail
 
 PROJECT_ID="${PROJECT_ID:?Set it first: export PROJECT_ID=...}"
@@ -28,7 +28,8 @@ gcloud artifacts repositories create "$REPO" \
   --repository-format=docker --location="$REGION" --project "$PROJECT_ID" 2>/dev/null || true
 
 echo ">> Building and pushing the image"
-gcloud builds submit app --tag "$IMAGE" --project "$PROJECT_ID"
+APP_DIR="$(cd "$(dirname "$0")/../app" && pwd)"   # the image is built from the shared app/ folder
+gcloud builds submit "$APP_DIR" --tag "$IMAGE" --project "$PROJECT_ID"
 
 deploy() {
   local name="$1" min="$2" variant="$3"

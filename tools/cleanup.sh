@@ -5,10 +5,11 @@
 #
 #   export PROJECT_ID=cold-start-lab
 #   export REGION=europe-central2
-#   ./cleanup.sh                 # everything except the VM, the image repository and the billing dataset
-#   KEEP_IMAGES=0 ./cleanup.sh   # also delete the Artifact Registry repository (all images)
-#   DELETE_VM=1   ./cleanup.sh   # also delete the measurement VM
-#   ONLY=pilot4   ./cleanup.sh   # only the Test 4 pilot services
+#   tools/cleanup.sh                 # everything except the VM, the image repository and the billing dataset
+#   KEEP_IMAGES=0 tools/cleanup.sh   # also delete the Artifact Registry repository (all images)
+#   DELETE_VM=1   tools/cleanup.sh   # also delete the measurement VM
+#   ONLY=pilot4   tools/cleanup.sh   # only the Test 4 pilot services
+# (no paths inside: it can be run from any folder)
 set -uo pipefail
 
 PROJECT_ID="${PROJECT_ID:?Set it first: export PROJECT_ID=...}"

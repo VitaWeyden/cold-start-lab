@@ -28,7 +28,7 @@ The free tier is the same in both tiers (it is based on us-central1 prices).
 this mode is the Tier 1 list price x 1.229 (not observed). Output is in EUR; --eur-rate is ignored.
 
 Usage:
-  python3 cost.py --requests-per-month 100000 --avg-ms 40                 # Tier 2 (default)
+  python3 tools/cost.py --requests-per-month 100000 --avg-ms 40           # Tier 2 (default)
   python3 cost.py --requests-per-month 100000 --avg-ms 40 --tier 1        # the old Tier 1 estimate
   python3 cost.py --requests-per-month 100000 --avg-ms 40 --prices bill   # exact EUR prices from our bill
   python3 cost.py --requests-per-month 100000 --avg-ms 40 --no-free-tier

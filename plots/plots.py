@@ -11,8 +11,8 @@ Only HTTP 200 rows are used; warm-up requests and the back-to-back
 "sequential" series are left out.
 
   pip install matplotlib
-  python3 plots.py                 # run from the project folder
-  python3 plots.py --out slides    # another output folder
+  python3 plots/plots.py                 # from anywhere; reads the Test folders, writes into plots/
+  python3 plots/plots.py --out slides    # another output folder
 """
 import argparse
 import csv
@@ -32,12 +32,14 @@ MUTED = "#5F6A74"
 GRID = "#E2DED5"
 BG = "#FFFFFF"
 
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
 TESTS = {
-    "Test 1": "Test 1/results_1.csv",
-    "Test 2": "Test 2/results_2.csv",
-    "Test 3": "Test 3/results3.csv",
+    "Test 1": os.path.join(ROOT, "Test 1", "results_1.csv"),
+    "Test 2": os.path.join(ROOT, "Test 2", "results_2.csv"),
+    "Test 3": os.path.join(ROOT, "Test 3", "results3.csv"),
 }
-TEARDOWN = "Test 3/teardown3.csv"
+TEARDOWN = os.path.join(ROOT, "Test 3", "teardown3.csv")
 
 
 def style(ax):
@@ -181,7 +183,7 @@ def fig_teardown(path, out):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("--out", default="plots", help="output folder (default: plots)")
+    ap.add_argument("--out", default=HERE, help="output folder (default: the plots/ folder)")
     args = ap.parse_args()
     os.makedirs(args.out, exist_ok=True)
     data = {name: idle_rows(path) for name, path in TESTS.items()}

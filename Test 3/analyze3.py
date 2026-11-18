@@ -3,7 +3,7 @@
 on the Test 1 / Test 2 CSVs).
 
   python3 analyze3.py results3.csv
-  python3 analyze3.py "Test 2/results_2.csv" --legacy-drop-first
+  python3 analyze3.py "../Test 2/results_2.csv" --legacy-drop-first
 
 Per idle tier: n, cold count, cold rate with 95% Wilson CI, real idle time actually waited.
 Then the boundary: the bracket between the longest idle that stayed warm and the shortest

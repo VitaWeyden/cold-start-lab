@@ -20,26 +20,52 @@ The application is a mid-sized **webshop analytics API** (FastAPI, pandas, NumPy
 | CPU / memory | 1 vCPU / 1 GiB | 1 vCPU / 1 GiB |
 | image | same | same |
 
+## Folder layout
+
+```
+app/            the measured application (v1), shared by all tests; Test 4 builds on it
+Test 1/         Tests 1-2 scripts (deploy.sh, measure.py, analyze.py), Test 1 results and report
+Test 2/         Test 2 results and report (measured with the Test 1 scripts)
+Test 3/         Test 3 scripts (boundary, teardown from logs), results and report
+Test 4 pilot/   max-instances 1 vs 3 before Test 4: scripts, results, report
+Test 4/         application size S / M / L: app variants, scripts, plan / report
+billing/        the project's hourly bill from the BigQuery export, exact cost of Tests 1-3
+plots/          presentation charts of Tests 1-3 and the script that draws them
+tools/          shared tools: cleanup.sh (delete resources), cost.py (monthly cost estimate)
+OBSERVATIONS.md dated log of findings; README.md this file
+```
+
+Each test folder holds the scripts of that test, its results and its report, and the commands
+of a test are run from inside its folder (`cd "Test 3"` etc.). Scripts that build an image find
+`app/` relative to their own location.
+
 ## Files
 
 | File | Purpose |
 |---|---|
 | `app/main.py`, `app/data.py` | the measured application: FastAPI service + dataset generation / SQLite loading |
 | `app/requirements.txt`, `app/Dockerfile` | pinned dependencies and the container image |
-| `deploy.sh` | builds the image and deploys both services, URLs go to `urls.env` |
-| `measure.py` | the measurement (first request after idle time + back-to-back requests) -> `results.csv` |
-| `analyze.py` | median, p95, cold start count -> `summary.csv`, `latency.png` |
-| `cost.py` | monthly cost estimate based on the price list |
-| `cleanup.sh` | deletes the resources (mandatory when the measurements are done!) |
+| `Test 1/deploy.sh` | builds the image from `app/` and deploys both services (Tests 1-2), URLs go to `urls.env` |
+| `Test 1/measure.py` | the measurement of Tests 1-2 (first request after idle time + back-to-back requests) -> `results.csv` |
+| `Test 1/analyze.py` | median, p95, cold start count -> `summary.csv`, `latency.png` |
+| `Test 1/local_test.csv` | output of the local trial (git-ignored) |
+| `tools/cost.py` | monthly cost estimate based on the price list |
+| `tools/cleanup.sh` | deletes the resources (mandatory when the measurements are done!) |
+| `plots/plots.py` | presentation charts of Tests 1-3 -> `plots/fig1..3_*.png` (needs matplotlib) |
 | `OBSERVATIONS.md` | dated log of things found while setting up and testing, feeds the Results/Limitations sections |
 | `Test 1/Test1_report.md` | full methodology, results and billing validation for the completed first measurement run |
-| `deploy3.sh`, `measure3.py`, `analyze3.py` | Test 3 (boundary): one service per idle tier, parallel measurement with real idle times, analysis incl. boundary bracket / logistic fit |
-| `teardown_times.py`, `billing_query.sql` | Test 3: teardown moment from Cloud Logging, hourly per-service cost from the BigQuery billing export |
+| `Test 3/deploy3.sh`, `measure3.py`, `analyze3.py` | Test 3 (boundary): one service per idle tier, parallel measurement with real idle times, analysis incl. boundary bracket / logistic fit |
+| `Test 3/teardown_times.py`, `billing_query.sql` | Test 3: teardown moment from Cloud Logging, hourly per-service cost from the BigQuery billing export |
 | `billing/billing_hourly_2026-10.csv`, `billing/billing_windows.py`, `billing/billing_summary.txt` | the whole project's hourly bill 2026-10-01..16 from the BigQuery export, and the exact cost of Tests 1-3 computed from it |
 | `Test 4 pilot/Test4_report.md` | Test 4 pilot: why, design, decision rule (written before the run), run book, results (run 2026-11-06) |
 | `Test 4 pilot/setup_billing_export.sh` | creates the billing dataset, prints the Console step, `check` tells whether the export table exists |
 | `Test 4 pilot/deploy4p.sh`, `measure4.py`, `collect_logs4.sh`, `analyze4.py`, `billing_query4.sql` | Test 4 pilot: max-instances 1 vs 3; measurement with billing gate, request ids, retries, staggered starts; log download; joined analysis; per-service cost |
 | `Test 4 pilot/main.py` | the v4 app (`app/main.py` + instance/request logging); `deploy4p.sh` builds `app/` with this file |
+| `Test 4/Test4_report.md` | Test 4 (application size): question, the three sizes, local calibration, design, analysis rules fixed before the run, cost estimate, run book |
+| `Test 4/main.py`, `Dockerfile`, `make_model.py`, `requirements-ml.txt` | the Test 4 app in three sizes from one code base (`SIZE=s/m/l` build argument): S = the v4 app, M = 1M rows + scikit-learn + 20 MB model, L = M + 500 MB model; the models are generated at build time |
+| `Test 4/local_check4.sh`, `local_check4.csv` | local calibration with Docker (1 CPU / 2 GiB): image size, start-up phases, memory per size |
+| `Test 4/cloudbuild4.yaml`, `deploy4.sh` | builds `shop-api:v4-s/m/l` with Cloud Build and deploys the 18 services (3 sizes x 6 idle tiers), writes `services4.csv` |
+| `Test 4/measure4.py`, `collect_logs4.sh`, `analyze4.py`, `billing_query4.sql` | Test 4 measurement for a fixed duration (10 h), log download, analysis by the pre-registered rules, per-service cost |
 
 ## Procedure
 
@@ -53,7 +79,7 @@ pip install -r app/requirements.txt
 cd app
 VARIANT=scale-zero  python3 -m uvicorn main:app --port 8081 &
 VARIANT=always-warm python3 -m uvicorn main:app --port 8082 &
-cd ..
+cd "../Test 1"
 python3 measure.py --scale-zero-url http://localhost:8081 --warm-url http://localhost:8082 \
     --idle 0.05 --repeats 2 --sequential 20 --out local_test.csv
 python3 analyze.py local_test.csv
@@ -77,7 +103,8 @@ cd app
 $env:VARIANT = "always-warm"
 python -m uvicorn main:app --port 8082
 
-# Terminal 3 (activate the venv here too, project folder)
+# Terminal 3 (activate the venv here too)
+cd "Test 1"
 python measure.py --scale-zero-url http://localhost:8081 --warm-url http://localhost:8082 --idle 0.05 --repeats 2 --sequential 20 --out local_test.csv
 python analyze.py local_test.csv
 ```
@@ -87,7 +114,8 @@ Use `python -m uvicorn` (not `uvicorn`), because the `uvicorn.exe` script is usu
 ```bash
 export PROJECT_ID=your-project-id
 export REGION=europe-west1
-./deploy.sh
+cd "Test 1"
+./deploy.sh                 # builds from ../app, writes urls.env into Test 1/
 ```
 If `--allow-unauthenticated` fails because of an organization policy, ask for an exception, or use `gcloud auth print-identity-token` (then `measure.py` needs an extra `Authorization` header).
 
@@ -107,6 +135,7 @@ Found that the scale-to-zero teardown threshold for this configuration lies some
 Test 1 only bracketed the threshold (0% at 15 min, 100% at 30 min) without showing how the cold-start rate actually rises in between. Test 2 was built to trace that: drop the 5-minute tier (Test 1 showed nothing interesting happens there), keep 15 min (expect ~0% cold) and 30 min (expect 100% cold) as the two "obvious" ends, and add **two** tiers *inside* that window — 20 and 25 minutes — with equal repetitions, so the mixed cold-start rate at each has a usable 95% CI (Wilson score, computed by `analyze.py`) instead of being reported as a single step-function jump.
 
 ```bash
+cd "Test 1"                 # the Test 1-2 scripts and urls.env
 nohup python3 measure.py --urls-file urls.env \
     --tier 15:10 --tier 20:10 --tier 25:10 --tier 30:10 \
     --sequential 100 --out results.csv > measure2.log 2>&1 &
@@ -122,7 +151,7 @@ All four tiers used 10 repetitions each, ~15h estimated total. Unlike Test 1, wh
 | Idle gap (Test 1 end → Test 2 start) | ~14h 21m (~51,660 s) |
 | Test 2 end | read from the `Done ->` line in `Test 2/measure_2.log` |
 
-**Result (`Test 2/results_2.csv`, `Test 2/summary_2.csv`):** 15 min 1/10 cold, 20 min 10/10, 25 min 10/10, 30 min 10/10 — the boundary is *not* between 25 and 30 min but between 15 and 20 min. Caveat: the single cold sample in the 15-minute tier is the first request after the ~14 h gap between the tests, so the instance was already gone for a reason unrelated to the 15-minute idle time; excluded, 15 min is **0/9** (and 0/19 together with Test 1). `python3 analyze3.py "Test 2/results_2.csv" --legacy-drop-first` reproduces the corrected numbers. The same applies to Test 1's first `idle_5min` sample (corrected: 0/9).
+**Result (`Test 2/results_2.csv`, `Test 2/summary_2.csv`):** 15 min 1/10 cold, 20 min 10/10, 25 min 10/10, 30 min 10/10 — the boundary is *not* between 25 and 30 min but between 15 and 20 min. Caveat: the single cold sample in the 15-minute tier is the first request after the ~14 h gap between the tests, so the instance was already gone for a reason unrelated to the 15-minute idle time; excluded, 15 min is **0/9** (and 0/19 together with Test 1). `python3 analyze3.py "../Test 2/results_2.csv" --legacy-drop-first` (from `Test 3/`) reproduces the corrected numbers. The same applies to Test 1's first `idle_5min` sample (corrected: 0/9).
 
 (`OBSERVATIONS.md` has the full dated log this summary and the billing-correction derivation below are drawn from.)
 
@@ -140,6 +169,7 @@ What changed compared with Test 2:
 - **Analysis** (`analyze3.py`): per-tier cold rate with Wilson CI; if the outcomes do not overlap, the boundary is reported as the bracket between the longest idle that stayed warm and the shortest that was cold (a logistic MLE does not exist for a perfect step); if they overlap, a logistic fit gives the 50% point with a bootstrap CI.
 
 ```bash
+cd "Test 3"
 ./deploy3.sh                                  # six services, copies image/cpu/memory from coldstart-scale-zero, writes services3.csv
 python3 measure3.py --services services3.csv --dry-run
 nohup python3 measure3.py --services services3.csv --reps 20 --out results3.csv > measure3.log 2>&1 &
@@ -173,15 +203,60 @@ START=... END=... ./collect_logs4.sh
 python3 analyze4.py results4p.csv --logs logs4p
 ```
 
-The app image for Test 4 is `shop-api:v4`, built from `app/` with `Test 4 pilot/main.py` in place of
+The app image of the pilot is `shop-api:v4`, built from `app/` with `Test 4 pilot/main.py` in place of
 `app/main.py` (so `app/` stays the v1 code of Tests 1-3): same data, endpoints and startup work, plus
 structured log lines (`instance_start` / `instance_ready` / `instance_shutdown` / `request`,
 the Cloud Run instance id from the metadata server) and the `X-Request-Id` echo.
 
+**Result (`Test 4 pilot/results4p.csv`, `analyze4p_output.txt`, `instances4p.csv`, `billing4p.csv`;
+full write-up in `Test 4 pilot/Test4_report.md` sections 9 - 14):** run on 2026-11-06,
+14:00:00 - 16:10:08 UTC. No HTTP 429 in either arm (0/24 vs 0/24 first attempts, Fisher p = 1.0;
+0/54 including the warm-ups), against 21/50 in the same hours of Test 3: **case C, the 429 was not
+reproduced**, so Test 4 keeps `max-instances=1` and the retry. All plumbing checks passed (54/54
+trace-id matches, 54/54 instances joined, labels present in the billing export). Teardown
+900.4 - 910.0 s after the last response in both arms (one early teardown at 297.5 s). Not part of
+the decision: the max3 arm started ~0.4 s slower, but the services of the two arms overlapped, so
+no effect is claimed. Cost: EUR 0.0075 gross, EUR 0 net (free tier).
+
+#### Test 4 (application size: S / M / L x 6 idle tiers)
+
+How does the size of the application change the cold start, the teardown moment and the cost?
+Three sizes from one code base (`Test 4/main.py`, `Dockerfile` with `SIZE=s|m|l`), all running the
+same `/api/report` work on the same 200,000 orders, so only the start-up differs:
+
+| | S | M | L |
+|---|---|---|---|
+| content | the v4 app of the pilot | 1M orders + scikit-learn + 20 MB model | as M + 500 MB model |
+| image (local) | 392 MB | 693 MB | 1,298 MB |
+| start-up (local, 1 CPU) | ~1.2 s | ~3.8 s | ~5.7 s |
+| memory after start-up | 155 MB | 406 MB | 1,371 MB (67% of 2 GiB) |
+
+The models are RandomForests generated at image build time (`make_model.py`, fixed seed, no
+download). 18 services = 3 sizes x idle tiers 5 (warm baseline), 14, 15, 16 (around the ~900 s
+teardown), 18 and 20 min (cold); 1 vCPU, 2 GiB, `max-instances=1`, no CPU boost, as in the pilot;
+measured in parallel for 10 hours (planned 08:00 - 18:00 UTC on a weekday), start offsets 30 s apart.
+The analysis rules (when a size difference or a teardown shift counts as shown) are fixed in advance
+in `Test 4/Test4_report.md` section 5. Run everything from `Test 4/`.
+
+```bash
+cd "Test 4"
+bash local_check4.sh                      # optional, needs Docker: local calibration -> local_check4.csv
+./deploy4.sh                              # Cloud Build (v4-s/m/l, ~10-15 min) + 18 services -> services4.csv
+python3 measure4.py --services services4.csv --dry-run         # on the VM; stops if the billing export is missing
+nohup python3 measure4.py --services services4.csv --duration-h 10 --start-at <DATE>T08:00Z \
+  --out results4.csv --meta run4_meta.txt > measure4.log 2>&1 & disown
+START=<DATE>T07:55:00Z END=<DATE>T18:30:00Z ./collect_logs4.sh
+bq query --nouse_legacy_sql --format=csv --max_rows=10000 "$(cat billing_query4.sql)" > billing4.csv   # the next day
+python3 analyze4.py results4.csv --logs logs4 --billing billing4.csv
+```
+
+The full run book (VM, file transfers, cleanup) is in `Test 4/Test4_report.md` section 9.
+Deploy at least an hour before the start: the deploy itself starts one instance per service.
+
 ### 4. Analysis and cost
 ```bash
-python3 analyze.py results.csv
-python3 cost.py --requests-per-month 100000 --avg-ms 70 --memory-gib 1.0 --eur-rate 0.92
+python3 "Test 1/analyze.py" results.csv
+python3 tools/cost.py --requests-per-month 100000 --avg-ms 70 --memory-gib 1.0 --eur-rate 0.92
 ```
 `analyze.py` now also reports `cold_rate_pct` with a 95% (Wilson score) confidence interval per scenario — the number to quote for a tier that sometimes restarts and sometimes doesn't, instead of just the raw count. `cost.py`'s optional `--eur-rate` converts its USD estimate to EUR at a flat rate you supply, for an easier side-by-side with the EUR Billing report (see `Test 1/Test1_report.md` §6.1 for the caveats on this conversion).
 
@@ -226,9 +301,9 @@ In the Reports table, filter by **Project** (your project) and set the **Time ra
 
 ### 5. Cleanup
 ```bash
-./cleanup.sh                 # all coldstart-* services, Cloud SQL / Redis / VPC connectors named coldstart-*
-ONLY=pilot4 ./cleanup.sh     # only the six pilot services
-DELETE_VM=1 KEEP_IMAGES=0 ./cleanup.sh   # also the measurement VM and the image repository
+tools/cleanup.sh                 # all coldstart-* services (incl. the 18 Test 4 ones), Cloud SQL / Redis / VPC connectors named coldstart-*
+ONLY=pilot4 tools/cleanup.sh     # only the six pilot services
+DELETE_VM=1 KEEP_IMAGES=0 tools/cleanup.sh   # also the measurement VM and the image repository
 ```
 Default region is now `europe-central2` (where the experiment actually runs). The billing
 dataset is kept on purpose.
@@ -248,7 +323,7 @@ dataset is kept on purpose.
 
 `.gitignore` excludes everything that is either regenerated by the scripts or
 specific to one run: `urls.env` (live service URLs), the measurement CSVs,
-`latency.png`, `measure*.log`, `services3.csv`, `services4p.csv`, the Test 4 log downloads (`logs4p_*.json`), local virtual environments, and the usual
+`latency.png`, `measure*.log`, `services3.csv`, `services4p.csv`, `services4.csv`, the Test 4 pilot and Test 4 log downloads (`logs4p_*.json`, `logs4_*.json`), local virtual environments, and the usual
 Python/OS/editor clutter. Nothing in this repository requires a secret file or
 API key — `deploy.sh` and `cleanup.sh` use your already-authenticated `gcloud`
 session (`gcloud auth login`), not a key file. If you ever add a service

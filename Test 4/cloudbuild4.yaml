@@ -1,0 +1,24 @@
+# Test 4: builds the three size images in one Cloud Build run (used by deploy4.sh).
+# `gcloud builds submit --tag` cannot pass build arguments, hence this file.
+# The L model is generated during the build (a few minutes), so the timeout is raised.
+steps:
+  - id: build-s
+    name: gcr.io/cloud-builders/docker
+    args: [build, --build-arg, SIZE=s, -t, "${_IMAGE}:v4-s", .]
+  - id: build-m
+    name: gcr.io/cloud-builders/docker
+    args: [build, --build-arg, SIZE=m, --build-arg, "MODEL_MB_M=${_MODEL_MB_M}", -t, "${_IMAGE}:v4-m", .]
+    waitFor: [build-s]
+  - id: build-l
+    name: gcr.io/cloud-builders/docker
+    args: [build, --build-arg, SIZE=l, --build-arg, "MODEL_MB_L=${_MODEL_MB_L}", -t, "${_IMAGE}:v4-l", .]
+    waitFor: [build-m]
+images:
+  - "${_IMAGE}:v4-s"
+  - "${_IMAGE}:v4-m"
+  - "${_IMAGE}:v4-l"
+substitutions:
+  _IMAGE: europe-central2-docker.pkg.dev/cold-start-lab/coldstart-lab/shop-api
+  _MODEL_MB_M: "20"
+  _MODEL_MB_L: "500"
+timeout: 3600s

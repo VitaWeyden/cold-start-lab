@@ -168,7 +168,7 @@ gcloud compute scp coldstart-measurer:~/results4p.csv coldstart-measurer:~/run4p
   coldstart-measurer:~/measure4p.log . --zone europe-central2-a
 START=2026-10-30T13:55:00Z END=2026-10-30T16:40:00Z ./collect_logs4.sh
 python3 analyze4.py results4p.csv --logs logs4p
-ONLY=pilot4 ../cleanup.sh                                  # delete the 6 pilot services
+ONLY=pilot4 ../tools/cleanup.sh                            # delete the 6 pilot services
 gcloud compute instances stop coldstart-measurer --zone europe-central2-a   # keep it for Test 4
 ```
 
@@ -374,5 +374,5 @@ What the pilot does show: under `max-instances=1`, 24 of 24 cold starts at 16 mi
   ```
 - Log window used for `collect_logs4.sh`: `START=2026-11-06T13:55:00Z END=2026-11-06T16:40:00Z`
   (the last shutdown is ~15 min after the last request, 16:25 here).
-- After the run: pilot services deleted (`ONLY=pilot4 ../cleanup.sh`), VM stopped and kept for
+- After the run: pilot services deleted (`ONLY=pilot4 ../tools/cleanup.sh`), VM stopped and kept for
   Test 4.
