@@ -1,0 +1,51 @@
+results4p.csv: 54 rows, 48 measured samples (first attempts), arms ['max1', 'max3']
+client window (UTC): 2026-11-06 14:00:00 -> 16:10:05
+
+1. First attempts per arm
+   arm   n  ok  http_429  other_fail  rate_429_pct  ci95_lo  ci95_hi  cold_of_ok  median_cold_ms  median_warm_ms
+  max1  24  24         0           0           0.0      0.0     13.8       24/24          2646.3                
+  max3  24  24         0           0           0.0      0.0     13.8       24/24          3071.1                
+  Fisher exact (429 vs not, max1 vs max3): two-sided p = 1.0000
+
+2. 429 on first attempts per replica and per UTC hour
+   arm  replica  429/n
+  max1        a    0/8
+  max1        b    0/8
+  max1        c    0/8
+  max3        a    0/8
+  max3        b    0/8
+  max3        c    0/8
+  hour_utc  max1  max3
+        14   0/9   0/9
+        15  0/12  0/12
+        16   0/3   0/3
+
+3. Samples whose first attempt failed
+  none
+
+4. Latency split of successful first attempts, median ms
+   arm  kind   n  latency_ms  dns_ms  tcp_ms  tls_ms  ttfb_ms  body_ms  startup_ms  init_ms  work_ms  p95_latency
+  max1  cold  24      2646.3    27.2     0.9    68.2   2502.6      0.2      1783.7    683.9     93.9       3679.7
+  max3  cold  24      3071.1    25.8     0.9    68.1   2929.8      0.2      2099.9    863.5    136.7       3874.5
+  request id echoed by the app: 54/54 successful attempts
+
+5. Client attempts vs Cloud Run request log (joined on trace id)
+  client attempts 54, request-log entries 54: matched 54, client-only 0, log-only 0, status mismatch 0
+
+6. Instances (Cloud Run labels.instanceId <-> app instance_id)
+  54 instances, 0 never served a request
+  teardown after last response (exact instance match): min 297.5 s, median 905.2 s, max 910.0 s, n=54
+    max1: 27 instances, 0 never served
+    max3: 27 instances, 0 never served
+  -> instances4p.csv
+
+7. Failed first attempts: instance started around them
+  none
+
+8. Cloud Run system log
+  108 entries; 'Starting new instance' per service: {'coldstart-p4-m1-a': 9, 'coldstart-p4-m1-b': 9, 'coldstart-p4-m1-c': 9, 'coldstart-p4-m3-a': 9, 'coldstart-p4-m3-b': 9, 'coldstart-p4-m3-c': 9}
+      54  AUTOSCALING - Instance started due to configured scaling factors (e.g. CPU utilization, request throughput, et
+      54  (other) Default STARTUP TCP probe succeeded after 1 attempt for container "shop-api-1" on port 8080.
+
+Decision rule (written before the run, Test4_report.md section 5):
+  -> case C: no 429 in either arm; the cause is not reproduced. Test 4 keeps max=1 (comparable with Tests 1-3) and keeps the retry logic.

@@ -1,0 +1,7 @@
+planned_start_utc=2026-11-06T14:00:00+00:00
+billing_check=billing export table found: cold-start-lab:billing_export.gcp_billing_export_v1_015D6E_D0CFC3_EA1613; last export_time 2026-11-05T13:14:14Z
+args={'services': 'services4p.csv', 'reps': 8, 'path': '/api/report', 'warmups': 1, 'max_retries': 5, 'retry_delay': 0.0, 'start_at': '2026-11-06T14:00Z', 'project': 'cold-start-lab', 'billing_dataset': 'billing_export', 'skip_billing_check': False, 'out': 'results4p.csv', 'meta': 'run4p_meta.txt', 'dry_run': False}
+client=coldstart-measurer python=3.11.2
+actual_start_utc=2026-11-06T14:00:00.000+00:00
+end_utc=2026-11-06T16:10:08.101+00:00
+rows=54

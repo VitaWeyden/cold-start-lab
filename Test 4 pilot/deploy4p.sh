@@ -10,10 +10,10 @@
 #
 #   export PROJECT_ID=cold-start-lab
 #   export REGION=europe-central2
-#   bash "Test 4/deploy4p.sh"      (from anywhere; the paths are resolved from this file)
+#   bash "Test 4 pilot/deploy4p.sh"      (from anywhere; the paths are resolved from this file)
 #
-# The image is built from app/ with app/main.py replaced by Test 4/main.py, so app/ itself stays
-# the v1 code of Tests 1-3 and the v4 app lives next to the Test 4 scripts.
+# The image is built from app/ with app/main.py replaced by Test 4 pilot/main.py, so app/ itself stays
+# the v1 code of Tests 1-3 and the v4 app lives next to the pilot scripts.
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 ROOT="$(dirname "$HERE")"
@@ -41,8 +41,8 @@ cp -r "$ROOT/app/." "$BUILD/"
 rm -rf "$BUILD/__pycache__"
 cp "$HERE/main.py" "$BUILD/main.py"
 sed -i 's/\r$//' "$BUILD/main.py"
-grep -q "instance_identity" "$BUILD/main.py" || { echo "Test 4/main.py is not the v4 app"; exit 1; }
-echo ">> Building $IMAGE from app/ + Test 4/main.py"
+grep -q "instance_identity" "$BUILD/main.py" || { echo "Test 4 pilot/main.py is not the v4 app"; exit 1; }
+echo ">> Building $IMAGE from app/ + Test 4 pilot/main.py"
 gcloud builds submit "$BUILD" --tag "$IMAGE" --project "$PROJECT_ID"
 
 echo "arm,replica,idle_min,offset_s,name,url" > "$SERVICES"

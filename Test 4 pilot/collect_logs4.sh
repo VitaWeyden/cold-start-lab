@@ -9,7 +9,7 @@
 #   START=2026-10-30T13:50:00Z END=2026-10-30T16:40:00Z ./collect_logs4.sh
 # START/END: a few minutes around the window in run4p_meta.txt (END must include the last
 # shutdown, i.e. ~16 min after the last request). Logs are kept 30 days by default.
-# Run it from the "Test 4" folder (Test 3 lesson: the first teardown file landed elsewhere);
+# Run it from the "Test 4 pilot" folder (Test 3 lesson: the first teardown file landed elsewhere);
 # the script also cd's there itself, so the files always land next to results4p.csv.
 set -euo pipefail
 PROJECT_ID="${PROJECT_ID:?Set it first: export PROJECT_ID=...}"

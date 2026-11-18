@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Test 4 measurement (used first for the max-instances pilot, see "Test 4/Test4_report.md").
+"""Test 4 measurement (used first for the max-instances pilot, see "Test 4 pilot/Test4_report.md").
 
 Same idea as measure3.py (one thread per service, a warm-up request, then REPS samples, each
 exactly IDLE minutes after the END of the previous response), with the fixes that Test 3 needed:
@@ -21,7 +21,7 @@ exactly IDLE minutes after the END of the previous response), with the fixes tha
     written in the plan; the actual start / end is written to the meta file.
 
 Services file (written by deploy4p.sh):  arm,replica,idle_min,offset_s,name,url
-Run it from the "Test 4" folder: all inputs and outputs are relative to the current directory.
+Run it from the "Test 4 pilot" folder: all inputs and outputs are relative to the current directory.
 Standard library only. Rows are appended and flushed one by one.
 
   python3 measure4.py --services services4p.csv --dry-run

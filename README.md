@@ -36,10 +36,10 @@ The application is a mid-sized **webshop analytics API** (FastAPI, pandas, NumPy
 | `deploy3.sh`, `measure3.py`, `analyze3.py` | Test 3 (boundary): one service per idle tier, parallel measurement with real idle times, analysis incl. boundary bracket / logistic fit |
 | `teardown_times.py`, `billing_query.sql` | Test 3: teardown moment from Cloud Logging, hourly per-service cost from the BigQuery billing export |
 | `billing/billing_hourly_2026-10.csv`, `billing/billing_windows.py`, `billing/billing_summary.txt` | the whole project's hourly bill 2026-10-01..16 from the BigQuery export, and the exact cost of Tests 1-3 computed from it |
-| `Test 4/Test4_report.md` | Test 4 pilot: why, design, decision rule (written before the run), run book |
-| `Test 4/setup_billing_export.sh` | creates the billing dataset, prints the Console step, `check` tells whether the export table exists |
-| `Test 4/deploy4p.sh`, `measure4.py`, `collect_logs4.sh`, `analyze4.py`, `billing_query4.sql` | Test 4 pilot: max-instances 1 vs 3; measurement with billing gate, request ids, retries, staggered starts; log download; joined analysis; per-service cost |
-| `Test 4/main.py` | the v4 app (`app/main.py` + instance/request logging); `deploy4p.sh` builds `app/` with this file |
+| `Test 4 pilot/Test4_report.md` | Test 4 pilot: why, design, decision rule (written before the run), run book, results (run 2026-11-06) |
+| `Test 4 pilot/setup_billing_export.sh` | creates the billing dataset, prints the Console step, `check` tells whether the export table exists |
+| `Test 4 pilot/deploy4p.sh`, `measure4.py`, `collect_logs4.sh`, `analyze4.py`, `billing_query4.sql` | Test 4 pilot: max-instances 1 vs 3; measurement with billing gate, request ids, retries, staggered starts; log download; joined analysis; per-service cost |
+| `Test 4 pilot/main.py` | the v4 app (`app/main.py` + instance/request logging); `deploy4p.sh` builds `app/` with this file |
 
 ## Procedure
 
@@ -160,10 +160,10 @@ error). Test 4 would run a much slower-starting size L under the same `max-insta
 the pilot tests first whether that setting causes the 429s: six services at 16 min idle,
 three with `max-instances=1`, three with `max-instances=3`, otherwise identical (2 GiB, the Test 4
 memory), 8 samples each, 14:00 - ~16:12 UTC (the Test 3 peak hours of 429s). The decision rule
-for Test 4 is fixed in advance in `Test 4/Test4_report.md` section 5. Run everything from `Test 4/`.
+for Test 4 is fixed in advance in `Test 4 pilot/Test4_report.md` section 5. Run everything from `Test 4 pilot/`.
 
 ```bash
-cd "Test 4"
+cd "Test 4 pilot"
 ./setup_billing_export.sh && ./setup_billing_export.sh check   # must say OK before measuring
 ./deploy4p.sh
 python3 measure4.py --services services4p.csv --dry-run        # stops if the billing export is missing
@@ -173,7 +173,7 @@ START=... END=... ./collect_logs4.sh
 python3 analyze4.py results4p.csv --logs logs4p
 ```
 
-The app image for Test 4 is `shop-api:v4`, built from `app/` with `Test 4/main.py` in place of
+The app image for Test 4 is `shop-api:v4`, built from `app/` with `Test 4 pilot/main.py` in place of
 `app/main.py` (so `app/` stays the v1 code of Tests 1-3): same data, endpoints and startup work, plus
 structured log lines (`instance_start` / `instance_ready` / `instance_shutdown` / `request`,
 the Cloud Run instance id from the metadata server) and the `X-Request-Id` echo.
@@ -211,7 +211,7 @@ Once Test 2's billing delta is visible (usually ~24h after the window closes), c
 
 **What happened in the Test 3 run:** the dataset was created but the export itself was never switched on in the Console (every export under Billing -> Billing export read "Disabled" afterwards), so the `billing_export` dataset stayed empty and `billing_query.sql` failed with "does not match any table". **Update 2026-10-29:** once switched on (before the Test 4 pilot), the export filled itself back to 2026-09-01, with the service labels, so the hourly per-service cost of Test 3 (and of Tests 1-2) was recovered after all: `billing/billing_summary.txt`, `Test 3/Test3_report.md` section 4. For a future run, check in the Console that *Standard usage cost* is enabled and that a `gcp_billing_export_v1_...` table has appeared **before** starting the measurement.
 
-The Billing Reports UI only has day-level granularity. The standard usage cost export to BigQuery gives hourly rows per SKU and per label, so the cost of each Test 3 service can be read separately. In our project it was backfilled to the start of the previous month when it was switched on; do not rely on that (Google does not promise it for every case): enable it *before* the measurement starts and check that the table exists (`Test 4/setup_billing_export.sh check`).
+The Billing Reports UI only has day-level granularity. The standard usage cost export to BigQuery gives hourly rows per SKU and per label, so the cost of each Test 3 service can be read separately. In our project it was backfilled to the start of the previous month when it was switched on; do not rely on that (Google does not promise it for every case): enable it *before* the measurement starts and check that the table exists (`Test 4 pilot/setup_billing_export.sh check`).
 
 ```bash
 gcloud services enable bigquery.googleapis.com
