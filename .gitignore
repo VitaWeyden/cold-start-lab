@@ -16,6 +16,7 @@ services3.csv
 # Test 4 (pilot and main run): same, written next to deploy4p.sh / deploy4.sh (Test 4 pilot/, Test 4/)
 services4p.csv
 services4.csv
+services4w.csv
 
 # --- Python ---
 __pycache__/

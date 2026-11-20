@@ -66,6 +66,8 @@ of a test are run from inside its folder (`cd "Test 3"` etc.). Scripts that buil
 | `Test 4/local_check4.sh`, `local_check4.csv` | local calibration with Docker (1 CPU / 2 GiB): image size, start-up phases, memory per size |
 | `Test 4/cloudbuild4.yaml`, `deploy4.sh` | builds `shop-api:v4-s/m/l` with Cloud Build and deploys the 18 services (3 sizes x 6 idle tiers), writes `services4.csv` |
 | `Test 4/measure4.py`, `collect_logs4.sh`, `analyze4.py`, `billing_query4.sql` | Test 4 measurement for a fixed duration (10 h), log download, analysis by the pre-registered rules, per-service cost |
+| `Test 4/deploy4w.sh`, `analyze4w.py`, `billing_query4w.sql` | Test 4 addition: the always-warm side (3 services S/M/L, min-instances 1, 16 min idle), compared with the scale-to-zero run; `DELETE=1 bash deploy4w.sh` removes them |
+| `Test 4/deploy_check4.txt` | deployed configuration of the 18 services and the image sizes in Artifact Registry |
 
 ## Procedure
 

@@ -1,0 +1,13 @@
+Test 4 - deployed configuration and image sizes, read on 2026-11-20 (after the run, services unchanged)
+
+gcloud artifacts docker images list .../coldstart-lab/shop-api --include-tags
+TAGS  SIZE (bytes, compressed in Artifact Registry)  CREATE_TIME
+v4-s   95218281   (90.8 MiB)   2026-11-18T15:43:30
+v4-m  167988278  (160.2 MiB)   2026-11-18T15:44:02
+v4-l  295689576  (282.0 MiB)   2026-11-18T15:44:44
+(v4 = pilot image 95214720, v1 = Tests 1-3 image 95220978)
+
+gcloud run services list --filter="metadata.name~^coldstart-t4-"
+all 18 services coldstart-t4-{s,m,l}-{05,14,15,16,18,20}:
+  minScale empty (= 0), maxScale 1, cpu 1, memory 2Gi, startup-cpu-boost false,
+  image shop-api:v4-s / v4-m / v4-l matching the size in the name

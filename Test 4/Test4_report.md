@@ -1,6 +1,6 @@
 # Test 4 - how does the size of the application change cold starts, teardown and cost?
 
-Status: **planned, not run yet. Scheduled for 2026-11-19 (Thursday), 08:00 - 18:00 UTC; deployed the day before.** Written before the run, so the analysis rules in section 5
+Status: **main run done on 2026-11-19 (08:00 - 17:58 UTC, scale-to-zero, 18 services); always-warm addition (section 10) run from 2026-11-20 19:00 UTC.** Results of the main run: to be written up. Written before the run, so the analysis rules in section 5
 cannot be fitted to the result afterwards. All Test 4 files live in this folder (`Test 4/`).
 The preparation run is in `Test 4 pilot/` (its report: `Test 4 pilot/Test4_report.md`).
 
@@ -259,3 +259,103 @@ Nothing else may call the Test 4 URLs during the run (browser tabs, uptime check
 request resets the idle timer of that service. The deploy itself starts one instance per service
 (the pilot's billing shows 1 request per service on deploy day, outside the run); deploying at
 least an hour before the start keeps it out of the measurement.
+
+## 10. Addition: the always-warm side (planned 2026-11-20, after the main run)
+
+**Why this was added.** The project compares scale-to-zero with an always-warm instance
+(`min-instances=1`), and Tests 1 - 2 measured both. The Test 4 design in sections 3 - 9 has only
+scale-to-zero services: the always-warm side was left out by mistake when the design was written,
+and this was noticed only after the main run on 2026-11-19. It is added as a separate run with the
+same images and settings. The main run's results were already known when this section was
+written; the rules below are fixed before the always-warm run, but they were not part of the
+original plan, and the paper should say so.
+
+### 10.1 Design
+
+| | |
+|---|---|
+| services | **3**: `coldstart-t4w-{s,m,l}-16`, one per size |
+| identical to Test 4 | images `shop-api:v4-s/m/l` (the same build), 1 vCPU, 2 GiB, concurrency 80, max-instances 1, no CPU boost, request-based billing, `europe-central2`, `/api/report`, same client VM, retry |
+| different | **min-instances 1** (always warm), labels `experiment=test4w` |
+| idle tier | **16 min**, the first tier that was cold every time for every size in the main run (37 / 36 / 36 of 37 / 36 / 36) |
+| window | **10 h, 2026-11-20 19:00 - 2026-11-21 05:00 UTC** (Friday evening to Saturday morning) |
+| offsets | 0, 30, 60 s |
+| deploy / delete | deploy ~1 h before the start (`deploy4w.sh`), delete as soon as the results are downloaded (`DELETE=1 bash deploy4w.sh`): a min-instance bills for every second it exists |
+
+Expected: ~37 samples per size. Every sample should be answered by the instance that has been
+running since the deploy (the app reports `cold=true` only for the very first request of an
+instance, which the warm-up absorbs).
+
+### 10.2 What it adds
+
+The latency and the cost of the always-warm side per size, measured, next to the scale-to-zero
+numbers of the main run at the same idle tier (16 min): how much waiting the min-instance saves
+per request, and what it costs, for S, M and L.
+
+### 10.3 Rules (fixed before the always-warm run; `analyze4w.py`)
+
+- **W1 - does always-warm remove the cold start?** For a size: yes if at least 95% of the
+  successful samples are answered in under 1,000 ms and no sample had to wait for a new instance
+  (`cold=true` with an instance younger than 60 s). Slow samples are listed with their instance.
+- **W2 - saving per request:** median latency scale-to-zero (main run, 16 min tier) minus median
+  latency always-warm, per size, and the ratio. Descriptive; the two runs are on different days
+  in the same hours (limitation 10.5).
+- **W3 - instances:** number of instances per always-warm service during the run (1 = the same
+  instance all day; more = replaced by the platform), from the app and system logs.
+- **W4 - cost:** from the billing export (`billing_query4w.sql`): min-instance vCPU-s and GiB-s
+  (summed over the whole existence, because min-instance rows arrive in uneven hourly chunks, as
+  in Tests 1 - 2), request-based part, gross EUR; price per second and a 30-day projection.
+  Compared with scale-to-zero at the same request pattern: the main run's 10 h cost of the 16 min
+  service x 72 = one request every 16 minutes for 30 days.
+
+### 10.4 Plumbing
+
+As in section 6: `app_size` = services file, request id echoed, client attempts = request log =
+billed requests, config check shows min 1 / max 1 / 1 CPU / 2 GiB / no boost / right image.
+
+### 10.5 Limitations of the addition
+
+- Different day **and different hours** than the scale-to-zero run (evening / night instead of
+  08:00 - 18:00 UTC; first planned for Monday 08:00 - 18:00 UTC, moved forward on 2026-11-20 to
+  have the results sooner). Warm latency depended little on the time of day so far (Tests 1 - 2 at
+  night: ~251 ms; Test 4 main run, 5 min tier, daytime: 231 - 254 ms), against cold-start
+  differences of seconds, so W2 is not expected to change; it stays descriptive. Section 11.1 of the
+  pilot showed service-to-service differences of ~0.4 s and the main run showed up to ~6 s between
+  L services; this run has one service per size.
+- Added after the main run's results were seen (see "Why this was added").
+
+### 10.6 Cost estimate
+
+3 x 1 vCPU + 2 GiB min-instance = 3 x 9.24e-06 EUR/s = ~EUR 0.10 per hour; ~11.5 h from deploy
+to delete = **~EUR 1.15 gross**, plus the VM (~EUR 0.12). The min-instance part is probably not
+covered by the free tier.
+
+### 10.7 Run book
+
+```bash
+# --- Cloud Shell, shortly before the start (images exist; no build) ---
+cd ~/cold-start-lab && git pull && cd "Test 4"
+export PROJECT_ID=cold-start-lab REGION=europe-central2
+bash deploy4w.sh                       # 3 services, min-instances 1, writes services4w.csv; note the deploy time
+gcloud compute instances start coldstart-measurer --zone europe-central2-a
+gcloud compute scp measure4.py services4w.csv coldstart-measurer:~ --zone europe-central2-a
+gcloud compute ssh coldstart-measurer --zone europe-central2-a
+
+# --- on the VM ---
+export PROJECT_ID=cold-start-lab
+python3 measure4.py --services services4w.csv --dry-run
+nohup python3 measure4.py --services services4w.csv --duration-h 10 --start-at 2026-11-20T19:00Z \
+  --out results4w.csv --meta run4w_meta.txt > measure4w.log 2>&1 &
+disown
+
+# --- after the run (Cloud Shell, in Test 4/) ---
+gcloud compute scp coldstart-measurer:~/results4w.csv coldstart-measurer:~/run4w_meta.txt \
+  coldstart-measurer:~/measure4w.log . --zone europe-central2-a
+PREFIX=coldstart-t4w- OUT=logs4w START=2026-11-20T18:00:00Z END=2026-11-21T05:30:00Z bash collect_logs4.sh
+DELETE=1 bash deploy4w.sh              # stop the min-instance bill right away
+gcloud compute instances stop coldstart-measurer --zone europe-central2-a
+# the next day:
+bq query --nouse_legacy_sql --format=csv --max_rows=10000 "$(cat billing_query4w.sql)" > billing4w.csv
+python3 analyze4w.py results4w.csv --zero results4.csv --logs logs4w \
+  --billing billing4w.csv --zero-billing billing4.csv | tee analyze4w_output.txt
+```

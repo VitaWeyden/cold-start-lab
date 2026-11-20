@@ -1,0 +1,793 @@
+hour,size,idle_min,sku,unit,usage_amount,gross_cost_eur,net_cost_eur
+2026-11-18 14:00:00,l,05,Requests,requests,1.0,0.0,0.0
+2026-11-18 14:00:00,l,05,Services CPU Tier 2  (Request-based billing),seconds,23.0,6.94E-4,0.0
+2026-11-18 14:00:00,l,05,Services Memory Tier 2 (Request-based billing),byte-seconds,4.9392123904E10,1.44E-4,0.0
+2026-11-18 14:00:00,l,14,Requests,requests,1.0,0.0,0.0
+2026-11-18 14:00:00,l,14,Services CPU Tier 2  (Request-based billing),seconds,17.4,5.24E-4,0.0
+2026-11-18 14:00:00,l,14,Services Memory Tier 2 (Request-based billing),byte-seconds,3.73662154752E10,1.09E-4,0.0
+2026-11-18 14:00:00,l,15,Requests,requests,1.0,0.0,0.0
+2026-11-18 14:00:00,l,15,Services CPU Tier 2  (Request-based billing),seconds,17.6,5.3E-4,0.0
+2026-11-18 14:00:00,l,15,Services Memory Tier 2 (Request-based billing),byte-seconds,3.77957122048E10,1.11E-4,0.0
+2026-11-18 14:00:00,l,16,Requests,requests,1.0,0.0,0.0
+2026-11-18 14:00:00,l,16,Services CPU Tier 2  (Request-based billing),seconds,16.1,4.86E-4,0.0
+2026-11-18 14:00:00,l,16,Services Memory Tier 2 (Request-based billing),byte-seconds,3.45744867328E10,1.01E-4,0.0
+2026-11-18 14:00:00,l,18,Requests,requests,1.0,0.0,0.0
+2026-11-18 14:00:00,l,18,Services CPU Tier 2  (Request-based billing),seconds,15.7,4.74E-4,0.0
+2026-11-18 14:00:00,l,18,Services Memory Tier 2 (Request-based billing),byte-seconds,3.37154932736E10,9.9E-5,0.0
+2026-11-18 14:00:00,l,20,Requests,requests,1.0,0.0,0.0
+2026-11-18 14:00:00,l,20,Services CPU Tier 2  (Request-based billing),seconds,16.9,5.1E-4,0.0
+2026-11-18 14:00:00,l,20,Services Memory Tier 2 (Request-based billing),byte-seconds,3.62924736512E10,1.06E-4,0.0
+2026-11-18 14:00:00,m,05,Requests,requests,1.0,0.0,0.0
+2026-11-18 14:00:00,m,05,Services CPU Tier 2  (Request-based billing),seconds,11.2,3.38E-4,0.0
+2026-11-18 14:00:00,m,05,Services Memory Tier 2 (Request-based billing),byte-seconds,2.40518168576E10,7.0E-5,0.0
+2026-11-18 14:00:00,m,14,Requests,requests,1.0,0.0,0.0
+2026-11-18 14:00:00,m,14,Services CPU Tier 2  (Request-based billing),seconds,10.6,3.2E-4,0.0
+2026-11-18 14:00:00,m,14,Services Memory Tier 2 (Request-based billing),byte-seconds,2.27633266688E10,6.7E-5,0.0
+2026-11-18 14:00:00,m,15,Requests,requests,1.0,0.0,0.0
+2026-11-18 14:00:00,m,15,Services CPU Tier 2  (Request-based billing),seconds,10.2,3.08E-4,0.0
+2026-11-18 14:00:00,m,15,Services Memory Tier 2 (Request-based billing),byte-seconds,2.19043332096E10,6.4E-5,0.0
+2026-11-18 14:00:00,m,16,Requests,requests,1.0,0.0,0.0
+2026-11-18 14:00:00,m,16,Services CPU Tier 2  (Request-based billing),seconds,9.4,2.83E-4,0.0
+2026-11-18 14:00:00,m,16,Services Memory Tier 2 (Request-based billing),byte-seconds,2.01863462912E10,5.9E-5,0.0
+2026-11-18 14:00:00,m,18,Requests,requests,1.0,0.0,0.0
+2026-11-18 14:00:00,m,18,Services CPU Tier 2  (Request-based billing),seconds,9.9,2.98E-4,0.0
+2026-11-18 14:00:00,m,18,Services Memory Tier 2 (Request-based billing),byte-seconds,2.12600881152E10,6.2E-5,0.0
+2026-11-18 14:00:00,m,20,Requests,requests,1.0,0.0,0.0
+2026-11-18 14:00:00,m,20,Services CPU Tier 2  (Request-based billing),seconds,9.0,2.71E-4,0.0
+2026-11-18 14:00:00,m,20,Services Memory Tier 2 (Request-based billing),byte-seconds,1.9327352832E10,5.7E-5,0.0
+2026-11-18 14:00:00,s,05,Requests,requests,1.0,0.0,0.0
+2026-11-18 14:00:00,s,05,Services CPU Tier 2  (Request-based billing),seconds,4.3,1.3E-4,0.0
+2026-11-18 14:00:00,s,05,Services Memory Tier 2 (Request-based billing),byte-seconds,9.2341796864E9,2.7E-5,0.0
+2026-11-18 14:00:00,s,14,Requests,requests,1.0,0.0,0.0
+2026-11-18 14:00:00,s,14,Services CPU Tier 2  (Request-based billing),seconds,3.7,1.12E-4,0.0
+2026-11-18 14:00:00,s,14,Services Memory Tier 2 (Request-based billing),byte-seconds,7.9456894976E9,2.3E-5,0.0
+2026-11-18 14:00:00,s,15,Requests,requests,1.0,0.0,0.0
+2026-11-18 14:00:00,s,15,Services CPU Tier 2  (Request-based billing),seconds,4.0,1.21E-4,0.0
+2026-11-18 14:00:00,s,15,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E9,2.5E-5,0.0
+2026-11-18 14:00:00,s,16,Requests,requests,1.0,0.0,0.0
+2026-11-18 14:00:00,s,16,Services CPU Tier 2  (Request-based billing),seconds,4.6,1.39E-4,0.0
+2026-11-18 14:00:00,s,16,Services Memory Tier 2 (Request-based billing),byte-seconds,9.8784247808E9,2.9E-5,0.0
+2026-11-18 14:00:00,s,18,Requests,requests,1.0,0.0,0.0
+2026-11-18 14:00:00,s,18,Services CPU Tier 2  (Request-based billing),seconds,4.4,1.33E-4,0.0
+2026-11-18 14:00:00,s,18,Services Memory Tier 2 (Request-based billing),byte-seconds,9.4489280512E9,2.8E-5,0.0
+2026-11-18 14:00:00,s,20,Requests,requests,1.0,0.0,0.0
+2026-11-18 14:00:00,s,20,Services CPU Tier 2  (Request-based billing),seconds,4.3,1.3E-4,0.0
+2026-11-18 14:00:00,s,20,Services Memory Tier 2 (Request-based billing),byte-seconds,9.2341796864E9,2.7E-5,0.0
+2026-11-18 15:00:00,l,14,Services CPU Tier 2  (Request-based billing),seconds,1.1,3.3E-5,0.0
+2026-11-18 15:00:00,l,14,Services Memory Tier 2 (Request-based billing),byte-seconds,2.3622320128E9,7.0E-6,0.0
+2026-11-18 15:00:00,l,18,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-18 15:00:00,l,18,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,2.0E-6,0.0
+2026-11-18 15:00:00,m,14,Services CPU Tier 2  (Request-based billing),seconds,0.7,2.1E-5,0.0
+2026-11-18 15:00:00,m,14,Services Memory Tier 2 (Request-based billing),byte-seconds,1.5032385536E9,4.0E-6,0.0
+2026-11-18 15:00:00,m,16,Services CPU Tier 2  (Request-based billing),seconds,1.0,3.1E-5,0.0
+2026-11-18 15:00:00,m,16,Services Memory Tier 2 (Request-based billing),byte-seconds,2.147483648E9,6.0E-6,0.0
+2026-11-18 15:00:00,m,18,Services CPU Tier 2  (Request-based billing),seconds,0.9,2.7E-5,0.0
+2026-11-18 15:00:00,m,18,Services Memory Tier 2 (Request-based billing),byte-seconds,1.9327352832E9,6.0E-6,0.0
+2026-11-18 15:00:00,s,05,Services CPU Tier 2  (Request-based billing),seconds,0.9,2.7E-5,0.0
+2026-11-18 15:00:00,s,05,Services Memory Tier 2 (Request-based billing),byte-seconds,1.9327352832E9,6.0E-6,0.0
+2026-11-18 15:00:00,s,14,Services CPU Tier 2  (Request-based billing),seconds,0.9,2.7E-5,0.0
+2026-11-18 15:00:00,s,14,Services Memory Tier 2 (Request-based billing),byte-seconds,1.9327352832E9,6.0E-6,0.0
+2026-11-18 15:00:00,s,15,Services CPU Tier 2  (Request-based billing),seconds,1.0,3.0E-5,0.0
+2026-11-18 15:00:00,s,15,Services Memory Tier 2 (Request-based billing),byte-seconds,2.147483648E9,6.0E-6,0.0
+2026-11-19 08:00:00,l,05,Cloud Run Network Intra Region Data Transfer,bytes,20732.67,0.0,0.0
+2026-11-19 08:00:00,l,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 08:00:00,l,05,Services CPU Tier 2  (Request-based billing),seconds,29.1,8.78E-4,0.0
+2026-11-19 08:00:00,l,05,Services Memory Tier 2 (Request-based billing),byte-seconds,6.24917741568E10,1.83E-4,0.0
+2026-11-19 08:00:00,l,14,Cloud Run Network Intra Region Data Transfer,bytes,10371.42,0.0,0.0
+2026-11-19 08:00:00,l,14,Requests,requests,5.0,0.0,0.0
+2026-11-19 08:00:00,l,14,Services CPU Tier 2  (Request-based billing),seconds,22.0,6.64E-4,0.0
+2026-11-19 08:00:00,l,14,Services Memory Tier 2 (Request-based billing),byte-seconds,4.7244640256E10,1.38E-4,0.0
+2026-11-19 08:00:00,l,15,Cloud Run Network Intra Region Data Transfer,bytes,2591.04,0.0,0.0
+2026-11-19 08:00:00,l,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 08:00:00,l,15,Services CPU Tier 2  (Request-based billing),seconds,20.7,6.25E-4,0.0
+2026-11-19 08:00:00,l,15,Services Memory Tier 2 (Request-based billing),byte-seconds,4.44529115136E10,1.3E-4,0.0
+2026-11-19 08:00:00,l,16,Cloud Run Network Intra Region Data Transfer,bytes,2588.13,0.0,0.0
+2026-11-19 08:00:00,l,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 08:00:00,l,16,Services CPU Tier 2  (Request-based billing),seconds,94.3,0.002845,0.0
+2026-11-19 08:00:00,l,16,Services Memory Tier 2 (Request-based billing),byte-seconds,2.025077080064E11,5.94E-4,0.0
+2026-11-19 08:00:00,l,18,Cloud Run Network Intra Region Data Transfer,bytes,7758.59,0.0,0.0
+2026-11-19 08:00:00,l,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 08:00:00,l,18,Services CPU Tier 2  (Request-based billing),seconds,52.1,0.001572,0.0
+2026-11-19 08:00:00,l,18,Services Memory Tier 2 (Request-based billing),byte-seconds,1.118838980608E11,3.27E-4,0.0
+2026-11-19 08:00:00,l,20,Cloud Run Network Intra Region Data Transfer,bytes,5176.27,0.0,0.0
+2026-11-19 08:00:00,l,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 08:00:00,l,20,Services CPU Tier 2  (Request-based billing),seconds,46.3,0.001396,0.0
+2026-11-19 08:00:00,l,20,Services Memory Tier 2 (Request-based billing),byte-seconds,9.94284929024E10,2.92E-4,0.0
+2026-11-19 08:00:00,m,05,Cloud Run Network Intra Region Data Transfer,bytes,25829.01,0.0,0.0
+2026-11-19 08:00:00,m,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 08:00:00,m,05,Services CPU Tier 2  (Request-based billing),seconds,15.4,4.65E-4,0.0
+2026-11-19 08:00:00,m,05,Services Memory Tier 2 (Request-based billing),byte-seconds,3.30712481792E10,9.7E-5,0.0
+2026-11-19 08:00:00,m,14,Cloud Run Network Intra Region Data Transfer,bytes,12910.15,0.0,0.0
+2026-11-19 08:00:00,m,14,Requests,requests,5.0,0.0,0.0
+2026-11-19 08:00:00,m,14,Services CPU Tier 2  (Request-based billing),seconds,13.8,4.16E-4,0.0
+2026-11-19 08:00:00,m,14,Services Memory Tier 2 (Request-based billing),byte-seconds,2.96352743424E10,8.6E-5,0.0
+2026-11-19 08:00:00,m,15,Cloud Run Network Intra Region Data Transfer,bytes,7748.41,0.0,0.0
+2026-11-19 08:00:00,m,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 08:00:00,m,15,Services CPU Tier 2  (Request-based billing),seconds,12.2,3.68E-4,0.0
+2026-11-19 08:00:00,m,15,Services Memory Tier 2 (Request-based billing),byte-seconds,2.61993005056E10,7.6E-5,0.0
+2026-11-19 08:00:00,m,16,Cloud Run Network Intra Region Data Transfer,bytes,7729.52,0.0,0.0
+2026-11-19 08:00:00,m,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 08:00:00,m,16,Services CPU Tier 2  (Request-based billing),seconds,44.5,0.001342,0.0
+2026-11-19 08:00:00,m,16,Services Memory Tier 2 (Request-based billing),byte-seconds,9.5563022336E10,2.79E-4,0.0
+2026-11-19 08:00:00,m,18,Cloud Run Network Intra Region Data Transfer,bytes,5157.37,0.0,0.0
+2026-11-19 08:00:00,m,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 08:00:00,m,18,Services CPU Tier 2  (Request-based billing),seconds,42.6,0.001285,0.0
+2026-11-19 08:00:00,m,18,Services Memory Tier 2 (Request-based billing),byte-seconds,9.14828034048E10,2.68E-4,0.0
+2026-11-19 08:00:00,m,20,Cloud Run Network Intra Region Data Transfer,bytes,2580.87,0.0,0.0
+2026-11-19 08:00:00,m,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 08:00:00,m,20,Services CPU Tier 2  (Request-based billing),seconds,29.6,8.93E-4,0.0
+2026-11-19 08:00:00,m,20,Services Memory Tier 2 (Request-based billing),byte-seconds,6.35655159808E10,1.85E-4,0.0
+2026-11-19 08:00:00,s,05,Cloud Run Network Intra Region Data Transfer,bytes,25820.29,0.0,0.0
+2026-11-19 08:00:00,s,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 08:00:00,s,05,Services CPU Tier 2  (Request-based billing),seconds,7.5,2.26E-4,0.0
+2026-11-19 08:00:00,s,05,Services Memory Tier 2 (Request-based billing),byte-seconds,1.610612736E10,4.7E-5,0.0
+2026-11-19 08:00:00,s,14,Cloud Run Network Intra Region Data Transfer,bytes,10323.47,0.0,0.0
+2026-11-19 08:00:00,s,14,Requests,requests,5.0,0.0,0.0
+2026-11-19 08:00:00,s,14,Services CPU Tier 2  (Request-based billing),seconds,6.2,1.87E-4,0.0
+2026-11-19 08:00:00,s,14,Services Memory Tier 2 (Request-based billing),byte-seconds,1.33143986176E10,3.9E-5,0.0
+2026-11-19 08:00:00,s,15,Cloud Run Network Intra Region Data Transfer,bytes,10336.55,0.0,0.0
+2026-11-19 08:00:00,s,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 08:00:00,s,15,Services CPU Tier 2  (Request-based billing),seconds,5.6,1.69E-4,0.0
+2026-11-19 08:00:00,s,15,Services Memory Tier 2 (Request-based billing),byte-seconds,1.20259084288E10,3.5E-5,0.0
+2026-11-19 08:00:00,s,16,Cloud Run Network Intra Region Data Transfer,bytes,2577.96,0.0,0.0
+2026-11-19 08:00:00,s,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 08:00:00,s,16,Services CPU Tier 2  (Request-based billing),seconds,19.5,5.89E-4,0.0
+2026-11-19 08:00:00,s,16,Services Memory Tier 2 (Request-based billing),byte-seconds,4.1875931136E10,1.22E-4,0.0
+2026-11-19 08:00:00,s,18,Cloud Run Network Intra Region Data Transfer,bytes,5160.28,0.0,0.0
+2026-11-19 08:00:00,s,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 08:00:00,s,18,Services CPU Tier 2  (Request-based billing),seconds,17.0,5.14E-4,0.0
+2026-11-19 08:00:00,s,18,Services Memory Tier 2 (Request-based billing),byte-seconds,3.6507222016E10,1.06E-4,0.0
+2026-11-19 08:00:00,s,20,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 08:00:00,s,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 08:00:00,s,20,Services CPU Tier 2  (Request-based billing),seconds,10.9,3.29E-4,0.0
+2026-11-19 08:00:00,s,20,Services Memory Tier 2 (Request-based billing),byte-seconds,2.34075717632E10,6.9E-5,0.0
+2026-11-19 09:00:00,l,05,Cloud Run Network Intra Region Data Transfer,bytes,20747.56,0.0,0.0
+2026-11-19 09:00:00,l,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 09:00:00,l,05,Services CPU Tier 2  (Request-based billing),seconds,1.3,3.9E-5,0.0
+2026-11-19 09:00:00,l,05,Services Memory Tier 2 (Request-based billing),byte-seconds,2.7917287424E9,8.0E-6,0.0
+2026-11-19 09:00:00,l,14,Cloud Run Network Intra Region Data Transfer,bytes,8299.49,0.0,0.0
+2026-11-19 09:00:00,l,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 09:00:00,l,14,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-19 09:00:00,l,14,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,3.0E-6,0.0
+2026-11-19 09:00:00,l,15,Cloud Run Network Intra Region Data Transfer,bytes,4146.26,0.0,0.0
+2026-11-19 09:00:00,l,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 09:00:00,l,15,Services CPU Tier 2  (Request-based billing),seconds,0.5,1.5E-5,0.0
+2026-11-19 09:00:00,l,15,Services Memory Tier 2 (Request-based billing),byte-seconds,1.073741824E9,3.0E-6,0.0
+2026-11-19 09:00:00,l,16,Cloud Run Network Intra Region Data Transfer,bytes,8283.21,0.0,0.0
+2026-11-19 09:00:00,l,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 09:00:00,l,16,Services CPU Tier 2  (Request-based billing),seconds,70.2,0.002118,0.0
+2026-11-19 09:00:00,l,16,Services Memory Tier 2 (Request-based billing),byte-seconds,1.507533520896E11,4.41E-4,0.0
+2026-11-19 09:00:00,l,18,Cloud Run Network Intra Region Data Transfer,bytes,8276.23,0.0,0.0
+2026-11-19 09:00:00,l,18,Requests,requests,4.0,0.0,0.0
+2026-11-19 09:00:00,l,18,Services CPU Tier 2  (Request-based billing),seconds,48.7,0.00147,0.0
+2026-11-19 09:00:00,l,18,Services Memory Tier 2 (Request-based billing),byte-seconds,1.045824536576E11,3.06E-4,0.0
+2026-11-19 09:00:00,l,20,Cloud Run Network Intra Region Data Transfer,bytes,4139.28,0.0,0.0
+2026-11-19 09:00:00,l,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 09:00:00,l,20,Services CPU Tier 2  (Request-based billing),seconds,51.2,0.001544,0.0
+2026-11-19 09:00:00,l,20,Services Memory Tier 2 (Request-based billing),byte-seconds,1.099511627776E11,3.21E-4,0.0
+2026-11-19 09:00:00,m,05,Cloud Run Network Intra Region Data Transfer,bytes,20684.77,0.0,0.0
+2026-11-19 09:00:00,m,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 09:00:00,m,05,Services CPU Tier 2  (Request-based billing),seconds,1.3,3.9E-5,0.0
+2026-11-19 09:00:00,m,05,Services Memory Tier 2 (Request-based billing),byte-seconds,2.7917287424E9,8.0E-6,0.0
+2026-11-19 09:00:00,m,14,Cloud Run Network Intra Region Data Transfer,bytes,8269.26,0.0,0.0
+2026-11-19 09:00:00,m,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 09:00:00,m,14,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-19 09:00:00,m,14,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,2.0E-6,0.0
+2026-11-19 09:00:00,m,15,Cloud Run Network Intra Region Data Transfer,bytes,8266.93,0.0,0.0
+2026-11-19 09:00:00,m,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 09:00:00,m,15,Services CPU Tier 2  (Request-based billing),seconds,0.6,1.8E-5,0.0
+2026-11-19 09:00:00,m,15,Services Memory Tier 2 (Request-based billing),byte-seconds,1.2884901888E9,4.0E-6,0.0
+2026-11-19 09:00:00,m,16,Cloud Run Network Intra Region Data Transfer,bytes,8239.03,0.0,0.0
+2026-11-19 09:00:00,m,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 09:00:00,m,16,Services CPU Tier 2  (Request-based billing),seconds,28.4,8.58E-4,0.0
+2026-11-19 09:00:00,m,16,Services Memory Tier 2 (Request-based billing),byte-seconds,6.09885356032E10,1.79E-4,0.0
+2026-11-19 09:00:00,m,18,Cloud Run Network Intra Region Data Transfer,bytes,8236.7,0.0,0.0
+2026-11-19 09:00:00,m,18,Requests,requests,4.0,0.0,0.0
+2026-11-19 09:00:00,m,18,Services CPU Tier 2  (Request-based billing),seconds,31.8,9.6E-4,0.0
+2026-11-19 09:00:00,m,18,Services Memory Tier 2 (Request-based billing),byte-seconds,6.82899800064E10,2.0E-4,0.0
+2026-11-19 09:00:00,m,20,Cloud Run Network Intra Region Data Transfer,bytes,4127.65,0.0,0.0
+2026-11-19 09:00:00,m,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 09:00:00,m,20,Services CPU Tier 2  (Request-based billing),seconds,24.4,7.36E-4,0.0
+2026-11-19 09:00:00,m,20,Services Memory Tier 2 (Request-based billing),byte-seconds,5.23986010112E10,1.53E-4,0.0
+2026-11-19 09:00:00,s,05,Cloud Run Network Intra Region Data Transfer,bytes,20670.82,0.0,0.0
+2026-11-19 09:00:00,s,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 09:00:00,s,05,Services CPU Tier 2  (Request-based billing),seconds,2.1,6.3E-5,0.0
+2026-11-19 09:00:00,s,05,Services Memory Tier 2 (Request-based billing),byte-seconds,4.5097156608E9,1.3E-5,0.0
+2026-11-19 09:00:00,s,14,Cloud Run Network Intra Region Data Transfer,bytes,8264.61,0.0,0.0
+2026-11-19 09:00:00,s,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 09:00:00,s,14,Services CPU Tier 2  (Request-based billing),seconds,0.6,1.8E-5,0.0
+2026-11-19 09:00:00,s,14,Services Memory Tier 2 (Request-based billing),byte-seconds,1.2884901888E9,4.0E-6,0.0
+2026-11-19 09:00:00,s,15,Cloud Run Network Intra Region Data Transfer,bytes,4136.95,0.0,0.0
+2026-11-19 09:00:00,s,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 09:00:00,s,15,Services CPU Tier 2  (Request-based billing),seconds,0.7,2.1E-5,0.0
+2026-11-19 09:00:00,s,15,Services Memory Tier 2 (Request-based billing),byte-seconds,1.5032385536E9,4.0E-6,0.0
+2026-11-19 09:00:00,s,16,Cloud Run Network Intra Region Data Transfer,bytes,8250.65,0.0,0.0
+2026-11-19 09:00:00,s,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 09:00:00,s,16,Services CPU Tier 2  (Request-based billing),seconds,14.6,4.41E-4,0.0
+2026-11-19 09:00:00,s,16,Services Memory Tier 2 (Request-based billing),byte-seconds,3.13532612608E10,9.2E-5,0.0
+2026-11-19 09:00:00,s,18,Cloud Run Network Intra Region Data Transfer,bytes,8257.63,0.0,0.0
+2026-11-19 09:00:00,s,18,Requests,requests,4.0,0.0,0.0
+2026-11-19 09:00:00,s,18,Services CPU Tier 2  (Request-based billing),seconds,16.0,4.82E-4,0.0
+2026-11-19 09:00:00,s,18,Services Memory Tier 2 (Request-based billing),byte-seconds,3.4359738368E10,1.0E-4,0.0
+2026-11-19 09:00:00,s,20,Cloud Run Network Intra Region Data Transfer,bytes,4129.98,0.0,0.0
+2026-11-19 09:00:00,s,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 09:00:00,s,20,Services CPU Tier 2  (Request-based billing),seconds,11.5,3.47E-4,0.0
+2026-11-19 09:00:00,s,20,Services Memory Tier 2 (Request-based billing),byte-seconds,2.4696061952E10,7.2E-5,0.0
+2026-11-19 10:00:00,l,05,Cloud Run Network Intra Region Data Transfer,bytes,10346.94,0.0,0.0
+2026-11-19 10:00:00,l,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 10:00:00,l,05,Services CPU Tier 2  (Request-based billing),seconds,1.3,3.9E-5,0.0
+2026-11-19 10:00:00,l,05,Services Memory Tier 2 (Request-based billing),byte-seconds,2.7917287424E9,8.0E-6,0.0
+2026-11-19 10:00:00,l,14,Cloud Run Network Intra Region Data Transfer,bytes,20711.28,0.0,0.0
+2026-11-19 10:00:00,l,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 10:00:00,l,14,Services CPU Tier 2  (Request-based billing),seconds,0.3,9.0E-6,0.0
+2026-11-19 10:00:00,l,14,Services Memory Tier 2 (Request-based billing),byte-seconds,6.442450944E8,2.0E-6,0.0
+2026-11-19 10:00:00,l,15,Cloud Run Network Intra Region Data Transfer,bytes,10335.35,0.0,0.0
+2026-11-19 10:00:00,l,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 10:00:00,l,15,Services CPU Tier 2  (Request-based billing),seconds,0.3,9.0E-6,0.0
+2026-11-19 10:00:00,l,15,Services Memory Tier 2 (Request-based billing),byte-seconds,6.442450944E8,2.0E-6,0.0
+2026-11-19 10:00:00,l,16,Cloud Run Network Intra Region Data Transfer,bytes,10317.96,0.0,0.0
+2026-11-19 10:00:00,l,16,Requests,requests,3.0,0.0,0.0
+2026-11-19 10:00:00,l,16,Services CPU Tier 2  (Request-based billing),seconds,31.9,9.63E-4,0.0
+2026-11-19 10:00:00,l,16,Services Memory Tier 2 (Request-based billing),byte-seconds,6.85047283712E10,2.0E-4,0.0
+2026-11-19 10:00:00,l,18,Cloud Run Network Intra Region Data Transfer,bytes,20641.72,0.0,0.0
+2026-11-19 10:00:00,l,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 10:00:00,l,18,Services CPU Tier 2  (Request-based billing),seconds,25.9,7.81E-4,0.0
+2026-11-19 10:00:00,l,18,Services Memory Tier 2 (Request-based billing),byte-seconds,5.56198264832E10,1.63E-4,0.0
+2026-11-19 10:00:00,l,20,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 10:00:00,l,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 10:00:00,l,20,Services CPU Tier 2  (Request-based billing),seconds,26.2,7.91E-4,0.0
+2026-11-19 10:00:00,l,20,Services Memory Tier 2 (Request-based billing),byte-seconds,5.62640715776E10,1.65E-4,0.0
+2026-11-19 10:00:00,m,05,Cloud Run Network Intra Region Data Transfer,bytes,30948.09,0.0,0.0
+2026-11-19 10:00:00,m,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 10:00:00,m,05,Services CPU Tier 2  (Request-based billing),seconds,1.2,3.6E-5,0.0
+2026-11-19 10:00:00,m,05,Services Memory Tier 2 (Request-based billing),byte-seconds,2.5769803776E9,8.0E-6,0.0
+2026-11-19 10:00:00,m,14,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 10:00:00,m,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 10:00:00,m,14,Services CPU Tier 2  (Request-based billing),seconds,0.3,9.0E-6,0.0
+2026-11-19 10:00:00,m,14,Services Memory Tier 2 (Request-based billing),byte-seconds,6.442450944E8,2.0E-6,0.0
+2026-11-19 10:00:00,m,15,Cloud Run Network Intra Region Data Transfer,bytes,10312.16,0.0,0.0
+2026-11-19 10:00:00,m,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 10:00:00,m,15,Services CPU Tier 2  (Request-based billing),seconds,0.2,6.0E-6,0.0
+2026-11-19 10:00:00,m,15,Services Memory Tier 2 (Request-based billing),byte-seconds,4.294967296E8,1.0E-6,0.0
+2026-11-19 10:00:00,m,16,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 10:00:00,m,16,Requests,requests,3.0,0.0,0.0
+2026-11-19 10:00:00,m,16,Services CPU Tier 2  (Request-based billing),seconds,15.0,4.53E-4,0.0
+2026-11-19 10:00:00,m,16,Services Memory Tier 2 (Request-based billing),byte-seconds,3.221225472E10,9.4E-5,0.0
+2026-11-19 10:00:00,m,18,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 10:00:00,m,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 10:00:00,m,18,Services CPU Tier 2  (Request-based billing),seconds,15.1,4.56E-4,0.0
+2026-11-19 10:00:00,m,18,Services Memory Tier 2 (Request-based billing),byte-seconds,3.24270030848E10,9.5E-5,0.0
+2026-11-19 10:00:00,m,20,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 10:00:00,m,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 10:00:00,m,20,Services CPU Tier 2  (Request-based billing),seconds,22.9,6.91E-4,0.0
+2026-11-19 10:00:00,m,20,Services Memory Tier 2 (Request-based billing),byte-seconds,4.91773755392E10,1.44E-4,0.0
+2026-11-19 10:00:00,s,05,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 10:00:00,s,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 10:00:00,s,05,Services CPU Tier 2  (Request-based billing),seconds,1.7,5.1E-5,0.0
+2026-11-19 10:00:00,s,05,Services Memory Tier 2 (Request-based billing),byte-seconds,3.6507222016E9,1.0E-5,0.0
+2026-11-19 10:00:00,s,14,Cloud Run Network Intra Region Data Transfer,bytes,10306.37,0.0,0.0
+2026-11-19 10:00:00,s,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 10:00:00,s,14,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-19 10:00:00,s,14,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,2.0E-6,0.0
+2026-11-19 10:00:00,s,15,Cloud Run Network Intra Region Data Transfer,bytes,10317.96,0.0,0.0
+2026-11-19 10:00:00,s,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 10:00:00,s,15,Services CPU Tier 2  (Request-based billing),seconds,0.2,6.0E-6,0.0
+2026-11-19 10:00:00,s,15,Services Memory Tier 2 (Request-based billing),byte-seconds,4.294967296E8,1.0E-6,0.0
+2026-11-19 10:00:00,s,16,Cloud Run Network Intra Region Data Transfer,bytes,20572.16,0.0,0.0
+2026-11-19 10:00:00,s,16,Requests,requests,3.0,0.0,0.0
+2026-11-19 10:00:00,s,16,Services CPU Tier 2  (Request-based billing),seconds,7.0,2.11E-4,0.0
+2026-11-19 10:00:00,s,16,Services Memory Tier 2 (Request-based billing),byte-seconds,1.5032385536E10,4.4E-5,0.0
+2026-11-19 10:00:00,s,18,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 10:00:00,s,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 10:00:00,s,18,Services CPU Tier 2  (Request-based billing),seconds,7.6,2.29E-4,0.0
+2026-11-19 10:00:00,s,18,Services Memory Tier 2 (Request-based billing),byte-seconds,1.63208757248E10,4.8E-5,0.0
+2026-11-19 10:00:00,s,20,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 10:00:00,s,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 10:00:00,s,20,Services CPU Tier 2  (Request-based billing),seconds,12.0,3.62E-4,0.0
+2026-11-19 10:00:00,s,20,Services Memory Tier 2 (Request-based billing),byte-seconds,2.5769803776E10,7.5E-5,0.0
+2026-11-19 11:00:00,l,05,Cloud Run Network Intra Region Data Transfer,bytes,40659.05,0.0,0.0
+2026-11-19 11:00:00,l,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 11:00:00,l,05,Services CPU Tier 2  (Request-based billing),seconds,1.2,3.6E-5,0.0
+2026-11-19 11:00:00,l,05,Services Memory Tier 2 (Request-based billing),byte-seconds,2.5769803776E9,8.0E-6,0.0
+2026-11-19 11:00:00,l,14,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 11:00:00,l,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 11:00:00,l,14,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-19 11:00:00,l,14,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,2.0E-6,0.0
+2026-11-19 11:00:00,l,15,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 11:00:00,l,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 11:00:00,l,15,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-19 11:00:00,l,15,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,2.0E-6,0.0
+2026-11-19 11:00:00,l,16,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 11:00:00,l,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 11:00:00,l,16,Services CPU Tier 2  (Request-based billing),seconds,94.4,0.002848,0.0
+2026-11-19 11:00:00,l,16,Services Memory Tier 2 (Request-based billing),byte-seconds,2.027224563712E11,5.93E-4,0.0
+2026-11-19 11:00:00,l,18,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 11:00:00,l,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 11:00:00,l,18,Services CPU Tier 2  (Request-based billing),seconds,38.7,0.001168,0.0
+2026-11-19 11:00:00,l,18,Services Memory Tier 2 (Request-based billing),byte-seconds,8.31076171776E10,2.44E-4,0.0
+2026-11-19 11:00:00,l,20,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 11:00:00,l,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 11:00:00,l,20,Services CPU Tier 2  (Request-based billing),seconds,39.9,0.001204,0.0
+2026-11-19 11:00:00,l,20,Services Memory Tier 2 (Request-based billing),byte-seconds,8.56845975552E10,2.51E-4,0.0
+2026-11-19 11:00:00,m,05,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 11:00:00,m,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 11:00:00,m,05,Services CPU Tier 2  (Request-based billing),seconds,1.4,4.2E-5,0.0
+2026-11-19 11:00:00,m,05,Services Memory Tier 2 (Request-based billing),byte-seconds,3.0064771072E9,8.0E-6,0.0
+2026-11-19 11:00:00,m,14,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 11:00:00,m,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 11:00:00,m,14,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-19 11:00:00,m,14,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,2.0E-6,0.0
+2026-11-19 11:00:00,m,15,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 11:00:00,m,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 11:00:00,m,15,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-19 11:00:00,m,15,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,2.0E-6,0.0
+2026-11-19 11:00:00,m,16,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 11:00:00,m,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 11:00:00,m,16,Services CPU Tier 2  (Request-based billing),seconds,51.3,0.001548,0.0
+2026-11-19 11:00:00,m,16,Services Memory Tier 2 (Request-based billing),byte-seconds,1.101659111424E11,3.22E-4,0.0
+2026-11-19 11:00:00,m,18,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 11:00:00,m,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 11:00:00,m,18,Services CPU Tier 2  (Request-based billing),seconds,37.4,0.001129,0.0
+2026-11-19 11:00:00,m,18,Services Memory Tier 2 (Request-based billing),byte-seconds,8.03158884352E10,2.36E-4,0.0
+2026-11-19 11:00:00,m,20,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 11:00:00,m,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 11:00:00,m,20,Services CPU Tier 2  (Request-based billing),seconds,30.1,9.08E-4,0.0
+2026-11-19 11:00:00,m,20,Services Memory Tier 2 (Request-based billing),byte-seconds,6.46392578048E10,1.9E-4,0.0
+2026-11-19 11:00:00,s,05,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 11:00:00,s,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 11:00:00,s,05,Services CPU Tier 2  (Request-based billing),seconds,1.8,5.4E-5,0.0
+2026-11-19 11:00:00,s,05,Services Memory Tier 2 (Request-based billing),byte-seconds,3.8654705664E9,1.1E-5,0.0
+2026-11-19 11:00:00,s,14,Cloud Run Network Intra Region Data Transfer,bytes,40499.69,0.0,0.0
+2026-11-19 11:00:00,s,14,Requests,requests,5.0,0.0,0.0
+2026-11-19 11:00:00,s,14,Services CPU Tier 2  (Request-based billing),seconds,0.8,2.4E-5,0.0
+2026-11-19 11:00:00,s,14,Services Memory Tier 2 (Request-based billing),byte-seconds,1.7179869184E9,5.0E-6,0.0
+2026-11-19 11:00:00,s,15,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 11:00:00,s,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 11:00:00,s,15,Services CPU Tier 2  (Request-based billing),seconds,0.5,1.5E-5,0.0
+2026-11-19 11:00:00,s,15,Services Memory Tier 2 (Request-based billing),byte-seconds,1.073741824E9,3.0E-6,0.0
+2026-11-19 11:00:00,s,16,Cloud Run Network Intra Region Data Transfer,bytes,40385.86,0.0,0.0
+2026-11-19 11:00:00,s,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 11:00:00,s,16,Services CPU Tier 2  (Request-based billing),seconds,15.3,4.61E-4,0.0
+2026-11-19 11:00:00,s,16,Services Memory Tier 2 (Request-based billing),byte-seconds,3.28564998144E10,9.6E-5,0.0
+2026-11-19 11:00:00,s,18,Cloud Run Network Intra Region Data Transfer,bytes,40431.4,0.0,0.0
+2026-11-19 11:00:00,s,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 11:00:00,s,18,Services CPU Tier 2  (Request-based billing),seconds,18.0,5.43E-4,0.0
+2026-11-19 11:00:00,s,18,Services Memory Tier 2 (Request-based billing),byte-seconds,3.8654705664E10,1.13E-4,0.0
+2026-11-19 11:00:00,s,20,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 11:00:00,s,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 11:00:00,s,20,Services CPU Tier 2  (Request-based billing),seconds,11.8,3.56E-4,0.0
+2026-11-19 11:00:00,s,20,Services Memory Tier 2 (Request-based billing),byte-seconds,2.53403070464E10,7.4E-5,0.0
+2026-11-19 12:00:00,l,05,Cloud Run Network Intra Region Data Transfer,bytes,28292.01,0.0,0.0
+2026-11-19 12:00:00,l,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 12:00:00,l,05,Services CPU Tier 2  (Request-based billing),seconds,1.3,3.9E-5,0.0
+2026-11-19 12:00:00,l,05,Services Memory Tier 2 (Request-based billing),byte-seconds,2.7917287424E9,8.0E-6,0.0
+2026-11-19 12:00:00,l,14,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 12:00:00,l,14,Requests,requests,5.0,0.0,0.0
+2026-11-19 12:00:00,l,14,Services CPU Tier 2  (Request-based billing),seconds,0.6,1.8E-5,0.0
+2026-11-19 12:00:00,l,14,Services Memory Tier 2 (Request-based billing),byte-seconds,1.2884901888E9,3.0E-6,0.0
+2026-11-19 12:00:00,l,15,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 12:00:00,l,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 12:00:00,l,15,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-19 12:00:00,l,15,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,2.0E-6,0.0
+2026-11-19 12:00:00,l,16,Cloud Run Network Intra Region Data Transfer,bytes,14106.4,0.0,0.0
+2026-11-19 12:00:00,l,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 12:00:00,l,16,Services CPU Tier 2  (Request-based billing),seconds,66.7,0.002013,0.0
+2026-11-19 12:00:00,l,16,Services Memory Tier 2 (Request-based billing),byte-seconds,1.432371593216E11,4.2E-4,0.0
+2026-11-19 12:00:00,l,18,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 12:00:00,l,18,Requests,requests,4.0,0.0,0.0
+2026-11-19 12:00:00,l,18,Services CPU Tier 2  (Request-based billing),seconds,63.6,0.00192,0.0
+2026-11-19 12:00:00,l,18,Services Memory Tier 2 (Request-based billing),byte-seconds,1.365799600128E11,4.0E-4,0.0
+2026-11-19 12:00:00,l,20,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 12:00:00,l,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 12:00:00,l,20,Services CPU Tier 2  (Request-based billing),seconds,42.7,0.001288,0.0
+2026-11-19 12:00:00,l,20,Services Memory Tier 2 (Request-based billing),byte-seconds,9.16975517696E10,2.69E-4,0.0
+2026-11-19 12:00:00,m,05,Cloud Run Network Intra Region Data Transfer,bytes,28196.97,0.0,0.0
+2026-11-19 12:00:00,m,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 12:00:00,m,05,Services CPU Tier 2  (Request-based billing),seconds,1.2,3.6E-5,0.0
+2026-11-19 12:00:00,m,05,Services Memory Tier 2 (Request-based billing),byte-seconds,2.5769803776E9,8.0E-6,0.0
+2026-11-19 12:00:00,m,14,Cloud Run Network Intra Region Data Transfer,bytes,14098.48,0.0,0.0
+2026-11-19 12:00:00,m,14,Requests,requests,5.0,0.0,0.0
+2026-11-19 12:00:00,m,14,Services CPU Tier 2  (Request-based billing),seconds,0.6,1.8E-5,0.0
+2026-11-19 12:00:00,m,14,Services Memory Tier 2 (Request-based billing),byte-seconds,1.2884901888E9,3.0E-6,0.0
+2026-11-19 12:00:00,m,15,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 12:00:00,m,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 12:00:00,m,15,Services CPU Tier 2  (Request-based billing),seconds,12.2,3.68E-4,0.0
+2026-11-19 12:00:00,m,15,Services Memory Tier 2 (Request-based billing),byte-seconds,2.61993005056E10,7.6E-5,0.0
+2026-11-19 12:00:00,m,16,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 12:00:00,m,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 12:00:00,m,16,Services CPU Tier 2  (Request-based billing),seconds,31.0,9.34E-4,0.0
+2026-11-19 12:00:00,m,16,Services Memory Tier 2 (Request-based billing),byte-seconds,6.6571993088E10,1.94E-4,0.0
+2026-11-19 12:00:00,m,18,Cloud Run Network Intra Region Data Transfer,bytes,14035.12,0.0,0.0
+2026-11-19 12:00:00,m,18,Requests,requests,4.0,0.0,0.0
+2026-11-19 12:00:00,m,18,Services CPU Tier 2  (Request-based billing),seconds,22.4,6.76E-4,0.0
+2026-11-19 12:00:00,m,18,Services Memory Tier 2 (Request-based billing),byte-seconds,4.81036337152E10,1.41E-4,0.0
+2026-11-19 12:00:00,m,20,Cloud Run Network Intra Region Data Transfer,bytes,14066.8,0.0,0.0
+2026-11-19 12:00:00,m,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 12:00:00,m,20,Services CPU Tier 2  (Request-based billing),seconds,22.0,6.63E-4,0.0
+2026-11-19 12:00:00,m,20,Services Memory Tier 2 (Request-based billing),byte-seconds,4.7244640256E10,1.38E-4,0.0
+2026-11-19 12:00:00,s,05,Cloud Run Network Intra Region Data Transfer,bytes,14090.56,0.0,0.0
+2026-11-19 12:00:00,s,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 12:00:00,s,05,Services CPU Tier 2  (Request-based billing),seconds,1.7,5.1E-5,0.0
+2026-11-19 12:00:00,s,05,Services Memory Tier 2 (Request-based billing),byte-seconds,3.6507222016E9,1.1E-5,0.0
+2026-11-19 12:00:00,s,14,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 12:00:00,s,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 12:00:00,s,14,Services CPU Tier 2  (Request-based billing),seconds,0.7,2.1E-5,0.0
+2026-11-19 12:00:00,s,14,Services Memory Tier 2 (Request-based billing),byte-seconds,1.5032385536E9,5.0E-6,0.0
+2026-11-19 12:00:00,s,15,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 12:00:00,s,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 12:00:00,s,15,Services CPU Tier 2  (Request-based billing),seconds,5.8,1.75E-4,0.0
+2026-11-19 12:00:00,s,15,Services Memory Tier 2 (Request-based billing),byte-seconds,1.24554051584E10,3.7E-5,0.0
+2026-11-19 12:00:00,s,16,Cloud Run Network Intra Region Data Transfer,bytes,14050.96,0.0,0.0
+2026-11-19 12:00:00,s,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 12:00:00,s,16,Services CPU Tier 2  (Request-based billing),seconds,16.8,5.07E-4,0.0
+2026-11-19 12:00:00,s,16,Services Memory Tier 2 (Request-based billing),byte-seconds,3.60777252864E10,1.05E-4,0.0
+2026-11-19 12:00:00,s,18,Cloud Run Network Intra Region Data Transfer,bytes,14058.88,0.0,0.0
+2026-11-19 12:00:00,s,18,Requests,requests,4.0,0.0,0.0
+2026-11-19 12:00:00,s,18,Services CPU Tier 2  (Request-based billing),seconds,11.2,3.38E-4,0.0
+2026-11-19 12:00:00,s,18,Services Memory Tier 2 (Request-based billing),byte-seconds,2.40518168576E10,7.0E-5,0.0
+2026-11-19 12:00:00,s,20,Cloud Run Network Intra Region Data Transfer,bytes,14066.8,0.0,0.0
+2026-11-19 12:00:00,s,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 12:00:00,s,20,Services CPU Tier 2  (Request-based billing),seconds,10.9,3.29E-4,0.0
+2026-11-19 12:00:00,s,20,Services Memory Tier 2 (Request-based billing),byte-seconds,2.34075717632E10,6.9E-5,0.0
+2026-11-19 13:00:00,l,05,Cloud Run Network Intra Region Data Transfer,bytes,52332.64,0.0,0.0
+2026-11-19 13:00:00,l,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 13:00:00,l,05,Services CPU Tier 2  (Request-based billing),seconds,1.2,3.6E-5,0.0
+2026-11-19 13:00:00,l,05,Services Memory Tier 2 (Request-based billing),byte-seconds,2.5769803776E9,8.0E-6,0.0
+2026-11-19 13:00:00,l,14,Cloud Run Network Intra Region Data Transfer,bytes,26180.97,0.0,0.0
+2026-11-19 13:00:00,l,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 13:00:00,l,14,Services CPU Tier 2  (Request-based billing),seconds,0.5,1.5E-5,0.0
+2026-11-19 13:00:00,l,14,Services Memory Tier 2 (Request-based billing),byte-seconds,1.073741824E9,3.0E-6,0.0
+2026-11-19 13:00:00,l,15,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 13:00:00,l,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 13:00:00,l,15,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-19 13:00:00,l,15,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,2.0E-6,0.0
+2026-11-19 13:00:00,l,16,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 13:00:00,l,16,Requests,requests,3.0,0.0,0.0
+2026-11-19 13:00:00,l,16,Services CPU Tier 2  (Request-based billing),seconds,33.7,0.001016,0.0
+2026-11-19 13:00:00,l,16,Services Memory Tier 2 (Request-based billing),byte-seconds,7.23701989376E10,2.11E-4,0.0
+2026-11-19 13:00:00,l,18,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 13:00:00,l,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 13:00:00,l,18,Services CPU Tier 2  (Request-based billing),seconds,21.7,6.55E-4,0.0
+2026-11-19 13:00:00,l,18,Services Memory Tier 2 (Request-based billing),byte-seconds,4.66003951616E10,1.36E-4,0.0
+2026-11-19 13:00:00,l,20,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 13:00:00,l,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 13:00:00,l,20,Services CPU Tier 2  (Request-based billing),seconds,53.7,0.00162,0.0
+2026-11-19 13:00:00,l,20,Services Memory Tier 2 (Request-based billing),byte-seconds,1.153198718976E11,3.38E-4,0.0
+2026-11-19 13:00:00,m,05,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 13:00:00,m,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 13:00:00,m,05,Services CPU Tier 2  (Request-based billing),seconds,1.3,3.9E-5,0.0
+2026-11-19 13:00:00,m,05,Services Memory Tier 2 (Request-based billing),byte-seconds,2.7917287424E9,8.0E-6,0.0
+2026-11-19 13:00:00,m,14,Cloud Run Network Intra Region Data Transfer,bytes,26078.42,0.0,0.0
+2026-11-19 13:00:00,m,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 13:00:00,m,14,Services CPU Tier 2  (Request-based billing),seconds,0.3,9.0E-6,0.0
+2026-11-19 13:00:00,m,14,Services Memory Tier 2 (Request-based billing),byte-seconds,6.442450944E8,2.0E-6,0.0
+2026-11-19 13:00:00,m,15,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 13:00:00,m,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 13:00:00,m,15,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-19 13:00:00,m,15,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,2.0E-6,0.0
+2026-11-19 13:00:00,m,16,Cloud Run Network Intra Region Data Transfer,bytes,25961.21,0.0,0.0
+2026-11-19 13:00:00,m,16,Requests,requests,3.0,0.0,0.0
+2026-11-19 13:00:00,m,16,Services CPU Tier 2  (Request-based billing),seconds,36.3,0.001095,0.0
+2026-11-19 13:00:00,m,16,Services Memory Tier 2 (Request-based billing),byte-seconds,7.79536564224E10,2.27E-4,0.0
+2026-11-19 13:00:00,m,18,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 13:00:00,m,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 13:00:00,m,18,Services CPU Tier 2  (Request-based billing),seconds,15.0,4.53E-4,0.0
+2026-11-19 13:00:00,m,18,Services Memory Tier 2 (Request-based billing),byte-seconds,3.221225472E10,9.4E-5,0.0
+2026-11-19 13:00:00,m,20,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 13:00:00,m,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 13:00:00,m,20,Services CPU Tier 2  (Request-based billing),seconds,21.7,6.55E-4,0.0
+2026-11-19 13:00:00,m,20,Services Memory Tier 2 (Request-based billing),byte-seconds,4.66003951616E10,1.36E-4,0.0
+2026-11-19 13:00:00,s,05,Cloud Run Network Intra Region Data Transfer,bytes,26063.76,0.0,0.0
+2026-11-19 13:00:00,s,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 13:00:00,s,05,Services CPU Tier 2  (Request-based billing),seconds,1.3,3.9E-5,0.0
+2026-11-19 13:00:00,s,05,Services Memory Tier 2 (Request-based billing),byte-seconds,2.7917287424E9,8.0E-6,0.0
+2026-11-19 13:00:00,s,14,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 13:00:00,s,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 13:00:00,s,14,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-19 13:00:00,s,14,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,3.0E-6,0.0
+2026-11-19 13:00:00,s,15,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 13:00:00,s,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 13:00:00,s,15,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-19 13:00:00,s,15,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,2.0E-6,0.0
+2026-11-19 13:00:00,s,16,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 13:00:00,s,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 13:00:00,s,16,Services CPU Tier 2  (Request-based billing),seconds,18.5,5.59E-4,0.0
+2026-11-19 13:00:00,s,16,Services Memory Tier 2 (Request-based billing),byte-seconds,3.9728447488E10,1.17E-4,0.0
+2026-11-19 13:00:00,s,18,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 13:00:00,s,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 13:00:00,s,18,Services CPU Tier 2  (Request-based billing),seconds,7.5,2.26E-4,0.0
+2026-11-19 13:00:00,s,18,Services Memory Tier 2 (Request-based billing),byte-seconds,1.610612736E10,4.7E-5,0.0
+2026-11-19 13:00:00,s,20,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 13:00:00,s,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 13:00:00,s,20,Services CPU Tier 2  (Request-based billing),seconds,11.1,3.35E-4,0.0
+2026-11-19 13:00:00,s,20,Services Memory Tier 2 (Request-based billing),byte-seconds,2.38370684928E10,7.0E-5,0.0
+2026-11-19 14:00:00,l,05,Cloud Run Network Intra Region Data Transfer,bytes,158383.0,0.0,0.0
+2026-11-19 14:00:00,l,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 14:00:00,l,05,Services CPU Tier 2  (Request-based billing),seconds,1.1,3.3E-5,0.0
+2026-11-19 14:00:00,l,05,Services Memory Tier 2 (Request-based billing),byte-seconds,2.3622320128E9,7.0E-6,0.0
+2026-11-19 14:00:00,l,14,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 14:00:00,l,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 14:00:00,l,14,Services CPU Tier 2  (Request-based billing),seconds,0.2,6.0E-6,0.0
+2026-11-19 14:00:00,l,14,Services Memory Tier 2 (Request-based billing),byte-seconds,4.294967296E8,1.0E-6,0.0
+2026-11-19 14:00:00,l,15,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 14:00:00,l,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 14:00:00,l,15,Services CPU Tier 2  (Request-based billing),seconds,40.2,0.001212,0.0
+2026-11-19 14:00:00,l,15,Services Memory Tier 2 (Request-based billing),byte-seconds,8.63288426496E10,2.52E-4,0.0
+2026-11-19 14:00:00,l,16,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 14:00:00,l,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 14:00:00,l,16,Services CPU Tier 2  (Request-based billing),seconds,87.9,0.002653,0.0
+2026-11-19 14:00:00,l,16,Services Memory Tier 2 (Request-based billing),byte-seconds,1.887638126592E11,5.52E-4,0.0
+2026-11-19 14:00:00,l,18,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 14:00:00,l,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 14:00:00,l,18,Services CPU Tier 2  (Request-based billing),seconds,31.7,9.57E-4,0.0
+2026-11-19 14:00:00,l,18,Services Memory Tier 2 (Request-based billing),byte-seconds,6.80752316416E10,2.0E-4,0.0
+2026-11-19 14:00:00,l,20,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 14:00:00,l,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 14:00:00,l,20,Services CPU Tier 2  (Request-based billing),seconds,36.7,0.001108,0.0
+2026-11-19 14:00:00,l,20,Services Memory Tier 2 (Request-based billing),byte-seconds,7.88126498816E10,2.31E-4,0.0
+2026-11-19 14:00:00,m,05,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 14:00:00,m,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 14:00:00,m,05,Services CPU Tier 2  (Request-based billing),seconds,1.1,3.3E-5,0.0
+2026-11-19 14:00:00,m,05,Services Memory Tier 2 (Request-based billing),byte-seconds,2.3622320128E9,7.0E-6,0.0
+2026-11-19 14:00:00,m,14,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 14:00:00,m,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 14:00:00,m,14,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-19 14:00:00,m,14,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,2.0E-6,0.0
+2026-11-19 14:00:00,m,15,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 14:00:00,m,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 14:00:00,m,15,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-19 14:00:00,m,15,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,2.0E-6,0.0
+2026-11-19 14:00:00,m,16,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 14:00:00,m,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 14:00:00,m,16,Services CPU Tier 2  (Request-based billing),seconds,27.6,8.32E-4,0.0
+2026-11-19 14:00:00,m,16,Services Memory Tier 2 (Request-based billing),byte-seconds,5.92705486848E10,1.73E-4,0.0
+2026-11-19 14:00:00,m,18,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 14:00:00,m,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 14:00:00,m,18,Services CPU Tier 2  (Request-based billing),seconds,21.0,6.33E-4,0.0
+2026-11-19 14:00:00,m,18,Services Memory Tier 2 (Request-based billing),byte-seconds,4.5097156608E10,1.32E-4,0.0
+2026-11-19 14:00:00,m,20,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 14:00:00,m,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 14:00:00,m,20,Services CPU Tier 2  (Request-based billing),seconds,21.9,6.61E-4,0.0
+2026-11-19 14:00:00,m,20,Services Memory Tier 2 (Request-based billing),byte-seconds,4.70298918912E10,1.38E-4,0.0
+2026-11-19 14:00:00,s,05,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 14:00:00,s,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 14:00:00,s,05,Services CPU Tier 2  (Request-based billing),seconds,1.8,5.4E-5,0.0
+2026-11-19 14:00:00,s,05,Services Memory Tier 2 (Request-based billing),byte-seconds,3.8654705664E9,1.2E-5,0.0
+2026-11-19 14:00:00,s,14,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 14:00:00,s,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 14:00:00,s,14,Services CPU Tier 2  (Request-based billing),seconds,0.5,1.5E-5,0.0
+2026-11-19 14:00:00,s,14,Services Memory Tier 2 (Request-based billing),byte-seconds,1.073741824E9,3.0E-6,0.0
+2026-11-19 14:00:00,s,15,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 14:00:00,s,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 14:00:00,s,15,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-19 14:00:00,s,15,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,2.0E-6,0.0
+2026-11-19 14:00:00,s,16,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 14:00:00,s,16,Requests,requests,3.0,0.0,0.0
+2026-11-19 14:00:00,s,16,Services CPU Tier 2  (Request-based billing),seconds,7.2,2.17E-4,0.0
+2026-11-19 14:00:00,s,16,Services Memory Tier 2 (Request-based billing),byte-seconds,1.54618822656E10,4.5E-5,0.0
+2026-11-19 14:00:00,s,18,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 14:00:00,s,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 14:00:00,s,18,Services CPU Tier 2  (Request-based billing),seconds,15.8,4.77E-4,0.0
+2026-11-19 14:00:00,s,18,Services Memory Tier 2 (Request-based billing),byte-seconds,3.39302416384E10,1.0E-4,0.0
+2026-11-19 14:00:00,s,20,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 14:00:00,s,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 14:00:00,s,20,Services CPU Tier 2  (Request-based billing),seconds,11.0,3.32E-4,0.0
+2026-11-19 14:00:00,s,20,Services Memory Tier 2 (Request-based billing),byte-seconds,2.3622320128E10,6.9E-5,0.0
+2026-11-19 15:00:00,l,05,Cloud Run Network Intra Region Data Transfer,bytes,16159.68,0.0,0.0
+2026-11-19 15:00:00,l,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 15:00:00,l,05,Services CPU Tier 2  (Request-based billing),seconds,1.2,3.6E-5,0.0
+2026-11-19 15:00:00,l,05,Services Memory Tier 2 (Request-based billing),byte-seconds,2.5769803776E9,8.0E-6,0.0
+2026-11-19 15:00:00,l,14,Cloud Run Network Intra Region Data Transfer,bytes,16168.73,0.0,0.0
+2026-11-19 15:00:00,l,14,Requests,requests,5.0,0.0,0.0
+2026-11-19 15:00:00,l,14,Services CPU Tier 2  (Request-based billing),seconds,0.6,1.8E-5,0.0
+2026-11-19 15:00:00,l,14,Services Memory Tier 2 (Request-based billing),byte-seconds,1.2884901888E9,4.0E-6,0.0
+2026-11-19 15:00:00,l,15,Cloud Run Network Intra Region Data Transfer,bytes,8061.75,0.0,0.0
+2026-11-19 15:00:00,l,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 15:00:00,l,15,Services CPU Tier 2  (Request-based billing),seconds,22.0,6.64E-4,0.0
+2026-11-19 15:00:00,l,15,Services Memory Tier 2 (Request-based billing),byte-seconds,4.7244640256E10,1.38E-4,0.0
+2026-11-19 15:00:00,l,16,Cloud Run Network Intra Region Data Transfer,bytes,16114.44,0.0,0.0
+2026-11-19 15:00:00,l,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 15:00:00,l,16,Services CPU Tier 2  (Request-based billing),seconds,66.9,0.002019,0.0
+2026-11-19 15:00:00,l,16,Services Memory Tier 2 (Request-based billing),byte-seconds,1.436666560512E11,4.21E-4,0.0
+2026-11-19 15:00:00,l,18,Cloud Run Network Intra Region Data Transfer,bytes,8052.7,0.0,0.0
+2026-11-19 15:00:00,l,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 15:00:00,l,18,Services CPU Tier 2  (Request-based billing),seconds,58.2,0.001755,0.0
+2026-11-19 15:00:00,l,18,Services Memory Tier 2 (Request-based billing),byte-seconds,1.249835483136E11,3.65E-4,0.0
+2026-11-19 15:00:00,l,20,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 15:00:00,l,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 15:00:00,l,20,Services CPU Tier 2  (Request-based billing),seconds,40.1,0.00121,0.0
+2026-11-19 15:00:00,l,20,Services Memory Tier 2 (Request-based billing),byte-seconds,8.61140942848E10,2.52E-4,0.0
+2026-11-19 15:00:00,m,05,Cloud Run Network Intra Region Data Transfer,bytes,24158.1,0.0,0.0
+2026-11-19 15:00:00,m,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 15:00:00,m,05,Services CPU Tier 2  (Request-based billing),seconds,1.2,3.6E-5,0.0
+2026-11-19 15:00:00,m,05,Services Memory Tier 2 (Request-based billing),byte-seconds,2.5769803776E9,8.0E-6,0.0
+2026-11-19 15:00:00,m,14,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 15:00:00,m,14,Requests,requests,5.0,0.0,0.0
+2026-11-19 15:00:00,m,14,Services CPU Tier 2  (Request-based billing),seconds,0.6,1.8E-5,0.0
+2026-11-19 15:00:00,m,14,Services Memory Tier 2 (Request-based billing),byte-seconds,1.2884901888E9,3.0E-6,0.0
+2026-11-19 15:00:00,m,15,Cloud Run Network Intra Region Data Transfer,bytes,8048.17,0.0,0.0
+2026-11-19 15:00:00,m,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 15:00:00,m,15,Services CPU Tier 2  (Request-based billing),seconds,0.5,1.5E-5,0.0
+2026-11-19 15:00:00,m,15,Services Memory Tier 2 (Request-based billing),byte-seconds,1.073741824E9,3.0E-6,0.0
+2026-11-19 15:00:00,m,16,Cloud Run Network Intra Region Data Transfer,bytes,16028.49,0.0,0.0
+2026-11-19 15:00:00,m,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 15:00:00,m,16,Services CPU Tier 2  (Request-based billing),seconds,22.2,6.69E-4,0.0
+2026-11-19 15:00:00,m,16,Services Memory Tier 2 (Request-based billing),byte-seconds,4.76741369856E10,1.39E-4,0.0
+2026-11-19 15:00:00,m,18,Cloud Run Network Intra Region Data Transfer,bytes,8011.98,0.0,0.0
+2026-11-19 15:00:00,m,18,Requests,requests,4.0,0.0,0.0
+2026-11-19 15:00:00,m,18,Services CPU Tier 2  (Request-based billing),seconds,36.4,0.001098,0.0
+2026-11-19 15:00:00,m,18,Services Memory Tier 2 (Request-based billing),byte-seconds,7.81684047872E10,2.28E-4,0.0
+2026-11-19 15:00:00,m,20,Cloud Run Network Intra Region Data Transfer,bytes,8034.6,0.0,0.0
+2026-11-19 15:00:00,m,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 15:00:00,m,20,Services CPU Tier 2  (Request-based billing),seconds,34.9,0.001054,0.0
+2026-11-19 15:00:00,m,20,Services Memory Tier 2 (Request-based billing),byte-seconds,7.49471793152E10,2.19E-4,0.0
+2026-11-19 15:00:00,s,05,Cloud Run Network Intra Region Data Transfer,bytes,8052.7,0.0,0.0
+2026-11-19 15:00:00,s,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 15:00:00,s,05,Services CPU Tier 2  (Request-based billing),seconds,1.6,4.8E-5,0.0
+2026-11-19 15:00:00,s,05,Services Memory Tier 2 (Request-based billing),byte-seconds,3.4359738368E9,1.0E-5,0.0
+2026-11-19 15:00:00,s,14,Cloud Run Network Intra Region Data Transfer,bytes,16096.35,0.0,0.0
+2026-11-19 15:00:00,s,14,Requests,requests,5.0,0.0,0.0
+2026-11-19 15:00:00,s,14,Services CPU Tier 2  (Request-based billing),seconds,1.0,3.0E-5,0.0
+2026-11-19 15:00:00,s,14,Services Memory Tier 2 (Request-based billing),byte-seconds,2.147483648E9,7.0E-6,0.0
+2026-11-19 15:00:00,s,15,Cloud Run Network Intra Region Data Transfer,bytes,8057.22,0.0,0.0
+2026-11-19 15:00:00,s,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 15:00:00,s,15,Services CPU Tier 2  (Request-based billing),seconds,0.6,1.8E-5,0.0
+2026-11-19 15:00:00,s,15,Services Memory Tier 2 (Request-based billing),byte-seconds,1.2884901888E9,4.0E-6,0.0
+2026-11-19 15:00:00,s,16,Cloud Run Network Intra Region Data Transfer,bytes,8030.08,0.0,0.0
+2026-11-19 15:00:00,s,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 15:00:00,s,16,Services CPU Tier 2  (Request-based billing),seconds,19.0,5.73E-4,0.0
+2026-11-19 15:00:00,s,16,Services Memory Tier 2 (Request-based billing),byte-seconds,4.0802189312E10,1.19E-4,0.0
+2026-11-19 15:00:00,s,18,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 15:00:00,s,18,Requests,requests,4.0,0.0,0.0
+2026-11-19 15:00:00,s,18,Services CPU Tier 2  (Request-based billing),seconds,14.0,4.22E-4,0.0
+2026-11-19 15:00:00,s,18,Services Memory Tier 2 (Request-based billing),byte-seconds,3.0064771072E10,8.8E-5,0.0
+2026-11-19 15:00:00,s,20,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 15:00:00,s,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 15:00:00,s,20,Services CPU Tier 2  (Request-based billing),seconds,14.7,4.44E-4,0.0
+2026-11-19 15:00:00,s,20,Services Memory Tier 2 (Request-based billing),byte-seconds,3.15680096256E10,9.3E-5,0.0
+2026-11-19 16:00:00,l,05,Cloud Run Network Intra Region Data Transfer,bytes,20088.94,0.0,0.0
+2026-11-19 16:00:00,l,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 16:00:00,l,05,Services CPU Tier 2  (Request-based billing),seconds,1.2,3.6E-5,0.0
+2026-11-19 16:00:00,l,05,Services Memory Tier 2 (Request-based billing),byte-seconds,2.5769803776E9,8.0E-6,0.0
+2026-11-19 16:00:00,l,14,Cloud Run Network Intra Region Data Transfer,bytes,10047.28,0.0,0.0
+2026-11-19 16:00:00,l,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 16:00:00,l,14,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-19 16:00:00,l,14,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,2.0E-6,0.0
+2026-11-19 16:00:00,l,15,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 16:00:00,l,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 16:00:00,l,15,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-19 16:00:00,l,15,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,2.0E-6,0.0
+2026-11-19 16:00:00,l,16,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 16:00:00,l,16,Requests,requests,3.0,0.0,0.0
+2026-11-19 16:00:00,l,16,Services CPU Tier 2  (Request-based billing),seconds,26.9,8.12E-4,0.0
+2026-11-19 16:00:00,l,16,Services Memory Tier 2 (Request-based billing),byte-seconds,5.77673101312E10,1.69E-4,0.0
+2026-11-19 16:00:00,l,18,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 16:00:00,l,18,Requests,requests,4.0,0.0,0.0
+2026-11-19 16:00:00,l,18,Services CPU Tier 2  (Request-based billing),seconds,34.6,0.001044,0.0
+2026-11-19 16:00:00,l,18,Services Memory Tier 2 (Request-based billing),byte-seconds,7.43029342208E10,2.18E-4,0.0
+2026-11-19 16:00:00,l,20,Cloud Run Network Intra Region Data Transfer,bytes,10013.53,0.0,0.0
+2026-11-19 16:00:00,l,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 16:00:00,l,20,Services CPU Tier 2  (Request-based billing),seconds,37.3,0.001125,0.0
+2026-11-19 16:00:00,l,20,Services Memory Tier 2 (Request-based billing),byte-seconds,8.01011400704E10,2.34E-4,0.0
+2026-11-19 16:00:00,m,05,Cloud Run Network Intra Region Data Transfer,bytes,20038.31,0.0,0.0
+2026-11-19 16:00:00,m,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 16:00:00,m,05,Services CPU Tier 2  (Request-based billing),seconds,1.2,3.6E-5,0.0
+2026-11-19 16:00:00,m,05,Services Memory Tier 2 (Request-based billing),byte-seconds,2.5769803776E9,8.0E-6,0.0
+2026-11-19 16:00:00,m,14,Cloud Run Network Intra Region Data Transfer,bytes,20027.06,0.0,0.0
+2026-11-19 16:00:00,m,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 16:00:00,m,14,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-19 16:00:00,m,14,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,2.0E-6,0.0
+2026-11-19 16:00:00,m,15,Cloud Run Network Intra Region Data Transfer,bytes,10007.91,0.0,0.0
+2026-11-19 16:00:00,m,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 16:00:00,m,15,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-19 16:00:00,m,15,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,2.0E-6,0.0
+2026-11-19 16:00:00,m,16,Cloud Run Network Intra Region Data Transfer,bytes,19937.05,0.0,0.0
+2026-11-19 16:00:00,m,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 16:00:00,m,16,Services CPU Tier 2  (Request-based billing),seconds,29.1,8.78E-4,0.0
+2026-11-19 16:00:00,m,16,Services Memory Tier 2 (Request-based billing),byte-seconds,6.24917741568E10,1.83E-4,0.0
+2026-11-19 16:00:00,m,18,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 16:00:00,m,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 16:00:00,m,18,Services CPU Tier 2  (Request-based billing),seconds,21.7,6.55E-4,0.0
+2026-11-19 16:00:00,m,18,Services Memory Tier 2 (Request-based billing),byte-seconds,4.66003951616E10,1.36E-4,0.0
+2026-11-19 16:00:00,m,20,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 16:00:00,m,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 16:00:00,m,20,Services CPU Tier 2  (Request-based billing),seconds,20.6,6.22E-4,0.0
+2026-11-19 16:00:00,m,20,Services Memory Tier 2 (Request-based billing),byte-seconds,4.42381631488E10,1.29E-4,0.0
+2026-11-19 16:00:00,s,05,Cloud Run Network Intra Region Data Transfer,bytes,30034.97,0.0,0.0
+2026-11-19 16:00:00,s,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 16:00:00,s,05,Services CPU Tier 2  (Request-based billing),seconds,1.5,4.5E-5,0.0
+2026-11-19 16:00:00,s,05,Services Memory Tier 2 (Request-based billing),byte-seconds,3.221225472E9,9.0E-6,0.0
+2026-11-19 16:00:00,s,14,Cloud Run Network Intra Region Data Transfer,bytes,10007.91,0.0,0.0
+2026-11-19 16:00:00,s,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 16:00:00,s,14,Services CPU Tier 2  (Request-based billing),seconds,0.6,1.8E-5,0.0
+2026-11-19 16:00:00,s,14,Services Memory Tier 2 (Request-based billing),byte-seconds,1.2884901888E9,4.0E-6,0.0
+2026-11-19 16:00:00,s,15,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 16:00:00,s,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 16:00:00,s,15,Services CPU Tier 2  (Request-based billing),seconds,0.5,1.5E-5,0.0
+2026-11-19 16:00:00,s,15,Services Memory Tier 2 (Request-based billing),byte-seconds,1.073741824E9,2.0E-6,0.0
+2026-11-19 16:00:00,s,16,Cloud Run Network Intra Region Data Transfer,bytes,9991.03,0.0,0.0
+2026-11-19 16:00:00,s,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 16:00:00,s,16,Services CPU Tier 2  (Request-based billing),seconds,15.2,4.58E-4,0.0
+2026-11-19 16:00:00,s,16,Services Memory Tier 2 (Request-based billing),byte-seconds,3.26417514496E10,9.6E-5,0.0
+2026-11-19 16:00:00,s,18,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 16:00:00,s,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 16:00:00,s,18,Services CPU Tier 2  (Request-based billing),seconds,10.6,3.2E-4,0.0
+2026-11-19 16:00:00,s,18,Services Memory Tier 2 (Request-based billing),byte-seconds,2.27633266688E10,6.7E-5,0.0
+2026-11-19 16:00:00,s,20,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 16:00:00,s,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 16:00:00,s,20,Services CPU Tier 2  (Request-based billing),seconds,10.8,3.26E-4,0.0
+2026-11-19 16:00:00,s,20,Services Memory Tier 2 (Request-based billing),byte-seconds,2.31928233984E10,6.8E-5,0.0
+2026-11-19 17:00:00,l,05,Cloud Run Network Intra Region Data Transfer,bytes,15144.64,0.0,0.0
+2026-11-19 17:00:00,l,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 17:00:00,l,05,Services CPU Tier 2  (Request-based billing),seconds,1.6,4.8E-5,0.0
+2026-11-19 17:00:00,l,05,Services Memory Tier 2 (Request-based billing),byte-seconds,3.4359738368E9,1.0E-5,0.0
+2026-11-19 17:00:00,l,14,Cloud Run Network Intra Region Data Transfer,bytes,7563.85,0.0,0.0
+2026-11-19 17:00:00,l,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 17:00:00,l,14,Services CPU Tier 2  (Request-based billing),seconds,1.5,4.5E-5,0.0
+2026-11-19 17:00:00,l,14,Services Memory Tier 2 (Request-based billing),byte-seconds,3.221225472E9,9.0E-6,0.0
+2026-11-19 17:00:00,l,15,Cloud Run Network Intra Region Data Transfer,bytes,15110.74,0.0,0.0
+2026-11-19 17:00:00,l,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 17:00:00,l,15,Services CPU Tier 2  (Request-based billing),seconds,1.1,3.3E-5,0.0
+2026-11-19 17:00:00,l,15,Services Memory Tier 2 (Request-based billing),byte-seconds,2.3622320128E9,7.0E-6,0.0
+2026-11-19 17:00:00,l,16,Cloud Run Network Intra Region Data Transfer,bytes,7546.9,0.0,0.0
+2026-11-19 17:00:00,l,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 17:00:00,l,16,Services CPU Tier 2  (Request-based billing),seconds,76.0,0.002292,0.0
+2026-11-19 17:00:00,l,16,Services Memory Tier 2 (Request-based billing),byte-seconds,1.63208757248E11,4.77E-4,0.0
+2026-11-19 17:00:00,l,18,Cloud Run Network Intra Region Data Transfer,bytes,7542.66,0.0,0.0
+2026-11-19 17:00:00,l,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 17:00:00,l,18,Services CPU Tier 2  (Request-based billing),seconds,22.8,6.88E-4,0.0
+2026-11-19 17:00:00,l,18,Services Memory Tier 2 (Request-based billing),byte-seconds,4.89626271744E10,1.43E-4,0.0
+2026-11-19 17:00:00,l,20,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 17:00:00,l,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 17:00:00,l,20,Services CPU Tier 2  (Request-based billing),seconds,25.4,7.66E-4,0.0
+2026-11-19 17:00:00,l,20,Services Memory Tier 2 (Request-based billing),byte-seconds,5.45460846592E10,1.59E-4,0.0
+2026-11-19 17:00:00,m,05,Cloud Run Network Intra Region Data Transfer,bytes,30183.35,0.0,0.0
+2026-11-19 17:00:00,m,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 17:00:00,m,05,Services CPU Tier 2  (Request-based billing),seconds,1.3,3.9E-5,0.0
+2026-11-19 17:00:00,m,05,Services Memory Tier 2 (Request-based billing),byte-seconds,2.7917287424E9,8.0E-6,0.0
+2026-11-19 17:00:00,m,14,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 17:00:00,m,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 17:00:00,m,14,Services CPU Tier 2  (Request-based billing),seconds,0.7,2.1E-5,0.0
+2026-11-19 17:00:00,m,14,Services Memory Tier 2 (Request-based billing),byte-seconds,1.5032385536E9,4.0E-6,0.0
+2026-11-19 17:00:00,m,15,Cloud Run Network Intra Region Data Transfer,bytes,7538.42,0.0,0.0
+2026-11-19 17:00:00,m,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 17:00:00,m,15,Services CPU Tier 2  (Request-based billing),seconds,0.8,2.4E-5,0.0
+2026-11-19 17:00:00,m,15,Services Memory Tier 2 (Request-based billing),byte-seconds,1.7179869184E9,5.0E-6,0.0
+2026-11-19 17:00:00,m,16,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 17:00:00,m,16,Requests,requests,3.0,0.0,0.0
+2026-11-19 17:00:00,m,16,Services CPU Tier 2  (Request-based billing),seconds,23.1,6.97E-4,0.0
+2026-11-19 17:00:00,m,16,Services Memory Tier 2 (Request-based billing),byte-seconds,4.96068722688E10,1.44E-4,0.0
+2026-11-19 17:00:00,m,18,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 17:00:00,m,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 17:00:00,m,18,Services CPU Tier 2  (Request-based billing),seconds,14.6,4.4E-4,0.0
+2026-11-19 17:00:00,m,18,Services Memory Tier 2 (Request-based billing),byte-seconds,3.13532612608E10,9.2E-5,0.0
+2026-11-19 17:00:00,m,20,Cloud Run Network Intra Region Data Transfer,bytes,7525.71,0.0,0.0
+2026-11-19 17:00:00,m,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 17:00:00,m,20,Services CPU Tier 2  (Request-based billing),seconds,16.6,5.01E-4,0.0
+2026-11-19 17:00:00,m,20,Services Memory Tier 2 (Request-based billing),byte-seconds,3.56482285568E10,1.04E-4,0.0
+2026-11-19 17:00:00,s,05,Cloud Run Network Intra Region Data Transfer,bytes,22627.98,0.0,0.0
+2026-11-19 17:00:00,s,05,Requests,requests,12.0,0.0,0.0
+2026-11-19 17:00:00,s,05,Services CPU Tier 2  (Request-based billing),seconds,1.9,5.7E-5,0.0
+2026-11-19 17:00:00,s,05,Services Memory Tier 2 (Request-based billing),byte-seconds,4.0802189312E9,1.3E-5,0.0
+2026-11-19 17:00:00,s,14,Cloud Run Network Intra Region Data Transfer,bytes,15072.61,0.0,0.0
+2026-11-19 17:00:00,s,14,Requests,requests,4.0,0.0,0.0
+2026-11-19 17:00:00,s,14,Services CPU Tier 2  (Request-based billing),seconds,1.0,3.0E-5,0.0
+2026-11-19 17:00:00,s,14,Services Memory Tier 2 (Request-based billing),byte-seconds,2.147483648E9,6.0E-6,0.0
+2026-11-19 17:00:00,s,15,Cloud Run Network Intra Region Data Transfer,bytes,0.0,0.0,0.0
+2026-11-19 17:00:00,s,15,Requests,requests,4.0,0.0,0.0
+2026-11-19 17:00:00,s,15,Services CPU Tier 2  (Request-based billing),seconds,1.5,4.5E-5,0.0
+2026-11-19 17:00:00,s,15,Services Memory Tier 2 (Request-based billing),byte-seconds,3.221225472E9,1.0E-5,0.0
+2026-11-19 17:00:00,s,16,Cloud Run Network Intra Region Data Transfer,bytes,7525.71,0.0,0.0
+2026-11-19 17:00:00,s,16,Requests,requests,4.0,0.0,0.0
+2026-11-19 17:00:00,s,16,Services CPU Tier 2  (Request-based billing),seconds,13.8,4.17E-4,0.0
+2026-11-19 17:00:00,s,16,Services Memory Tier 2 (Request-based billing),byte-seconds,2.96352743424E10,8.7E-5,0.0
+2026-11-19 17:00:00,s,18,Cloud Run Network Intra Region Data Transfer,bytes,7525.71,0.0,0.0
+2026-11-19 17:00:00,s,18,Requests,requests,3.0,0.0,0.0
+2026-11-19 17:00:00,s,18,Services CPU Tier 2  (Request-based billing),seconds,7.0,2.11E-4,0.0
+2026-11-19 17:00:00,s,18,Services Memory Tier 2 (Request-based billing),byte-seconds,1.5032385536E10,4.4E-5,0.0
+2026-11-19 17:00:00,s,20,Cloud Run Network Intra Region Data Transfer,bytes,7525.71,0.0,0.0
+2026-11-19 17:00:00,s,20,Requests,requests,3.0,0.0,0.0
+2026-11-19 17:00:00,s,20,Services CPU Tier 2  (Request-based billing),seconds,7.3,2.21E-4,0.0
+2026-11-19 17:00:00,s,20,Services Memory Tier 2 (Request-based billing),byte-seconds,1.56766306304E10,4.6E-5,0.0
+2026-11-19 18:00:00,m,18,Services CPU Tier 2  (Request-based billing),seconds,0.4,1.2E-5,0.0
+2026-11-19 18:00:00,m,18,Services Memory Tier 2 (Request-based billing),byte-seconds,8.589934592E8,2.0E-6,0.0

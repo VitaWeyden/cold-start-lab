@@ -1,0 +1,122 @@
+results4.csv: 910 rows, 892 measured samples (first attempts), 18 services, sizes ['s', 'm', 'l'], tiers ['5', '14', '15', '16', '18', '20']
+client window (UTC): 2026-11-19 08:00:00 -> 17:58:30
+
+1. Plumbing (client side)  [6.5]
+  app_size = services file size: 910/910 successful attempts
+  request id echoed by the app: 910/910
+  size s: model_mb 0.0, rss_mb median 176.0, peak_rss_mb max 239.3
+  size m: model_mb 20.8, rss_mb median 423.4, peak_rss_mb max 612.7
+  size l: model_mb 503.6, rss_mb median 1388.7, peak_rss_mb max 1490.5
+
+2. Cold rate of successful first attempts per size x tier  [5.3]
+  size  tier_min    n   ok  fail  cold  cold_pct  ci95_lo  ci95_hi  median_latency_ms  p95_latency_ms
+     s         5  119  119     0     0       0.0      0.0      3.1              253.9           270.7
+     s        14   42   42     0     0       0.0      0.0      8.4              258.5           278.0
+     s        15   39   39     0     1       2.6      0.5     13.2              250.0           290.0
+     s        16   37   37     0    37     100.0     90.6    100.0             3051.4          4047.7
+     s        18   32   32     0    32     100.0     89.3    100.0             3003.1          3230.4
+     s        20   29   29     0    29     100.0     88.3    100.0             3021.3          3203.1
+     m         5  119  119     0     0       0.0      0.0      3.1              232.2           248.9
+     m        14   42   42     0     0       0.0      0.0      8.4              236.0           247.9
+     m        15   39   39     0     1       2.6      0.5     13.2              232.4           248.5
+     m        16   36   36     0    36     100.0     90.4    100.0             6768.7         10325.7
+     m        18   32   32     0    32     100.0     89.3    100.0             6735.1         10184.7
+     m        20   29   29     0    29     100.0     88.3    100.0             7025.4         10203.2
+     l         5  119  119     0     0       0.0      0.0      3.1              230.8           247.0
+     l        14   42   42     0     0       0.0      0.0      8.4              238.1           250.7
+     l        15   39   39     0     3       7.7      2.7     20.3              226.5         20054.0
+     l        16   36   36     0    36     100.0     90.4    100.0            16933.1         21188.9
+     l        18   32   32     0    32     100.0     89.3    100.0            10540.0         12874.7
+     l        20   29   29     0    29     100.0     88.3    100.0            12417.1         14950.3
+  14 min, S vs L: cold 0/42 vs 0/42, Fisher two-sided p = 1.0000
+  15 min, S vs L: cold 1/39 vs 3/39, Fisher two-sided p = 0.6151
+  16 min, S vs L: cold 37/37 vs 36/36, Fisher two-sided p = 1.0000
+
+3. Cold-start latency per size (all cold successful first attempts)  [5.1]
+  size  n_cold  median_ms   p95_ms  median_ttfb_ms  median_startup_ms
+     s      99     3021.3   3988.5          2871.2             2108.6
+     m      98     6788.8  10325.7          6639.8             5927.7
+     l     100    12791.2  20054.0         12650.4            11934.5
+  service medians, cold tiers (16 / 18 / 20 min):
+    s: coldstart-t4-s-16 3051.4, coldstart-t4-s-18 3003.1, coldstart-t4-s-20 3021.3
+    m: coldstart-t4-m-16 6768.7, coldstart-t4-m-18 6735.1, coldstart-t4-m-20 7025.4
+    l: coldstart-t4-l-16 16933.1, coldstart-t4-l-18 10540.0, coldstart-t4-l-20 12417.1
+  pair  median_diff_ms    p_MWU   p_Holm  all_services_separated  difference
+   s-m          3767.5  <0.0001  <0.0001                     yes       SHOWN
+   s-l          9769.9  <0.0001  <0.0001                     yes       SHOWN
+   m-l          6002.4  <0.0001  <0.0001                     yes       SHOWN
+
+4. Which part of the cold start grows (medians, ms)  [5.2]
+  size    n  latency_ms  ttfb_ms  startup_ms  imports_ms  init_ms  ml_import_ms  model_load_ms  work_ms  platform_ms
+     s   99      3021.3   2871.2      2108.6      1260.3    845.7           0.0            0.0    111.2        644.9
+     m   98      6788.8   6639.8      5927.7      1191.7   3389.5        1163.3           33.5     88.2        658.8
+     l  100     12791.2  12650.4     11934.5      1311.0   4218.0        1294.5         5081.5    108.6        648.1
+  platform_ms L - S = 3.2 ms -> below 500 ms: the growth is the app's own start-up work
+
+5. Warm latency at the 5 min tier  [5.4]
+  size  n_warm  median_ms  p95_ms  median_work_ms
+     s     119      253.9   270.7            94.0
+     m     119      232.2   248.9            71.8
+     l     119      230.8   247.0            69.9
+  largest difference of the medians: 23.1 ms (<= 100 ms: warm requests equal, as expected)
+
+6. Failed first attempts (429 / 5xx / errors)  [5.6]
+  size    n  http_429  http_5xx  conn_error  fail_ci95_pct
+     s  298         0         0           0        0.0-1.3
+     m  297         0         0           0        0.0-1.3
+     l  297         0         0           0        0.0-1.3
+  none
+
+7. Overlapping cold starts  [5.6]
+  size  n_cold  overlapping  median_all_ms  median_without_ms  difference
+     s      99            5         3021.3             3023.6        0.1%
+     m      98           10         6788.8             6776.3        0.2%
+     l     100           11        12791.2            12790.9        0.0%
+  -> cold4.csv
+
+8. Client attempts vs Cloud Run request log (trace id)  [6.4]
+  client attempts 910, request-log entries 910: matched 910, client-only 0, log-only 0, status mismatch 0
+
+9. Instances and teardown  [5.3, 5.6, 6.6]
+  315 instances: 0 without app_id, 0 never served a request, 0 without a shutdown line (possible crash / OOM, or still alive at END)
+  size    n  min_s  median_s  max_s  below_900s
+     s  105  900.1     905.4  910.1           0
+     m  104  900.1     904.4  910.0           0
+     l  106  900.1     905.3  910.0           0
+  S vs M: median difference -1.0 s, MWU p 0.1845, Holm 0.3691 -> no shift shown (needs >= 10 s and p < 0.05)
+  S vs L: median difference -0.1 s, MWU p 0.8568, Holm 0.8568 -> no shift shown (needs >= 10 s and p < 0.05)
+  -> instances4.csv
+
+10. Cloud Run system log
+  630 entries; 'Starting new instance' per size: {'l': 106, 'm': 104, 's': 105}
+      315  AUTOSCALING - Instance started due to configured scaling factors (e.g. CPU utilization, request thro
+      315  (other) Default STARTUP TCP probe succeeded after 1 attempt for container "..." on port 8080.
+  memory-related entries: 0
+
+11. Cost from the billing export  [5.5]
+  792 rows, 722 in the run hours 2026-11-19 08:00 - 18:59 UTC
+  size  tier  billed_req  client_attempts  check  vcpu_s   gib_s  gross_eur  net_eur
+     s     5         120              120     ok    22.9    45.8   0.000832      0.0
+     s    14          43               43     ok    12.2    24.4   0.000445      0.0
+     s    15          40               40     ok    16.2    32.4   0.000588      0.0
+     s    16          38               38     ok   146.9   293.8   0.005356      0.0
+     s    18          33               33     ok   124.7   249.4   0.004545      0.0
+     s    20          30               30     ok   112.0   224.0   0.004086      0.0
+     m     5         120              120     ok    26.6    53.2   0.000969      0.0
+     m    14          43               43     ok    17.9    35.8   0.000647      0.0
+     m    15          40               40     ok    28.1    56.2    0.00102      0.0
+     m    16          37               37     ok   308.5   617.0    0.01124      0.0
+     m    18          33               33     ok   258.4   516.8   0.009421      0.0
+     m    20          30               30     ok   244.7   489.4    0.00892      0.0
+     l     5         120              120     ok    40.5    81.0   0.001476      0.0
+     l    14          43               43     ok    26.9    53.8   0.000978      0.0
+     l    15          40               40     ok    86.4   172.8   0.003146      0.0
+     l    16          37               37     ok   648.9  1297.8   0.023657      0.0
+     l    18          33               33     ok   398.0   796.0   0.014512      0.0
+     l    20          30               30     ok   399.5   799.0   0.014564      0.0
+  per cold start, cold tiers 16 / 18 / 20 min:
+  size  billed_req  vcpu_s_per_req  median_latency_ms  median_startup_ms  gross_eur_per_1000
+     s         101             3.8             3019.4             2108.2              0.1385
+     m         100            8.12             6787.1             5903.2              0.2958
+     l         100           14.46            12777.0            11867.6              0.5273
+  Test 4 total in the run hours: gross EUR 0.1064, net EUR 0.0000
