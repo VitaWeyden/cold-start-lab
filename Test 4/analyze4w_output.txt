@@ -1,0 +1,28 @@
+results4w.csv: 114 rows, 111 measured samples at 16 min, sizes ['s', 'm', 'l']
+client window (UTC): 2026-11-20 19:00:00 -> 04:53:08
+
+1. Plumbing  [10.4]
+  app_size = services file size: 114/114
+  request id echoed: 114/114
+  failed attempts: 0 {}
+
+2. Always-warm latency at 16 min idle (successful first attempts)  [10.3 W1]
+  size   n  median_ms  p95_ms  max_ms  below_1000ms  cold_flag  waited_for_start  cold_start_removed
+     s  37      265.8   297.0  297.46         37/37          0                 0                 yes
+     m  37      208.1   219.3   220.6         37/37          0                 0                 yes
+     l  37      210.5   220.7  231.99         37/37          0                 0                 yes
+
+3. Always-warm vs scale-to-zero (Test 4 main run), 16 min tier  [10.3 W2]
+  size  n_zero  zero_median_ms  zero_p95_ms  n_warm  warm_median_ms  warm_p95_ms  saved_per_request_ms  zero_vs_warm_x
+     s      37          3051.4       4047.7      37           265.8        297.0                2785.5            11.5
+     m      36          6768.7      10325.7      37           208.1        219.3                6560.6            32.5
+     l      36         16933.1      21188.9      37           210.5        220.7               16722.6            80.4
+  (different days and hours: scale-to-zero 2026-11-19 08:00 - 18:00 UTC, always-warm 2026-11-20 19:00 - 11-21 04:53 UTC)
+
+4. Instances of the always-warm services  [10.3 W3]
+             service    instanceId   process_start        shutdown  served
+  coldstart-t4w-l-16  053995963773  11-20 18:34:38  11-21 17:08:58      38
+  coldstart-t4w-m-16  d04a275141b4  11-20 18:34:18  11-21 17:08:52      38
+  coldstart-t4w-s-16  c247aa0dde09  11-20 18:34:03  11-21 17:08:48      38
+  instances per service: coldstart-t4w-l-16 1, coldstart-t4w-m-16 1, coldstart-t4w-s-16 1  (1 = the same instance all day; more = replaced by the platform)
+  'Starting new instance' in the system log: {'coldstart-t4w-l-16': 1, 'coldstart-t4w-m-16': 1, 'coldstart-t4w-s-16': 1}

@@ -94,7 +94,8 @@ def main():
                         round(mz - mw, 1), round(mz / mw, 1)])
     table(out, ["size", "n_zero", "zero_median_ms", "zero_p95_ms", "n_warm", "warm_median_ms", "warm_p95_ms",
                 "saved_per_request_ms", "zero_vs_warm_x"])
-    print("  (different days: scale-to-zero 2026-11-19, always-warm on the date of this run, same hours)")
+    print(f"  (different days and hours: scale-to-zero 2026-11-19 08:00 - 18:00 UTC, "
+          f"always-warm {t[0]:%Y-%m-%d %H:%M} - {t[-1]:%m-%d %H:%M} UTC)")
 
     # 4. instances -------------------------------------------------------------------------------
     if a.logs:

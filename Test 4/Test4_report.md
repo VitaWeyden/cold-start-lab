@@ -1,6 +1,6 @@
 # Test 4 - how does the size of the application change cold starts, teardown and cost?
 
-Status: **main run done on 2026-11-19 (08:00 - 17:58 UTC, scale-to-zero, 18 services); always-warm addition (section 10) run from 2026-11-20 19:00 UTC.** Results of the main run: to be written up. Written before the run, so the analysis rules in section 5
+Status: **main run done on 2026-11-19 (08:00 - 17:58 UTC, scale-to-zero, 18 services); always-warm addition (section 10) run 2026-11-20 19:00 - 2026-11-21 04:53 UTC.** Results: sections 11 - 18 (written 2026-11-21; the always-warm cost W4 is pending the billing export). Written before the run, so the analysis rules in section 5
 cannot be fitted to the result afterwards. All Test 4 files live in this folder (`Test 4/`).
 The preparation run is in `Test 4 pilot/` (its report: `Test 4 pilot/Test4_report.md`).
 
@@ -359,3 +359,265 @@ bq query --nouse_legacy_sql --format=csv --max_rows=10000 "$(cat billing_query4w
 python3 analyze4w.py results4w.csv --zero results4.csv --logs logs4w \
   --billing billing4w.csv --zero-billing billing4.csv | tee analyze4w_output.txt
 ```
+
+---
+
+# Results (written 2026-11-21)
+
+Sections 1 - 10 were written before the respective runs and are unchanged, apart from the status
+line. The results follow the numbering of the rules: 5.x for the main run, W1 - W4 for the
+always-warm addition. Output files: `analyze4_output.txt`, `analyze4w_output.txt`.
+
+## 11. What was actually run
+
+**Main run (scale-to-zero).** Built and deployed on 2026-11-18 at about 14:45 - 14:55 UTC
+(`deploy_check4.txt`: all 18 services min 0, max 1, 1 vCPU, 2 GiB, no CPU boost, the right image).
+Measured **2026-11-19 (Thursday), 08:00:00 - 17:58:33 UTC** (`run4_meta.txt`), started by
+`--start-at` the day before; billing gate OK. 910 requests = 18 warm-ups + **892 samples**, all
+answered on the first attempt (no retry was needed):
+
+| tier | 5 min | 14 min | 15 min | 16 min | 18 min | 20 min |
+|---|---|---|---|---|---|---|
+| samples per service | 119 | 42 | 39 | 37 / 36 / 36 (S / M / L) | 32 | 29 |
+
+As planned in section 3, apart from: the cold samples at 16 min are 37 / 36 / 36 instead of
+37 each (the slower M and L starts push the next sample later, so one fewer fits into 10 h).
+The deploy started one instance per service on 2026-11-18 (18 billed requests, 199 vCPU-s,
+EUR 0.007), as the pilot had shown; it is outside the window and not counted.
+
+**Always-warm addition.** Deployed 2026-11-20 18:34 UTC; measured **2026-11-20 19:00:00 -
+2026-11-21 04:53:08 UTC** (`run4w_meta.txt`), 114 requests = 3 warm-ups + **111 samples**.
+Deviation from 10.1: the services were deleted only at **2026-11-21 17:08 UTC**, about 12 h after
+the end of the measurement (nobody was there in the morning), so they existed ~22.6 h instead of
+~10.5 h. This changes the total cost of the run, not the price per second (W4).
+
+## 12. Results of the main run (rules of section 5)
+
+### 12.1 Cold rate per size and tier (5.3)
+
+| tier | S cold | M cold | L cold |
+|---|---|---|---|
+| 5 min | 0 / 119 | 0 / 119 | 0 / 119 |
+| 14 min | 0 / 42 | 0 / 42 | 0 / 42 |
+| 15 min | 1 / 39 | 1 / 39 | 3 / 39 |
+| 16 min | 37 / 37 | 36 / 36 | 36 / 36 |
+| 18 min | 32 / 32 | 32 / 32 | 32 / 32 |
+| 20 min | 29 / 29 | 29 / 29 | 29 / 29 |
+
+Fisher S vs L: 14 min p = 1.0, 15 min p = 0.62, 16 min p = 1.0. **The boundary does not move with
+the size**: up to 14 min always warm, from 16 min always cold, for every size.
+
+The five cold samples at 15 min are all the same race: the request left the client at exactly
+900.0 s after the previous response, and the previous instance logged its shutdown 0.05 - 0.2 s
+*after* the request started. These are requests that arrived while the instance was being removed,
+not an earlier teardown of a bigger application (S 1, M 1, L 3; not significant).
+
+### 12.2 Cold-start latency per size (5.1)
+
+| | S | M | L |
+|---|---|---|---|
+| cold samples (all tiers) | 99 | 98 | 100 |
+| **median latency** | **3,021 ms** | **6,789 ms** | **12,791 ms** |
+| p95 | 3,989 ms | 10,326 ms | 20,054 ms |
+| median time to first byte | 2,871 ms | 6,640 ms | 12,650 ms |
+| service medians 16 / 18 / 20 min | 3,051 / 3,003 / 3,021 | 6,769 / 6,735 / 7,025 | 16,933 / 10,540 / 12,417 |
+
+| pair | median difference | Mann-Whitney (Holm) | all services separated | result |
+|---|---|---|---|---|
+| S - M | +3,768 ms | p < 0.0001 | yes | **shown** |
+| S - L | +9,770 ms | p < 0.0001 | yes | **shown** |
+| M - L | +6,002 ms | p < 0.0001 | yes | **shown** |
+
+**The cold start grows with the size: ~3.0 s (S), ~6.8 s (M), ~12.8 s (L)**, by both conditions
+of the rule: every service of a bigger size is slower than every service of a smaller one
+(slowest M 7.0 s < fastest L 10.5 s).
+
+The warm-ups (the first start of each service, ~17 h after the deploy) were slower again:
+median 5.2 s (S), 12.2 s (M), 19.7 s (L).
+
+### 12.3 Which part grows (5.2)
+
+Medians of the cold samples, ms:
+
+| | S | M | L |
+|---|---|---|---|
+| total latency | 3,021 | 6,789 | 12,791 |
+| app `startup_ms` | 2,109 | 5,928 | 11,935 |
+| - imports (FastAPI, pandas) | 1,260 | 1,192 | 1,311 |
+| - data + SQLite (`init_ms`) | 846 | 3,390 | 4,218 |
+| - scikit-learn import | - | 1,163 | 1,295 |
+| - model load | - | 34 | 5,082 |
+| request work (`work_ms`) | 111 | 88 | 109 |
+| `platform_ms` (ttfb - startup - work) | 645 | 659 | 648 |
+
+`platform_ms` L - S = +3 ms (rule: > 500 ms would point to the image / platform). **The growth
+is in the application's own start-up**: the five-times-larger data (+2.5 - 3.4 s), the
+scikit-learn import (+1.2 s) and, for L, loading the 500 MB model (+5.1 s). The part before the
+application runs stays at ~650 ms although the image grows from 91 to 282 MiB (compressed,
+Artifact Registry).
+
+One qualification, beyond the rule: the model load includes reading the 504 MB file from the
+container's file system, and on Cloud Run that took ~2.9x longer than locally (median 5.1 s vs
+1.3 - 1.9 s), while the other phases took ~1.4 - 1.9x longer (imports S 1,260 vs ~760 ms; data
+S 846 vs ~445 ms, M 3,390 vs ~2,380 ms, L 4,218 vs ~2,370 ms).
+So the image size does show up, but inside `model_load_ms`, not in `platform_ms`: what costs time
+is the large file the application reads at start-up, not the image as such. The spread between
+the L services (section 15) comes from the same phase.
+
+Local calibration vs Cloud Run (`startup_ms` medians): S 1.2 -> 2.1 s (x1.7), M 3.8 -> 5.9 s
+(x1.6), L 5.7 -> 11.9 s (x2.1).
+
+### 12.4 Teardown (5.3)
+
+| | S | M | L |
+|---|---|---|---|
+| instances (exact join) | 105 | 104 | 106 |
+| min / median / max | 900.1 / 905.4 / 910.1 s | 900.1 / 904.4 / 910.0 s | 900.1 / 905.3 / 910.0 s |
+| below 900 s | 0 | 0 | 0 |
+
+S vs M: -1.0 s (Holm p = 0.37), S vs L: -0.1 s (p = 0.86): **no shift**. The idle timeout is
+the same ~900 - 910 s for every size, as in Test 3 (889 - 910 s) and the pilot (900 - 910 s).
+No early teardown (< 800 s) occurred; every one of the 315 instances served at least one request
+and logged a shutdown.
+
+### 12.5 Warm requests (5.4)
+
+5 min tier: S 254 ms, M 232 ms, L 231 ms (median; p95 271 / 249 / 247 ms). Largest difference
+23 ms, below the 100 ms threshold: **warm requests cost the same for every size**. S is slightly
+the slowest, and its `/api/report` work too (94 vs 72 / 70 ms) although the rows are the same;
+this was also seen in the always-warm run (13) and is not explained.
+
+### 12.6 Failures, memory and overlaps (5.6)
+
+- **No HTTP 429, no 5xx, no connection error** in 892 samples (95% CI of the failure rate per size
+  0 - 1.3%). The pilot settings (max-instances 1, 2 GiB, staggered starts) carried over without
+  the Test 3 failure mode, also for the slowest size and also in the Test 3 peak hours.
+- **Memory**: median after start-up S 176 MB, M 423 MB, L 1,389 MB; peak L 1,491 MB (73% of
+  2 GiB). No instance without a shutdown line, no memory-related system log entry: no OOM.
+- **Overlaps**: 5 / 10 / 11 cold samples (S / M / L) overlapped another cold start; without them
+  the medians change by 0.1 / 0.2 / 0.0%, far below the 10% threshold.
+
+### 12.7 Cost (5.5)
+
+Billed requests = client attempts for **every one of the 18 services** (928 billed incl. the 18
+deploy-day requests, which are outside the window). Run window 08:00 - 18:59 UTC, gross:
+
+| | S | M | L |
+|---|---|---|---|
+| all six services, 10 h | EUR 0.0159 | EUR 0.0322 | EUR 0.0583 |
+| vCPU-s per cold start (16 / 18 / 20 min) | 3.80 | 8.12 | 14.46 |
+| median cold latency of the same samples | 3.02 s | 6.79 s | 12.78 s |
+| EUR per 1,000 cold starts | 0.139 | 0.296 | 0.527 |
+
+Total Cloud Run cost of the main run: **EUR 0.106 gross, EUR 0 net**. A cold start costs about
+1.1 - 1.3x its latency in billed vCPU time (the instance is billed from its start, before the
+request is answered), so **the cost per cold start grows with the size in the same proportion as
+the cold-start time**, as expected in section 1.
+
+## 13. Results of the always-warm addition (rules W1 - W4)
+
+### W1 - the cold start is removed for every size
+
+| | S | M | L |
+|---|---|---|---|
+| samples (16 min idle) | 37 | 37 | 37 |
+| median / p95 / max | 266 / 297 / 297 ms | 208 / 219 / 221 ms | 211 / 221 / 232 ms |
+| under 1,000 ms | 37 / 37 | 37 / 37 | 37 / 37 |
+| waited for a new instance | 0 | 0 | 0 |
+
+### W2 - what it saves per request (16 min tier)
+
+| | scale-to-zero median | always-warm median | saved per request | ratio |
+|---|---|---|---|---|
+| S | 3,051 ms | 266 ms | **2.8 s** | 11x |
+| M | 6,769 ms | 208 ms | **6.6 s** | 33x |
+| L | 16,933 ms | 211 ms | **16.7 s** | 80x |
+
+The L value uses the 16 min service, the slowest L service of the main run; with the median of all
+L cold samples (12.8 s) the saving is ~12.6 s. Different days and hours (10.5): the scale-to-zero
+side ran in the day, the always-warm side in the evening and night; the warm latencies (208 -
+266 ms) are in the range of the main run's warm requests (231 - 254 ms).
+
+### W3 - the same instance all the time
+
+Each always-warm service had **one instance** from the deploy (2026-11-20 18:34) to the deletion
+(2026-11-21 17:08), ~22.6 h, and it answered all 38 requests (warm-up + 37). The system log shows
+one "Starting new instance" per service. Client attempts = request-log entries (114 / 114), no
+foreign traffic.
+
+### W4 - cost
+
+*Pending: the billing export of 2026-11-21 was incomplete when this was written (last export
+14:52 UTC, deletion 17:08 UTC). `billing_query4w.sql` -> `billing4w.csv`, then
+`analyze4w.py ... --billing billing4w.csv --zero-billing billing4.csv`.*
+
+Expected from the list price (Tests 1 - 2, Tier 2): min-instance 1 vCPU + 2 GiB =
+9.24e-06 EUR/s = EUR 0.033 per hour = **~EUR 24 per 30-day month per service, the same for every
+size**. Compared with scale-to-zero at the same request pattern (one request every 16 min, all
+month; main-run cost x 72): S EUR 0.39, M EUR 0.81, L EUR 1.70 per month, i.e. the always-warm
+instance costs ~62x (S), ~30x (M) and ~14x (L) more. The whole Cloud Run bill of 2026-11-20 and
+2026-11-21 (until 14:52) shows EUR 0.57 + 1.23 gross, consistent with ~EUR 0.10 per hour for the
+three services; net EUR 0 (credits).
+
+## 14. Plumbing checks (sections 6 and 10.4)
+
+| # | check | main run | always-warm |
+|---|---|---|---|
+| 1 | local calibration | pass (2026-11-18) | - |
+| 2 | deployed config | pass, 18 / 18 (`deploy_check4.txt`) | pass, 3 / 3 |
+| 3 | billing gate before the run | pass | pass |
+| 4 | client = request log = billed requests | 910 = 910 = 910 (+18 deploy) | 114 = 114 (billing pending) |
+| 5 | `app_size` = services file | 910 / 910 | 114 / 114 |
+| 6 | instance join, teardown matched | 315 / 315 | 3 / 3 |
+
+## 15. Findings not covered by the rules
+
+- **L varies between services.** The three cold L services had medians of 16.9, 10.5 and 12.4 s
+  (stable through the day), and all of the difference is in the model load (7.6, 2.9, 4.8 s).
+  `coldstart-t4-l-18` alternated between two levels (10.0 - 10.8 s with a 2.6 - 3.0 s load, and
+  12.4 - 13.4 s with a 4.7 - 5.6 s load). Reading a large file at start-up is the part of a cold
+  start that depends most on where the instance lands. The size effect still holds (12.2), but a
+  single-service measurement of a large application can be off by several seconds.
+- **Cold starts at the boundary were slower.** The five race cold starts at 15 min (12.1) took
+  4.5 s (S), 11.6 s (M) and 17.6 - 19.7 s (L), against 3.0 / 6.8 / 12.8 s at 16 - 20 min; the
+  imports alone took 2.4 - 4.1 s instead of ~1.3 s. Five samples only; a plausible reading is
+  that the new instance started while the old one was still shutting down.
+- **S is ~20 - 55 ms slower when warm** than M and L (12.5, 13), with the same work.
+
+## 16. Conclusions for the paper
+
+1. **The cold start grows strongly with the size of the application:** median ~3.0 s (S),
+   ~6.8 s (M), ~12.8 s (L), p95 up to 20 s. Every step is shown by the pre-registered rule.
+2. **The growth is the application's own start-up work** (more data, a heavier library, a large
+   model); the platform's share before the application runs stays at ~0.65 s for a 91 - 282 MiB
+   image. A large file read at start-up is the slowest and most variable part on Cloud Run.
+3. **The teardown does not depend on the size:** ~900 - 910 s after the last response for S, M
+   and L; 14 min idle was always warm, 16 min always cold, 15 min a race at the edge.
+4. **Cost of a cold start grows with the size** (3.8 / 8.1 / 14.5 vCPU-s, EUR 0.14 / 0.30 / 0.53
+   per 1,000), but stays tiny; Test 4 cost EUR 0.11 gross for 892 samples.
+5. **Always-warm removes the cold start for every size** (all 111 samples 0.2 - 0.3 s) and costs
+   the same for every size (~EUR 24 per month at 1 vCPU + 2 GiB, W4 pending). So the bigger the
+   application, the more the same money buys: 2.8 s per request for S, 6.6 s for M, 12.6 - 16.7 s
+   for L at 16 min idle.
+6. **No 429** in 1,003 samples under max-instances 1, 2 GiB and staggered starts, including the
+   slowest size and the Test 3 peak hours; the Test 3 429s remain unexplained.
+
+## 17. Limitations seen in the results
+
+- One day per run; the always-warm side on a different day and at different hours (10.5).
+- One always-warm service per size; the main run showed that L services can differ by ~6 s.
+- The models are synthetic RandomForests (section 7); the size of the model file, not its kind,
+  drives the load time here.
+- Cost: hourly billing rows; the always-warm figures (W4) are list-price estimates until the
+  export is complete.
+
+## 18. Notes for the next run
+
+- The measurement VM kept running from the deploy (2026-11-18) to 2026-11-21 (~EUR 0.23 per day for
+  Compute Engine + ~EUR 0.06 for networking), and the always-warm services ran ~12 h past the
+  end of their measurement (~EUR 1.2). Put the deletion and the VM stop into the same session as
+  the download, or schedule them.
+- `git pull` in Cloud Shell failed because files written there by the analysis had been committed
+  from the local copy; move them aside first.
+- Scripts committed from Windows lose the executable bit: run them with `bash script.sh`.
+- `gcloud artifacts docker images list` prints the creation time in local time (CET), not UTC.

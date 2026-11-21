@@ -1,7 +1,7 @@
 Test 4 - deployed configuration and image sizes, read on 2026-11-20 (after the run, services unchanged)
 
 gcloud artifacts docker images list .../coldstart-lab/shop-api --include-tags
-TAGS  SIZE (bytes, compressed in Artifact Registry)  CREATE_TIME
+TAGS  SIZE (bytes, compressed in Artifact Registry)  CREATE_TIME (as printed: local time CET = UTC+1)
 v4-s   95218281   (90.8 MiB)   2026-11-18T15:43:30
 v4-m  167988278  (160.2 MiB)   2026-11-18T15:44:02
 v4-l  295689576  (282.0 MiB)   2026-11-18T15:44:44
